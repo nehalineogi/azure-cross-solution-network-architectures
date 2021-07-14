@@ -2,12 +2,6 @@
 
 This is a repo of cross solution network designs with Azure PaaS and on-premise connectivity. Create downloadable visio for varios design. The architectures based out of real world discussions with Partners and customers. Learn about tools to validate connectivity, view traffic flows
 
-# Sample Applications
-
-1. Simple CRUD API Application
-2. Simple http server
-3. Simple 3-tier application for AKS
-
 # Cross Solution Network Architectures
 
 1. Database Services
@@ -49,3 +43,12 @@ This is a repo of cross solution network designs with Azure PaaS and on-premise 
 2. Networking
    Wireshark
 3. Application
+   python
+   html
+   node.js
+
+# Sample Applications
+
+1. Simple CRUD API Application
+2. Simple http server
+3. Simple 3-tier application for AKS

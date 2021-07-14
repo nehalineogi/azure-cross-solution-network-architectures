@@ -12,6 +12,8 @@ This architecture demonstrates the connectivity architecture and traffic flows f
 
 ![Networking](images/sqlmi-architecture.png)
 
+Download Visio link here.
+
 ## Design Components
 
 1. DMS (Data Migration Services) is PaaS service Azure used for live/online Migration of SQL Server to SQL Managed Instance. DMS-Subnet routable from on-premises
