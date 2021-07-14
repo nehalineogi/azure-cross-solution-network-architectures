@@ -1,14 +1,12 @@
 ## Azure SQL MI Migration Architecture
 
-This architecture demonstrates the connectivity architecuture and traffic flows for migrating on-premises SQL database to SQL Managed Instance PaaS service in Azure.
+This architecture demonstrates the connectivity architecture and traffic flows for migrating on-premises SQL database to SQL Managed Instance PaaS service in Azure.
 
 ## Azure Documentation links
 
-[SQL MI Connectivity Architecture](https://docs.microsoft.com/en-us/azure/azure-sql/managed-instance/connectivity-architecture-overview)
-
-[SQL MI Network Requirements](https://docs.microsoft.com/en-us/azure/azure-sql/managed-instance/connectivity-architecture-overview#network-requirements)
-
-[Networking Constraints](https://docs.microsoft.com/en-us/azure/azure-sql/managed-instance/connectivity-architecture-overview#networking-constraints)
+1. [SQL MI Connectivity Architecture](https://docs.microsoft.com/en-us/azure/azure-sql/managed-instance/connectivity-architecture-overview)
+2. [SQL MI Network Requirements](https://docs.microsoft.com/en-us/azure/azure-sql/managed-instance/connectivity-architecture-overview#network-requirements)
+3. [Networking Constraints](https://docs.microsoft.com/en-us/azure/azure-sql/managed-instance/connectivity-architecture-overview#networking-constraints)
 
 ## Reference Architecture
 
