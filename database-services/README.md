@@ -12,7 +12,7 @@ This architecture demonstrates the connectivity architecuture and traffic flows 
 
 ## Reference Architecture
 
-![Networking](images/SQLMI-architecture.png)
+![Networking](images/sqlmi-architecture.png)
 
 ## Design Components
 
