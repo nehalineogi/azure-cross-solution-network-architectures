@@ -12,7 +12,7 @@ This is a repo of cross solution network designs with Azure PaaS and on-premise 
 
 1. Database Services
 
-   - SQL MI (Single Region and Multi region with Replication)
+   - [SQL MI (Single Region and Multi region with Replication)](database-services/README.md)
    - Azure SQL Database
    - mysql
    - Postgress
