@@ -20,8 +20,8 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
 3. [Azure Kubernetes services](aks/README.md)
 
-   - Basic Networking
-   - Kubenet Networking
+   - Basic/Kubenet Networking
+   - Advanced/Azure CNI Networking
    - Azure Private Cluster
    - AKS with Azure firewall
    - Core DNS and Azure DNS Integrations
