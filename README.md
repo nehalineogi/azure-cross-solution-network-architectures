@@ -4,33 +4,32 @@ This is a repo of cross solution network designs with Azure PaaS and on-premise 
 
 # Cross Solution Network Architectures
 
-1. Database Services
+1. [Azure Database Services](database-services/README.md)
 
    - [SQL MI (Single Region and Multi region with Replication)](database-services/README.md)
    - Azure SQL Database
-   - mysql
-   - Postgress
+   - OSS databases - mysql,postgres
 
-2. Azure APIM
+2. [Azure APIM](apim/README.md)
 
-   - internal network
-   - external network
-   - default network
-   - self hosted gateway
-   - Azure Private DNS Zones
+   - Internal network mode
+   - External network mode
+   - Self hosted gateway
+   - Azure Private DNS Zones integration
    - APIM with Azure firewall/NVA
 
-3. Azure Kubernetes services
+3. [Azure Kubernetes services](aks/README.md)
 
    - Basic Networking
    - Kubenet Networking
    - Azure Private Cluster
    - AKS with Azure firewall
-   - AKS nginx ingress controller
-   - AKS Application gateway as ingress controller
    - Core DNS and Azure DNS Integrations
+   - [AKS Private Cluster with Azure Front Door](https://github.com/nehalineogi/aks-private-cluster-with-afd-premium)
+   - [AKS nginx ingress controller](https://github.com/nehalineogi/aks-nginx-ingress)
+   - [AKS Application gateway as ingress controller](https://github.com/nehalineogi/aks-app-gw-ingress)
 
-4. Azure App-service Webapp
+4. [Azure App-service Webapp](webapp/README.md)
    - Private Endpoint
    - VNET Integration
    - NAT Gateway
@@ -39,13 +38,20 @@ This is a repo of cross solution network designs with Azure PaaS and on-premise 
 # Tools of Trade
 
 1. Database
-   SQl Server Management Studio
+
+   - SQl Server Management Studio
+   - Azure Data Management Studio
+
 2. Networking
-   Wireshark
+
+   - Wireshark
+
 3. Application
-   python
-   html
-   node.js
+   - python
+   - html
+   - node.js
+4. DevOps
+   - Postman
 
 # Sample Applications
 
