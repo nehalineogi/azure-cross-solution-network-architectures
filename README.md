@@ -1,6 +1,6 @@
 # appdev-database-networking
 
-This is a repo of cross solution network designs with Azure PaaS and on-premise connectivity. Create downloadable visio for varios design. The architectures based out of real world discussions with Partners and customers. Learn about tools to validate connectivity, view traffic flows
+This is a repo of cross solution network designs with Azure PaaS and on-premise connectivity. The goal is to create a reusable freference architecture content. This repo will contain downloadable visio, postman collections and test applications for various designs. These architectures are based out of real world discussions with Partners and customers. Learn about tools of trades to validate connectivity, view traffic flows.
 
 # Cross Solution Network Architectures
 
