@@ -20,7 +20,8 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
 3. [Azure Kubernetes services](aks/README.md)
 
-   - Basic/Kubenet Networking
+   - Docker Networking
+   - [Basic/Kubenet Networking](aks/README-kubenet.md)
    - Advanced/Azure CNI Networking
    - Azure Private Cluster
    - AKS with Azure firewall
@@ -30,10 +31,13 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
    - [AKS Application gateway as ingress controller](https://github.com/nehalineogi/aks-app-gw-ingress)
 
 4. [Azure App-service Webapp](webapp/README.md)
+
    - Private Endpoint
    - VNET Integration
    - NAT Gateway
    - Azure Private DNS Zone
+
+5. Bicep Automated Deployments
 
 # Tools of Trade
 
