@@ -25,15 +25,24 @@ Download Visio link here.
 - Nodes receive an IP address from the Azure virtual network subnet.
 - Pods receive an IP address from a logically different address space than the nodes' Azure virtual network subnet.
 - Network address translation (NAT) is then configured so that the pods can reach resources on the Azure virtual network.
-- The source IP address of the traffic is translated to the node's primary IP address.
+- The source IP address of the traffic is translated to the node's primary IP address
+
+Nodes use the kubenet Kubernetes plugin. You can:
+
+Let the Azure platform create and configure the virtual networks for you, or
+Choose to deploy your AKS cluster into an existing virtual network subnet
 
 2. [IP Address Calculations](https://docs.microsoft.com/en-us/azure/aks/)
    kubenet - a simple /24 IP address range can support up to 251 nodes in the cluster (each Azure virtual network subnet reserves the first three IP addresses for management operations)
    This node count could support up to 27,610 pods (with a default maximum of 110 pods per node with kubenet)
-3. On-Prem routing
-4. DNS Design
-5. Inbound IP via Azure Load Balancer
-6. Outbound IP via Azure load Balancer
+
+   With kubenet, you can use a much smaller IP address range and be able to support large clusters and application demands. For example, even with a /27 IP address range on your subnet, you could run a 20-25 node cluster with enough room to scale or upgrade. This cluster size would support up to 2,200-2,750 pods (with a default maximum of 110 pods per node). The maximum number of pods per node that you can configure with kubenet in AKS is 110.
+
+3. Node/Pod Limits
+4. On-Prem routing
+5. DNS Design
+6. Inbound IP via Azure Load Balancer
+7. Outbound IP via Azure load Balancer
    [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
 
 Creates an Azure load balancer resource, configures an external IP address, and connects the requested pods to the load balancer backend pool. To allow customers' traffic to reach the application, load balancing rules are created on the desired ports.

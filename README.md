@@ -6,11 +6,13 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
 1. [Azure Database Services](database-services/README.md)
 
-   - [SQL MI (Single Region and Multi region with Replication)](database-services/README.md)
+   - [SQL Managed Instance (Single Region and Multi region with Replication)](database-services/README.md)
+   - OSS databases - mysql and postgres
+   - Azure ADF and Integration Runtime
    - Azure SQL Database
-   - OSS databases - mysql,postgres
+   - Azure Syanpse
 
-2. [Azure APIM](apim/README.md)
+2. [Azure API Management(APIM)](apim/README.md)
 
    - Internal network mode
    - External network mode
@@ -18,17 +20,21 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
    - Azure Private DNS Zones integration
    - APIM with Azure firewall/NVA
 
-3. [Azure Kubernetes services](aks/README.md)
+3. [Azure Kubernetes Services (AKS)](aks/README.md)
 
    - Docker Networking
    - [Basic/Kubenet Networking](aks/README-kubenet.md)
-   - Advanced/Azure CNI Networking
-   - Azure Private Cluster
-   - AKS with Azure firewall
-   - Core DNS and Azure DNS Integrations
+   - [Advanced/Azure CNI Networking](aks/README-advanced.md)
+   - [AKS Private Cluster](aks/README-private-cluster.md)
+   - [AKS Ingress Controlles] (aks/README-ingress-controllers)
    - [AKS Private Cluster with Azure Front Door](https://github.com/nehalineogi/aks-private-cluster-with-afd-premium)
-   - [AKS nginx ingress controller](https://github.com/nehalineogi/aks-nginx-ingress)
-   - [AKS Application gateway as ingress controller](https://github.com/nehalineogi/aks-app-gw-ingress)
+   - Ingress Controllers
+     - [AKS nginx ingress controller](https://github.com/nehalineogi/aks-nginx-ingress)
+     - [AKS Application gateway as ingress controller](https://github.com/nehalineogi/aks-app-gw-ingress)
+   - AKS with Azure firewall/NVA
+   - Core DNS and Azure DNS Integrations
+   - Kubernetes Network Model (Multus, Flannel,Weave, Calico, Cilium)
+   - Kubernets Serivce Mesh (Istio, Linkerd and Consul)
 
 4. [Azure App-service Webapp](webapp/README.md)
 
