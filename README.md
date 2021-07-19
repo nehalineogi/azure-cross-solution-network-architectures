@@ -26,7 +26,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
    - [Basic/Kubenet Networking](aks/README-kubenet.md)
    - [Advanced/Azure CNI Networking](aks/README-advanced.md)
    - [AKS Private Cluster](aks/README-private-cluster.md)
-   - [AKS Ingress Controlles] (aks/README-ingress-controllers)
+   - [AKS Ingress Controlles](aks/README-ingress-controllers)
    - [AKS Private Cluster with Azure Front Door](https://github.com/nehalineogi/aks-private-cluster-with-afd-premium)
    - Ingress Controllers
      - [AKS nginx ingress controller](https://github.com/nehalineogi/aks-nginx-ingress)
