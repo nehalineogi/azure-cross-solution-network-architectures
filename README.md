@@ -14,10 +14,11 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
 2. [Azure API Management(APIM)](apim/README.md)
 
-   - Internal network mode
-   - External network mode
-   - Self hosted gateway
-   - Azure Private DNS Zones integration
+   - [Internal network mode](apim/README.md)
+   - [External network mode](apim/README.md)
+   - [Self hosted gateway](apim/README.md)
+   - [Azure Private DNS Zones integration](apim/README.md)
+   - APIM Custom Domain
    - APIM with Azure firewall/NVA
 
 3. [Azure Kubernetes Services (AKS)](aks/README.md)
