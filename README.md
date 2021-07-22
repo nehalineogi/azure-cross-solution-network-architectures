@@ -7,10 +7,10 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 1. [Azure Database Services](database-services/README.md)
 
    - [SQL Managed Instance (Single Region and Multi region with Replication)](database-services/README.md)
-   - OSS databases - mysql and postgres
-   - Azure Data Factory(ADF) and Integration Runtime
+   - Azure Data Factory(ADF) Managed VNET,Private Endpoints and Integration Runtime
    - Azure SQL Database
    - Azure Syanpse
+   - OSS databases - mysql and postgres
 
 2. [Azure API Management(APIM)](apim/README.md)
 
