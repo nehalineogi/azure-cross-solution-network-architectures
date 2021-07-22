@@ -71,3 +71,13 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 1. Simple CRUD API Application
 2. Simple http server
 3. Simple 3-tier application for AKS
+
+## Contributors
+
+Special thank you to all the contributors
+
+- [Tommy Falgout](https://github.com/lastcoolnameleft)
+
+- [Devanshi Joshi](https://github.com/devanshidiaries)
+
+## Acknowledgments
