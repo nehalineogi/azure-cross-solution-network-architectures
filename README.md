@@ -39,7 +39,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
    - Kubernetes Network Model (Multus, Flannel,Weave, Calico, Cilium)
    - Kubernets Serivce Mesh (Istio, Linkerd and Consul)
 
-4. [Azure App-service Webapp](webapp/README.md)
+4. [Azure App-service Webapp](app-service/README.md)
 
    - Private Endpoint
    - VNET Integration
