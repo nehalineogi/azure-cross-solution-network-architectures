@@ -53,6 +53,7 @@ Download Visio link here.
 ```
 
 DNS Checker Output
+
 ![DNS Checker](images/dns-checker-output.png)
 
 6. SSMS Connection String
