@@ -47,10 +47,10 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
 4. [Azure App-service Webapp](app-service/README.md)
 
-   - Private Endpoint
-   - VNET Integration
-   - NAT Gateway
-   - Azure Private DNS Zone
+   - [Private Endpoint](app-service/README.md)
+   - [VNET Integration](app-service/README.md)
+   - [NAT Gateway Integration](app-service/README.md)
+   - [Azure Private DNS Zone Planning](app-service/README.md)
 
 5. Bicep Automated Deployments
 
