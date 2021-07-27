@@ -8,7 +8,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
    - [SQL Managed Instance](database-services/README.md)
      - Single Region
-     - Multi region with Replication)
+     - Multi region with Replication
    - [Azure Data Factory(ADF)](database-services/README-ADF.md)
      - Managed VNET and Private Endpoints
      - Self hosted Integration Runtime (IR)
