@@ -52,6 +52,9 @@ Download Visio link here.
 
 ```
 
+DNS Checker Output
+![DNS Checker](images/dns-checker-output.png)
+
 6. SSMS Connection String
    Note the , seperated ports. Use tcp/1433 (private endpoint) or tcp/3342 (public endpoint)
 

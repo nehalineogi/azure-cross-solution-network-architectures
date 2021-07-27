@@ -1,13 +1,17 @@
 # appdev-database-networking
 
-This is a repo of cross solution network connectivity designs with Azure PaaS services and on-premise connectivity. The goal is to create a reusable reference architectures and content based on real world examples based out of working with partners and collaborating with cross solution CSAs. This repo will contain downloadable artifacts like visios, postman collections and test applications for various designs. Learn about tools of trades from various SME CSAs to validate designs,connectivity, view application and traffic flows.
+This is a repo of cross solution network connectivity designs with Azure PaaS services and on-premise connectivity. The design are based on real world experiences working with Partners and customers in various ADS (Azure Design Sessions). The goal is to create a reusable reference architectures and content based on real world examples based out of working with partners and collaborating with cross solution CSAs. This repo will contain downloadable artifacts like visios, postman collections and test applications for various designs. Learn about tools of trades from various SME CSAs to validate designs,connectivity, view application and traffic flows.
 
 # Cross Solution Network Architectures
 
 1. [Azure Database Services](database-services/README.md)
 
-   - [SQL Managed Instance (Single Region and Multi region with Replication)](database-services/README.md)
-   - Azure Data Factory(ADF) Managed VNET,Private Endpoints and Integration Runtime (IR)
+   - [SQL Managed Instance](database-services/README.md)
+     - Single Region
+     - Multi region with Replication)
+   - [Azure Data Factory(ADF)](database-services/README-ADF.md)
+     - Managed VNET and Private Endpoints
+     - Self hosted Integration Runtime (IR)
    - Azure SQL Database
    - Azure Syanpse
    - OSS databases - mysql and postgres
@@ -18,14 +22,16 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
    - [Securing APIM with Internal network mode and application gateway](apim/README.md)
    - [Self hosted gateway](apim/README.md)
    - [Azure Private DNS Zones integration](apim/README.md)
-   - APIM Custom Domain
+   - [Letsencrypt Certificates and APIM Custom Domain](apim/README.md)
    - APIM with Azure firewall/NVA
-   - APIM Multi-region Architecture
    - APIM AAD and B2C Integration
+   - APIM Multi-region Architecture
 
 3. [Azure Kubernetes Services (AKS)](aks/README.md)
 
-   - Docker Networking
+   - [Docker Networking](aks/README-docker.md)
+     - Single Host
+     - Multi Host
    - [Basic/Kubenet Networking](aks/README-kubenet.md)
    - [Advanced/Azure CNI Networking](aks/README-advanced.md)
    - [AKS Private Cluster](aks/README-private-cluster.md)
@@ -58,6 +64,8 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 2. Networking
 
    - Wireshark
+   - dig
+   - hping
 
 3. Application
    - python
@@ -74,10 +82,15 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
 ## Contributors
 
-Special thank you to all the contributors
+Special thank you to my collegues
 
+- [Heather Tze](https://github.com/hsze)
+- [Daniel Mueser](https://github.com/dmauser)
+- [Mike Richter](https://github.com/michaelsrichter)
+- [Sumit Sengupta](https://github.com/sumitsengupta)
+- [Mike Shelton](https://www.linkedin.com/in/mshelt)
 - [Tommy Falgout](https://github.com/lastcoolnameleft)
-
 - [Devanshi Joshi](https://github.com/devanshidiaries)
+- [Sowmyan Soman Chullikkattil](https://github.com/sowsan)
 
 ## Acknowledgments
