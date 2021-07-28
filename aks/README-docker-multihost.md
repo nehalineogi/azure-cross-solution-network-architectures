@@ -1,4 +1,4 @@
-## Docker Single host Networking
+## Docker Multi host Networking
 
 This architecture demonstrates VXLAN network overlay with multi-host docker swarm cluster
 
