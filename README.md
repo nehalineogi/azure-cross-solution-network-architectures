@@ -15,7 +15,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
    - [Azure Data Factory(ADF)](database-services/README-ADF.md)
      - Managed VNET and Private Endpoints
      - Self hosted Integration Runtime (IR) In Azure
-     - Self hosted Integration Runtime (IR) On Prem
+     - Self hosted Integration Runtime (IR) On Premises
    - Azure SQL Database
    - Azure Syanpse
    - OSS databases - mysql and postgres
