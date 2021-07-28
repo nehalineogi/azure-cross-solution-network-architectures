@@ -33,6 +33,10 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
 3. [Azure Kubernetes Services (AKS)](aks/README.md)
 
+   - Advanced Linux Networking
+     - VXLAN, IPVLAN, MACVLAN, TUN/TAP drivers
+     - Bird Internet Routing Daemon
+     - IPtables
    - [Docker Networking](aks/README-multihost.md)
      - [Single Host](aks/README-docker-singlehost.md)
      - [Multi Host](aks/README-docker-multihost.md)
