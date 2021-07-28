@@ -2,13 +2,6 @@
 
 This architecture demonstrates the connectivity architecture and traffic flows for API Management (APIM). APIM can be deployed in various modes. APIM in internal mode with Application gateway and Custom DNS. APIM can also be deployed in External with direct access from the internet.
 
-## Azure Documentation links
-
-1. [APIM External Mode](https://docs.microsoft.com/en-us/azure/api-management/api-management-using-with-vnet)
-2. [APIM Internal Mode](https://docs.microsoft.com/en-us/azure/api-management/api-management-using-with-internal-vnet)
-3. [Internal APIM with Application Gateway](https://docs.microsoft.com/en-us/azure/api-management/api-management-using-with-internal-vnet)
-4. [Internal APIM Self Hosted Gateway](https://docs.microsoft.com/en-us/azure/api-management/self-hosted-gateway-overviewt)
-
 ## Reference Architecture
 
 ![APIM Architecture](images/apim-architecture.png)
@@ -16,6 +9,13 @@ This architecture demonstrates the connectivity architecture and traffic flows f
 Download Visio link here
 
 Download postman APIM collection here
+
+## Azure Documentation links
+
+1. [APIM External Mode](https://docs.microsoft.com/en-us/azure/api-management/api-management-using-with-vnet)
+2. [APIM Internal Mode](https://docs.microsoft.com/en-us/azure/api-management/api-management-using-with-internal-vnet)
+3. [Internal APIM with Application Gateway](https://docs.microsoft.com/en-us/azure/api-management/api-management-using-with-internal-vnet)
+4. [Internal APIM Self Hosted Gateway](https://docs.microsoft.com/en-us/azure/api-management/self-hosted-gateway-overviewt)
 
 ## Design Components
 

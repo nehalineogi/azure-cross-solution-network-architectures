@@ -2,6 +2,12 @@
 
 This architecture demonstrates the connectivity architecture and traffic flows Azure Web APP and Function app. This covers VNET integration, private endpoints and DNS architecture in a multi-region design
 
+## Reference Architecture
+
+![APIM Architecture](images/app-service.png)
+
+Download Visio link here
+
 ## Azure Documentation links
 
 1. [VNET Integration with App services](https://docs.microsoft.com/en-us/azure/app-service/web-sites-integrate-with-vnet#how-regional-vnet-integration-works)
@@ -10,12 +16,6 @@ This architecture demonstrates the connectivity architecture and traffic flows A
 4. [Control Outbound IP using Azure NAT Gateway](https://docs.microsoft.com/en-us/azure/azure-functions/functions-how-to-use-nat-gateway)
 5. [Premium SKU requirement for Private Endpoints](https://docs.microsoft.com/en-us/azure/app-service/networking/private-endpoint)
 6. [DNS Private Zone with App Services](https://docs.microsoft.com/en-us/azure/app-service/web-sites-integrate-with-vnet#azure-dns-private-zones)
-
-## Reference Architecture
-
-![APIM Architecture](images/app-service.png)
-
-Download Visio link here
 
 ## Design Components
 

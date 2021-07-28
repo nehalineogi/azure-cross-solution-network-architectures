@@ -2,6 +2,12 @@
 
 This architecture demonstrates the connectivity architecture and traffic flows for migrating data using Azure Data Factory, Self Hosted IR and Managed Virtual Network
 
+## Reference Architecture
+
+![Networking](images/azure-adf-architecture.png)
+
+Download Visio link here.
+
 ## Azure Documentation links
 
 1. [Azure Data Factory terminology](hhttps://docs.microsoft.com/en-us/azure/data-factory/introduction)
@@ -10,12 +16,6 @@ This architecture demonstrates the connectivity architecture and traffic flows f
 4. [Self Hosted Integration Runtime](https://docs.microsoft.com/en-us/azure/data-factory/create-self-hosted-integration-runtimes)
 5. [Managed Virtual Network](https://docs.microsoft.com/en-us/azure/data-factory/managed-virtual-network-private-endpoint)
 6. [Linked Services](https://docs.microsoft.com/en-us/azure/data-factory/concepts-linked-services)
-
-## Reference Architecture
-
-![Networking](images/azure-adf-architecture.png)
-
-Download Visio link here.
 
 ## Design Components
 

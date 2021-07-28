@@ -2,14 +2,6 @@
 
 This architecture demonstrates the connectivity architecture and traffic flows connecting Azure AKS Private Cluster environment with your on-premises environment.
 
-## Azure Documentation links
-
-2. [Create Private Cluster](https://docs.microsoft.com/en-us/azure/aks/private-clusters)
-3. [AKS Private Cluster limitations](https://docs.microsoft.com/en-us/azure/aks/private-clusters#limitations)
-4. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
-5. [Internal Load Balancer](https://docs.microsoft.com/en-us/azure/aks/internal-lb)
-6. [Configure Private DNS Zone](https://docs.microsoft.com/en-us/azure/aks/private-clusters#configure-private-dns-zone)
-
 ## Reference Architecture
 
 ### Advanced/Azure CNI Networking
@@ -17,6 +9,14 @@ This architecture demonstrates the connectivity architecture and traffic flows c
 ![AKS Advanced Networking](images/aks-private-cluster.png)
 
 Download Visio link here.
+
+## Azure Documentation links
+
+2. [Create Private Cluster](https://docs.microsoft.com/en-us/azure/aks/private-clusters)
+3. [AKS Private Cluster limitations](https://docs.microsoft.com/en-us/azure/aks/private-clusters#limitations)
+4. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
+5. [Internal Load Balancer](https://docs.microsoft.com/en-us/azure/aks/internal-lb)
+6. [Configure Private DNS Zone](https://docs.microsoft.com/en-us/azure/aks/private-clusters#configure-private-dns-zone)
 
 ## Design Components and Planning
 

@@ -2,14 +2,6 @@
 
 This architecture demonstrates the connectivity architecture and traffic flows for using L7 load balancer to expose AKS services to the Internet. The Application Gateway Ingress Controller (AGIC) is a kubernetes application which make it possible for AKS customers to leverage Azure's nativce Application Gateway L7 load balancer.
 
-## Azure Documentation links
-
-2. [Ingress For AKS](https://docs.microsoft.com/en-us/azure/application-gateway/ingress-controller-overview)
-3. [Enable Ingress Controller add-on - Greenfield](https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ingress-controller-add-on-existing)
-4. [Enable Ingress Controller add-on - Brownfield](https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ingress-controller-add-on-new)
-5. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
-6. [Ingress Troubleshooting](https://azure.github.io/application-gateway-kubernetes-ingress/troubleshootings/troubleshooting-installing-a-simple-application/)
-
 ## Reference Architecture
 
 ### Application Gateway Ingress Contoller (AGIC)
@@ -17,6 +9,14 @@ This architecture demonstrates the connectivity architecture and traffic flows f
 ![AKS Advanced Networking](images/aks-app-gw-ingress.png)
 
 Download Visio link here.
+
+## Azure Documentation links
+
+2. [Ingress For AKS](https://docs.microsoft.com/en-us/azure/application-gateway/ingress-controller-overview)
+3. [Enable Ingress Controller add-on - Greenfield](https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ingress-controller-add-on-existing)
+4. [Enable Ingress Controller add-on - Brownfield](https://docs.microsoft.com/en-us/azure/application-gateway/tutorial-ingress-controller-add-on-new)
+5. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
+6. [Ingress Troubleshooting](https://azure.github.io/application-gateway-kubernetes-ingress/troubleshootings/troubleshooting-installing-a-simple-application/)
 
 ## Design Components and Planning
 

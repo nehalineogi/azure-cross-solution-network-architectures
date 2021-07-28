@@ -2,13 +2,6 @@
 
 This architecture demonstrates docker host in a single host networking mode.
 
-## Documentation links
-
-1. [Install Docker on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
-2. [Docker Network Tutorial](https://docs.docker.com/network/network-tutorial-standalone/)
-3. [Docker Network Bridge](https://docs.docker.com/network/bridge/)
-4. [Container networking](https://docs.docker.com/config/containers/container-networking/)
-
 ## Reference Architecture
 
 #### Single Host Docker networking
@@ -16,6 +9,13 @@ This architecture demonstrates docker host in a single host networking mode.
 ![Docker Swarm Cluster](images/docker-single-host.png)
 
 Download Visio link here.
+
+## Documentation links
+
+1. [Install Docker on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+2. [Docker Network Tutorial](https://docs.docker.com/network/network-tutorial-standalone/)
+3. [Docker Network Bridge](https://docs.docker.com/network/bridge/)
+4. [Container networking](https://docs.docker.com/config/containers/container-networking/)
 
 ## Design Components and Planning
 

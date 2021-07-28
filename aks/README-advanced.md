@@ -2,13 +2,6 @@
 
 This architecture demonstrates the connectivity architecture and traffic flows connecting Azure AKS environment with your on-premises environment.
 
-## Azure Documentation links
-
-2. [IP Address Planning](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#ip-address-availability-and-exhaustion)
-3. [Configure AKS Advanced Networking](https://docs.microsoft.com/en-us/azure/aks/configure-azure-cni)
-4. [AKS CNI Networking](https://docs.microsoft.com/en-us/azure/aks/configure-azure-cni)
-5. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
-
 ## Reference Architecture
 
 ### Advanced/Azure CNI Networking
@@ -16,6 +9,13 @@ This architecture demonstrates the connectivity architecture and traffic flows c
 ![AKS Advanced Networking](images/aks-advanced.png)
 
 Download Visio link here.
+
+## Azure Documentation links
+
+2. [IP Address Planning](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#ip-address-availability-and-exhaustion)
+3. [Configure AKS Advanced Networking](https://docs.microsoft.com/en-us/azure/aks/configure-azure-cni)
+4. [AKS CNI Networking](https://docs.microsoft.com/en-us/azure/aks/configure-azure-cni)
+5. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
 
 ## Design Components and Planning
 
