@@ -1,6 +1,6 @@
 # appdev-database-networking
 
-This is a repo of cross solution network connectivity designs with Azure PaaS services and on-premise connectivity. The design are based on real world experiences working with Partners and customers in various ADS (Azure Design Sessions). The goal is to create a reusable reference architectures and content based on real world examples based out of working with partners and collaborating with cross solution CSAs. This repo will contain downloadable artifacts like visios, postman collections and test applications for various designs. Learn about tools of trades from various SME CSAs to validate designs,connectivity, view application and traffic flows.
+This is a repo of cross solution network connectivity designs with Azure PaaS services, Azure Kubernetes Services and on-premise connectivity. The design are based on real world experiences working with Partners and customers in various ADS (Azure Design Sessions). The goal is to create a reusable reference architectures and content based on real world examples based out of working with partners and collaborating with cross solution CSAs. This repo will contain downloadable artifacts like visios, postman collections and test applications for various designs. Learn about tools of trades from various SME CSAs to validate designs,connectivity, view application and traffic flows.
 
 # Cross Solution Network Architectures
 
@@ -9,9 +9,13 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
    - [SQL Managed Instance](database-services/README.md)
      - Single Region
      - Multi region with Replication
+       DR Scenario
+       Multi Region Read
+       Database failover with Application connectivity
    - [Azure Data Factory(ADF)](database-services/README-ADF.md)
      - Managed VNET and Private Endpoints
-     - Self hosted Integration Runtime (IR)
+     - Self hosted Integration Runtime (IR) In Azure
+     - Self hosted Integration Runtime (IR) On Prem
    - Azure SQL Database
    - Azure Syanpse
    - OSS databases - mysql and postgres
@@ -29,9 +33,9 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
 3. [Azure Kubernetes Services (AKS)](aks/README.md)
 
-   - [Docker Networking](aks/README-docker.md)
-     - Single Host
-     - Multi Host
+   - [Docker Networking](aks/README-multihost.md)
+     - [Single Host](aks/README-docker-singlehost.md)
+     - [Multi Host](aks/README-docker-multihost.md)
    - [Basic/Kubenet Networking](aks/README-kubenet.md)
    - [Advanced/Azure CNI Networking](aks/README-advanced.md)
    - [AKS Private Cluster](aks/README-private-cluster.md)
@@ -48,6 +52,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 4. [Azure App-service Webapp](app-service/README.md)
 
    - [Private Endpoint](app-service/README.md)
+   - [Service Endpoint](app-service/README.md)
    - [VNET Integration](app-service/README.md)
    - [NAT Gateway Integration](app-service/README.md)
    - [Azure Private DNS Zone Planning](app-service/README.md)
