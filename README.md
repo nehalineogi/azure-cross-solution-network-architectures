@@ -31,13 +31,13 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
    - APIM AAD and B2C Integration
    - APIM Multi-region Architecture
 
-3. [Azure Kubernetes Services (AKS)](aks/README.md)
+3. [Azure Kubernetes Services (AKS)](aks/README-advanced.md)
 
    - Advanced Linux Networking
      - VXLAN, IPVLAN, MACVLAN, TUN/TAP drivers
      - Bird Internet Routing Daemon
      - IPtables
-   - [Docker Networking](aks/README-multihost.md)
+   - [Docker Networking](aks/README-docker-multihost.md)
      - [Single Host](aks/README-docker-singlehost.md)
      - [Multi Host](aks/README-docker-multihost.md)
    - [Basic/Kubenet Networking](aks/README-kubenet.md)
