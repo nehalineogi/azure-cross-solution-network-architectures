@@ -24,6 +24,7 @@ Download Visio link here.
 - Create Overlay Networks
 - Overlay networks span multiple nodes
 - Extend the layer-2 broadcast domain to multiple nodes
+- ![Overlay packets](images/vxlan-packets.png)
 
 ## Docker Installation
 
