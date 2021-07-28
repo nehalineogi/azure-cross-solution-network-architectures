@@ -11,7 +11,7 @@ This architecture demonstrates docker host in a single host networking mode.
 
 ## Reference Architecture
 
-#### Multi-Host (Docker Swarm Cluster)
+#### Single Host Docker networking
 
 ![Docker Swarm Cluster](images/docker-single-host.png)
 
