@@ -17,7 +17,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
      - Self hosted Integration Runtime (IR) In Azure
      - Self hosted Integration Runtime (IR) On Premises
    - Azure SQL Database
-   - Azure Syanpse
+   - Azure Synapse
    - OSS databases - mysql and postgres
 
 2. [Azure API Management(APIM)](apim/README.md)
