@@ -1,10 +1,10 @@
 ## Azure AKS Basic /Kubenet Networking
 
-This architecture demonstrates the connectivity architecture and traffic flows connecting Azure AKS environment with your on-premises environment.
+This architecture uses the for AKS Basic/Kubenet Network Model. Observe that the AKS Nodes receive IP address from Azure subnet (NODE CIDR) and Pod receive an IP address from a POD CIDR different from the node network. Note the traffic flows for inbound connectivity to AKS via Internal and External Load balancers.This architecture also demonstrates connectivity and flows to and from on-premises. Outbound flows from AKS pods to internet traverse the Azure load balancer. There are other design options to egress via Azure firewall/NVA or Azure NAT Gateway.
 
 ## Reference Architecture
 
-### Basic Networking
+#### Basic/Kubenet Networking
 
 ![AKS Basic Networking](images/aks-basic.png)
 
@@ -15,46 +15,84 @@ Download Visio link here.
 2. [IP Address Planning](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#ip-address-availability-and-exhaustion)
 3. [AKS Basic Networking](https://docs.microsoft.com/en-us/azure/aks/concepts-network#kubenet-basic-networking)
 4. [AKS CNI Networking](https://docs.microsoft.com/en-us/azure/aks/configure-azure-cni)
-5. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
+5. [AKS Services](https://docs.microsoft.com/en-us/azure/aks/concepts-network#services)
 
 ## Design Components and Planning
 
-1. [AKS Basic Networking](https://docs.microsoft.com/en-us/azure/aks/concepts-network#kubenet-basic-networking)
-   The kubenet networking option is the default configuration for AKS cluster creation. With kubenet:
+#### [Design Considerations](https://docs.microsoft.com/en-us/azure/aks/concepts-network#kubenet-basic-networking)
 
-- Nodes receive an IP address from the Azure virtual network subnet.
-- Pods receive an IP address from a logically different address space than the nodes' Azure virtual network subnet.
-- Network address translation (NAT) is then configured so that the pods can reach resources on the Azure virtual network.
-- The source IP address of the traffic is translated to the node's primary IP address
+The kubenet networking option is the default configuration for AKS cluster creation.Some design considerations for Kubenet
 
-Nodes use the kubenet Kubernetes plugin. You can:
+- Nodes receive an IP address from the Azure subnet (NODE CIDR). You can deploy these nodes in existing Azure VNET or a new VNET.
+- Pods receive an IP address from a POD CIDR which is logically different address space than the NODE CIDR
+- AKS Uses Network address translation (NAT) so that the pods can reach resources on the Azure virtual and on-prem resources. The source IP address of the traffic is translated to the node's primary IP address
+- Inbound connectivity using Internal or External load Balancer
+- Use Kubnet when uou have limited IP address space.
+- Most of the pod communication is within the cluster.
+- You don't need advanced AKS features such as virtual nodes or Azure Network Policy.
 
-Let the Azure platform create and configure the virtual networks for you, or
-Choose to deploy your AKS cluster into an existing virtual network subnet
+#### [IP Address Calculations](https://docs.microsoft.com/en-us/azure/aks/)
 
-2. [IP Address Calculations](https://docs.microsoft.com/en-us/azure/aks/)
-   kubenet - a simple /24 IP address range can support up to 251 nodes in the cluster (each Azure virtual network subnet reserves the first three IP addresses for management operations)
-   This node count could support up to 27,610 pods (with a default maximum of 110 pods per node with kubenet)
+kubenet - a simple /24 IP address range can support up to 251 nodes in the cluster (each Azure virtual network subnet reserves the first three IP addresses for management operations). Each Node can have a maximum of 110 pods/node. This node count could support up to 27,610 pods (251x110)
 
-   With kubenet, you can use a much smaller IP address range and be able to support large clusters and application demands. For example, even with a /27 IP address range on your subnet, you could run a 20-25 node cluster with enough room to scale or upgrade. This cluster size would support up to 2,200-2,750 pods (with a default maximum of 110 pods per node). The maximum number of pods per node that you can configure with kubenet in AKS is 110.
+With kubenet, you can use a much smaller IP address range and be able to support large clusters and application demands. For example, even with a /27 IP address range on your subnet, you could run a 20-25 node cluster with enough room to scale or upgrade. This cluster size would support up to 2,200-2,750 pods (with a default maximum of 110 pods per node). The maximum number of pods per node that you can configure with kubenet in AKS is 110.
 
-3. Node/Pod Limits
-4. On-Prem routing
-5. DNS Design
-6. Inbound IP via Azure Load Balancer
-7. Outbound IP via Azure load Balancer
-   [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
+#### Routing to and from onpremises
 
-Creates an Azure load balancer resource, configures an external IP address, and connects the requested pods to the load balancer backend pool. To allow customers' traffic to reach the application, load balancing rules are created on the desired ports.
+```
+Outbound from AKS to On-Premises
+Note: On-Premise sees the Node IP
+python3 -m http.server
+Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
+172.16.239.6 - - [16/Jul/2021 14:51:52] "GET / HTTP/1.1" 200 -
+172.16.239.6 - - [16/Jul/2021 14:51:59] "GET / HTTP/1.1" 200 -
+172.16.239.6 - - [16/Jul/2021 14:53:00] "GET / HTTP/1.1" 200 -
+172.16.239.6 - - [16/Jul/2021 14:53:04] "GET / HTTP/1.1" 200 -
+
+From On-Prem to AKS use the internal load balancer over VPN/ExpressRoute
+nehali@nehali-laptop:~$ curl  172.16.239.7:8080
+red
+
+```
+
+####DNS Design
+Azure Subnet can use custom DNS or Azure Default DNS. Core DNS can be used along with Azure DNS.
+####Inbound Services
+
+AKS Uses [services](https://docs.microsoft.com/en-us/azure/aks/concepts-network#services) to provide inbound connectivity to pods insides the AKS cluster. The three service types are (Cluster IP, NodePort and LoadBalancer). In the archictecture above, the service type is LoadBalancer. AKS Creates an Azure load balancer resource, configures an external IP address, and connects the requested pods to the load balancer backend pool. To allow customers' traffic to reach the application, load balancing rules are created on the desired ports.
 
 Diagram showing Load Balancer traffic flow in an AKS cluster
 ![AKS Basic Networking](images/aks-loadbalancer.png)
 
+####Outbound to Internet Flows
+Outbound traffic from the pods to the Internet flows via Azure External load Balancer (Separate article showing the outbound via Azure firwall/NVA/NAT)
+
 ## Design Validations
 
-1. Route table
-   ![Route table](images/basic-route-table.png)
-2. IP Address Assignment
+**1. IP Address Assignment**
+
+The cluster was created using this command line. Note the Node CIDR is 172.16.240.0/24 (AKS-Subnet)
+
+```
+az aks create \
+    --resource-group $RG \
+    --name $AKSCLUSTER \
+    --node-count 3 \
+    --generate-ssh-keys \
+    --enable-addons monitoring  \
+    --dns-name-prefix $AKSDNS \
+    --network-plugin $PLUGIN \
+    --service-cidr 10.101.0.0/16 \
+    --dns-service-ip 10.101.0.10 \
+    --pod-cidr 10.244.0.0/16 \
+    --docker-bridge-address 172.20.0.1/16 \
+    --vnet-subnet-id $SUBNET_ID \
+    --enable-managed-identity \
+    --attach-acr $MYACR \
+    --max-pods 30 \
+    --verbose
+
+```
 
 ```
 NAME                                     STATUS   ROLES   AGE    VERSION    INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
@@ -72,7 +110,13 @@ service/red-service   LoadBalancer   10.101.198.78   20.72.185.240   8080:31876/
 
 ```
 
-3. Node view
+**2. Route table**
+Note the POD CIDR is : --pod-cidr 10.244.0.0/16.
+![Route table](images/basic-route-table.png)
+
+**3. Node view**
+
+Node inherits the DNS from the Azure DNS.
 
 ```
 ../kubectl-node_shell aks-nodepool1-62766439-vmss000002
@@ -153,7 +197,9 @@ cbr0            8000.aed6453d6fec       no              veth482424ea
 
 ```
 
-6. POD View
+**6. POD View**
+
+The curl output showing the egress from POD to Internet via load balancer IP.
 
 ```
 k get pods -o wide
@@ -187,10 +233,14 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 
 ```
 
-7. On Premises view
+**7. On Premises view**
+
+Initiate Outbound traffic from AKS to On-Premises. Note that On-Premise sees the Node IP
 
 ```
 
+Source AKS:
+Exec into AKS Pod
 k get pods -o wide
 NAME       READY   STATUS    RESTARTS   AGE     IP           NODE                                NOMINATED NODE   READINESS GATES
 dnsutils   1/1     Running   6          6h55m   10.244.1.5   aks-nodepool1-62766439-vmss000002   <none>           <none>
@@ -205,9 +255,21 @@ Connecting to 192.168.199.130:8000 (192.168.199.130:8000)
 index.html           100% |*********************************************************************************************************************|   854   0:00:00 ETA
 / # exit
 
+Destination On-Premises:
+
+python3 -m http.server
+Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
+172.16.239.6 - - [16/Jul/2021 14:51:52] "GET / HTTP/1.1" 200 -
+172.16.239.6 - - [16/Jul/2021 14:51:59] "GET / HTTP/1.1" 200 -
+172.16.239.6 - - [16/Jul/2021 14:53:00] "GET / HTTP/1.1" 200 -
+172.16.239.6 - - [16/Jul/2021 14:53:04] "GET / HTTP/1.1" 200 -
+
+From On-Prem to AKS
+nehali@nehali-laptop:~$ curl  172.16.239.7:8080
+red
+
 ```
 
-## Tools and Traffic Flows
+## TODO
 
-1. kubectl command refernce
-2. dnsutils pod (To run basic connectivity commands)
+1. Reference link to egress via firewall/NAT gateway

@@ -1,6 +1,6 @@
 ## Docker Single host Networking
 
-This architecture demonstrates docker host in a single host networking mode.
+This architecture demonstrates single docker host and networking with the docker host, custom bridge networks, dual homing containers. Note: Containers connected to the bridge network on one docker host cannot talk to the container on the other host. Bridge networks are scoped locally and don't span multiple hosts.
 
 ## Reference Architecture
 
@@ -17,12 +17,15 @@ Download Visio link here.
 3. [Docker Network Bridge](https://docs.docker.com/network/bridge/)
 4. [Container networking](https://docs.docker.com/config/containers/container-networking/)
 
-## Design Components and Planning
+## Design Components
 
-- Two Ubuntu Linux VM acting as docker hosts
+The above architecture diagram contains a few key components
+
+- Two Ubuntu Linux VM acting as docker hosts. In this design VM reside on the same azure subnet but it can be deployed in enviornments where they have layer3 connectivity.
 - Default docker bridge (docker0)
 - Custom docker bridge red-bridge and green-bridge
-- Two docker hosts are connected to the same subnet. Containers connected to the bridge network on one docker host cannot talk to the container on the other host. Note: Bridge network are scoped locally and don't span multiple hosts. Two isolated layer two switches.
+- Two docker hosts are connected to the same subnet. Containers connected to the bridge network on one docker host cannot talk to the container on the other host. Note: Bridge network are scoped locally and don't span multiple hosts.
+- Bridge networks are like two isolated layer two switches.
 - Inbound and oubound connectivity to and from container via host port (eth0)
 
 ## Docker Installation
@@ -35,7 +38,7 @@ sudo apt-get install docker-ce docker-ce-cli containerd.io
 apt install bridge-utils
 ```
 
-## Single Host
+### Docker Host Default Networks
 
 List the default networks
 
@@ -53,12 +56,17 @@ Bridge Network: Layer2 broadcast domain. All containers connected to the bridge 
 ### Create containers on the default bridge network (docker0)
 
 ```
-
+# Clean any existing containers
+#
 root@docker-host-1:~# docker rm $(docker ps -aq)
 1c6ea3bd9a20
+
+# Run nginx container
 root@docker-host-1:~# docker run -dit --name blue-c1 nginxdemos/hello
 460eb69b0fbdc3ecff703364b45b0b7fcdf9f11be0ad45a79a4b89fe6c73690c
 
+# List the container and exec/login to the container and observe networking components
+#
 root@docker-host-1:~# docker ps
 CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
 460eb69b0fbd nginxdemos/hello "/docker-entrypoint.…" 2 seconds ago Up 1 second 80/tcp blue-c1
@@ -80,12 +88,15 @@ TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
 collisions:0 txqueuelen:1000
 RX bytes:0 (0.0 B) TX bytes:0 (0.0 B)
 
+# Observe outbout IP of the container is the PIP of the docker hosts
 / # curl ifconfig.me
 / # curl ifconfig.io
 40.114.86.154
 / # exit
 root@docker-host-1:~#
 
+# Create another container in the default bridge network and ping the first container
+#
 root@docker-host-1:~# docker run -dit --name blue-c2 nginxdemos/hello
 2535fc3f3ec0df7f516f1ebc978d297425351069a0bc3d246783678073ad8116
 root@docker-host-1:~# docker exec -it blue-c2 sh
@@ -125,7 +136,7 @@ Cache-Control: no-cache
 
 ```
 
-# Inspect the Docker network bridge
+### Inspect the Docker network bridge
 
 Observer subnet, gateway and container IPs
 
@@ -216,7 +227,7 @@ ping: bad address 'blue-c2'
 / #
 ```
 
-## Create a Red Bridge
+### Create custom bridge (red-bridge and green-bridge)
 
 ```
 root@docker-host-1:~# docker network create --driver bridge red-bridge
@@ -289,6 +300,8 @@ root@docker-host-1:~# docker exec -it green-c1 sh
 ### DNS Resolution for Custom Bridge
 
 ```
+#Note: In Custom bridge you can ping one green-c2 using the name.
+#
 root@docker-host-1:~# docker run -dit --name green-c1 --network green-bridge nginxdemos/hello
 86a13eb35477e3a89eb5377bb96492d0bdafe88b3337a1363a6cf39c9020f63f
 root@docker-host-1:~# docker run -dit --name green-c2 --network green-bridge nginxdemos/hello
@@ -344,7 +357,7 @@ root@docker-host-1:~# docker exec -it red-c1 sh
 / #
 ```
 
-### Expose a Container
+### Expose the Container to the outside world
 
 ```
 root@docker-host-1:~# docker run -dit -p 8080:80 --name web nginxdemos/hello

@@ -1,6 +1,6 @@
 ## Docker Multi host Networking
 
-This architecture demonstrates VXLAN network overlay with multi-host docker swarm cluster
+This architecture demonstrates VXLAN network overlay with multi-host docker swarm cluster. Overlay networks span multiple nodes. Overlay networks extend the layer-2 broadcast domain to multiple nodes
 
 ## Reference Architecture
 
@@ -17,18 +17,20 @@ Download Visio link here.
 3. [VXLAN Overlay Networks](https://docs.docker.com/network/overlay/)
 4. [Encrypt traffic on an overlay network](https://docs.docker.com/network/overlay/#encrypt-traffic-on-an-overlay-network)
 
-## Design Components and Planning
+## Design Components
 
-- Two Ubuntu Linux VM acting as docker hosts
-- Enable Swarm Mode and create a multihost cluster
-- Create Overlay Networks
+- Two Ubuntu Linux VM acting as docker hosts. In this design VM reside on the same azure subnet but it can be deployed in enviornments where they have layer3 connectivity.
+- Enable Swarm Mode to create a multihost cluster
+- Custom Overlay Networks (red-overlay and green-overlay)
+- docker_gwbridge is the default bridge for swarm cluster
 - Overlay networks span multiple nodes
-- Extend the layer-2 broadcast domain to multiple nodes
+- Overlay networks extend the layer-2 broadcast domain to multiple nodes
 - ![Overlay packets](images/vxlan-packets.png)
+- Encryption can be enabled on overlay networks
 
 ## Docker Installation
 
-Create an Ubuntu linux VMs (docker-host-1 and docker-host-2) in Azure subnet and install docker.
+Create Ubuntu linux VMs (docker-host-1 and docker-host-2) in Azure subnet and install docker.
 
 ```
 sudo apt-get update
@@ -39,6 +41,8 @@ apt install bridge-utils
 ## Create a Docker Swarm Cluster
 
 List the default networks and initialize docker swarm cluster
+
+### Initialize the cluster on the Manager Node
 
 ```
 root@docker-host-1:~# docker network ls
@@ -58,7 +62,7 @@ To add a manager to this swarm, run 'docker swarm join-token manager' and follow
 
 ```
 
-## Worker Node
+### Join the Worker Node to the swarm cluster
 
 ```
 root@docker-host-2:~# docker rm $(docker ps -aq) -f
@@ -70,7 +74,7 @@ Bridge Network: Layer2 broadcast domain. All containers connected to the bridge 
 
 ```
 
-## Manager Node
+### Run validations Manager Node
 
 ```
 
@@ -90,7 +94,7 @@ cbggz8x7u06z   ingress           overlay   swarm
 bbc4a629e148   none              null      local
 root@docker-host-1:~#
 
-Default bridge:
+Observe the IPs on the Default bridge:
 
 root@docker-host-1:~# docker network inspect docker_gwbridge
 [
@@ -198,7 +202,7 @@ root@docker-host-2:~# docker network inspect docker_gwbridge
 
 ```
 
-### Create new overlay networks
+### Create new custom overlay networks
 
 ```
 root@docker-host-1:~# docker network create -d overlay red-overlay
@@ -382,7 +386,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 
 ### VXLAN Overlay Packet capture
 
-Initiate ping from container on docker-host-1 to container on docker-host-2
+####Initiate ping from container on docker-host-1 to container on docker-host-2
 
 ```
 root@docker-host-1:~# docker service ps web-service
@@ -419,7 +423,9 @@ round-trip min/avg/max = 0.837/1.124/1.331 ms
 
 ```
 
-Run tcpdump on docker-host-2 eth0 interface
+####Run tcpdump on docker-host-2 eth0 interface
+
+Observe vxlan encapsulated packets (inner icmp packets)
 
 ```
 
@@ -443,3 +449,8 @@ IP 10.0.1.4 > 10.0.1.3: ICMP echo request, id 54, seq 3, length 64
 19:04:45.807009 IP 172.16.24.5.57953 > 172.16.24.4.4789: VXLAN, flags [I] (0x08), vni 4097
 IP 10.0.1.3 > 10.0.1.4: ICMP echo reply, id 54, seq 3, length 64
 ```
+
+### TODO
+
+1. Enable encryption on overlay and capture packets
+2. Use Bicep automation to deploy docker hosts and create a docker swarm cluster
