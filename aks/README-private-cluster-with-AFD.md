@@ -2,11 +2,6 @@
 
 Review Architecture options to expose AKS Private Cluster ILB endpoint using global load balancer (Azure Traffic Manager vs Azure Front Door Premium)
 
-## Azure Documentation
-
-[Azure Front Door Premium (Preview Service)](https://docs.microsoft.com/en-us/azure/frontdoor/standard-premium/)
-[Secure Origin (AKS Internal Load Balancer) with Private Link in Azure Front](https://docs.microsoft.com/en-us/azure/frontdoor/standard-premium/concept-private-link)
-
 # Architecture diagram
 
 ##### Option with Azure TM and Application Gateway
@@ -14,6 +9,12 @@ Review Architecture options to expose AKS Private Cluster ILB endpoint using glo
 ##### Option with Azure Front Door Premium and Private Link Service
 
 ![alt text for image](images/afd-premium-aks-private-cluster.png)
+
+## Azure Documentation
+
+[Azure Front Door Premium (Preview Service)](https://docs.microsoft.com/en-us/azure/frontdoor/standard-premium/)
+
+[Secure Origin (AKS Internal Load Balancer) with Private Link in Azure Front](https://docs.microsoft.com/en-us/azure/frontdoor/standard-premium/concept-private-link)
 
 ## Use case and Design Considerations
 
