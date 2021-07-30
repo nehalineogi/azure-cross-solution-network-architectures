@@ -57,7 +57,8 @@ red
 
 ```
 
-####DNS Design
+#### DNS Design
+
 Azure Subnet can use custom DNS or Azure Default DNS. Core DNS can be used along with Azure DNS.
 ####Inbound Services
 
@@ -66,7 +67,8 @@ AKS Uses [services](https://docs.microsoft.com/en-us/azure/aks/concepts-network#
 Diagram showing Load Balancer traffic flow in an AKS cluster
 ![AKS Basic Networking](images/aks-loadbalancer.png)
 
-####Outbound to Internet Flows
+#### Outbound to Internet Flows
+
 Outbound traffic from the pods to the Internet flows via Azure External load Balancer (Separate article showing the outbound via Azure firwall/NVA/NAT)
 
 ## Design Validations
@@ -113,6 +115,7 @@ service/red-service   LoadBalancer   10.101.198.78   20.72.185.240   8080:31876/
 ```
 
 **2. Route table**
+
 Note the POD CIDR is : --pod-cidr 10.244.0.0/16.
 ![Route table](images/basic-route-table.png)
 

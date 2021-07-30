@@ -1,6 +1,6 @@
 ## Azure AKS Advanced/CNI Networking
 
-This architecture uses the for AKS Advanced/CNI Network Model. Observe that the AKS Nodes **and** PODs receive IP address from Azure subnet (NODE CIDR). Note the traffic flows for inbound connectivity to AKS via Internal and External Load balancers.This architecture also demonstrates connectivity and flows to and from on-premises. Note that on-premises network can directly reach both NODE and pod networks. Outbound flows from AKS pods to internet traverse the Azure load balancer. There are other design options to egress via Azure firewall/NVA or Azure NAT Gateway.
+This architecture uses the for AKS Advanced/CNI Network Model. Observe that the AKS Nodes **and** Pods receive IP address from Azure subnet (NODE CIDR). Note the traffic flows for inbound connectivity to AKS via Internal and External Load balancers.This architecture also demonstrates connectivity and flows to and from on-premises. On-premises network can directly reach both node and pod networks. Outbound flows from AKS pods to internet traverse the Azure load balancer. There are other design options to egress via Azure firewall/NVA or Azure NAT Gateway.
 
 ## Reference Architecture
 
@@ -29,12 +29,12 @@ Download Visio link here.
 - Azure Network Policy support
 
 2. [IP Address Calculations](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#ip-address-availability-and-exhaustion)
-   Azure CNI - that same basic /24 subnet (251 usable IPs) range could only support a maximum of 8 nodes in the cluster
+   With Azure CNI network model, that same /24 subnet (251 usable IPs) range could only support a maximum of 8 nodes in the cluster
    This node count could only support up to 240 (8x30) pods (with a default maximum of 30 pods per node with Azure CNI).
 
 3. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
 
-AKS Uses [services](https://docs.microsoft.com/en-us/azure/aks/concepts-network#services) to provide inbound connectivity to pods insides the AKS cluster. The three service types are (Cluster IP, NodePort and LoadBalancer). In the archictecture above, the service type is LoadBalancer. AKS Creates an Azure load balancer resource, configures an external IP address, and connects the requested pods to the load balancer backend pool. To allow customers' traffic to reach the application, load balancing rules are created on the desired ports.Internal load balancer and external load balancer can be used at the same time. All egress traffic from the NODEs and PODs use the loadbalancer IP for outbound traffic.
+AKS uses [services](https://docs.microsoft.com/en-us/azure/aks/concepts-network#services) to provide inbound connectivity to pods insides the AKS cluster. The three service types are (Cluster IP, NodePort and LoadBalancer). In the archictecture above, the service type is LoadBalancer. AKS Creates an Azure load balancer resource, configures an external IP address, and connects the requested pods to the load balancer backend pool. To allow customers' traffic to reach the application, load balancing rules are created on the desired ports. Internal load balancer and external load balancer can be used at the same time. All egress traffic from the NODEs and PODs use the loadbalancer IP for outbound traffic.
 
 Diagram showing Load Balancer traffic flow in an AKS cluster
 ![AKS Basic Networking](images/aks-loadbalancer.png)
@@ -73,7 +73,7 @@ az aks create \
 Pre-assigned IP addresses for PODs based on --max-pods=30 setting setting
 Screen capture of the Azure VNET and AKS subnet:
 
-![Route table](images/aks-advanced-pod-ip-assignment.png)
+![Route table](images/aks-advanced-pod-IP-assignment.png)
 
 Note that AKS nodes and pods get IPs from the same AKS subnet
 
@@ -95,7 +95,7 @@ service/red-service-internal   LoadBalancer   10.101.54.70     172.16.240.97   8
 
 ```
 
-####Node view
+#### Node view
 
 Note that node inherits the DNS from the Azure VNET DNS setting. The outbound IP for the node is the External Load balancer outbound SNAT.
 
@@ -171,7 +171,7 @@ root@aks-nodepool1-38290826-vmss000002:/# curl ifconfig.io
 
 ```
 
-####POD View
+#### POD View
 
 Note that the outbound IP of the POD is the External Load balancer SNAT.
 
@@ -205,7 +205,7 @@ options ndots:5
 
 ```
 
-####Traffic flows to and from On-premises
+#### Traffic flows to and from On-premises
 
 **From AKS to On-premises**
 Note: On-Premises server sees the Node IP.
@@ -268,7 +268,7 @@ red
 
 ```
 
-####Azure VM View
+#### Azure VM View
 
 Note: Azure VM on the same VNET sees the actual POD IP.
 
