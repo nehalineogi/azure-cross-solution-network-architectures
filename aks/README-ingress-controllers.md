@@ -32,8 +32,11 @@ foo.bar.com -> 178.91.123.132 ->
 
 Fanout
 http://akscolors.penguintrails.com
+
 http://akscolors.penguintrails.com/red
+
 http://akscolors.penguintrails.com/green
+
 http://akscolors.penguintrails.com/blue
 
 **Name based virtual hosting**
@@ -45,9 +48,10 @@ foo.bar.com --| |-> foo.bar.com service1:80
 bar.foo.com --| |-> bar.foo.com service2:80
 
 http://aksred.penguintrails.com
+
 http://aksgreen.penguintrails.com
+
 http://aksblue.penguintrails.com
-default-white
 
 ## Design Components and Planning
 
