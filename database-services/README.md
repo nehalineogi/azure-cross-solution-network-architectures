@@ -61,9 +61,8 @@ DNS Checker Output
 
    ![Networking](images/ssms-connection.png)
 
-## Tools and Traffic Flows
+## TODO
 
-1. SSMS (local DB, SQLMI)
-2. Connection String (local DB, SQL MI)
-3. DMS
-4. Storage account
+1. Fix flow for online migration
+2. Multiregion addition
+3. NVA Design considerations

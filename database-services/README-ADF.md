@@ -14,7 +14,7 @@ Download Visio link here.
 2. [Support Data Stores and Formats](https://docs.microsoft.com/en-us/azure/data-factory/copy-activity-overview#supported-data-stores-and-formats)
 3. [Integration Runtime Concepts](https://docs.microsoft.com/en-us/azure/data-factory/concepts-integration-runtime)
 4. [Self Hosted Integration Runtime](https://docs.microsoft.com/en-us/azure/data-factory/create-self-hosted-integration-runtimes)
-5. [Managed Virtual Network](https://docs.microsoft.com/en-us/azure/data-factory/managed-virtual-network-private-endpoint)
+5. [Managed Virtual Network- **Preview Feature**](https://docs.microsoft.com/en-us/azure/data-factory/managed-virtual-network-private-endpoint)
 6. [Linked Services](https://docs.microsoft.com/en-us/azure/data-factory/concepts-linked-services)
 
 ## Design Components
@@ -40,7 +40,7 @@ Going from left to right, source(on-premises) to a sink(Azure PaaS), the service
 
 ## Design Considerations and Planning
 
-1. [Managed Virtual Network](https://docs.microsoft.com/en-us/azure/data-factory/managed-virtual-network-private-endpoint)
+1. [Managed Virtual Network - **Preview Feature**](https://docs.microsoft.com/en-us/azure/data-factory/managed-virtual-network-private-endpoint)
 
    Benefits of using Managed Virtual Network:
 
