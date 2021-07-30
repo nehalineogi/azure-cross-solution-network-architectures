@@ -4,7 +4,7 @@ This architecture demonstrates the connectivity architecture and traffic flows f
 
 ## Reference Architecture
 
-### Application Gateway Ingress Contoller (AGIC)
+### Application Gateway Ingress Contoller (AGIC) (Using Azure CNI Network)
 
 ![AKS Advanced Networking](images/aks-app-gw-ingress.png)
 
@@ -18,14 +18,46 @@ Download Visio link here.
 5. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
 6. [Ingress Troubleshooting](https://azure.github.io/application-gateway-kubernetes-ingress/troubleshootings/troubleshooting-installing-a-simple-application/)
 
+## Ingress Concepts
+
+Some ingress concepts - detailed link [here](https://kubernetes.io/docs/concepts/services-networking/ingress/)
+
+**Simple fanout**
+
+A fanout configuration routes traffic from a single IP address to more than one Service, based on the HTTP URI being requested. An Ingress allows you to keep the number of load balancers down to a minimum. For example, a setup like:
+
+foo.bar.com -> 178.91.123.132 ->
+/ foo service1:4200
+/ bar service2:8080
+
+Fanout
+http://akscolors.penguintrails.com
+http://akscolors.penguintrails.com/red
+http://akscolors.penguintrails.com/green
+http://akscolors.penguintrails.com/blue
+
+**Name based virtual hosting**
+
+Name-based virtual hosts support routing HTTP traffic to multiple host names at the same IP address.
+
+foo.bar.com --| |-> foo.bar.com service1:80
+| 178.91.123.132 |
+bar.foo.com --| |-> bar.foo.com service2:80
+
+http://aksred.penguintrails.com
+http://aksgreen.penguintrails.com
+http://aksblue.penguintrails.com
+default-white
+
 ## Design Components and Planning
 
 1. [Benefits of Application Gateway](https://docs.microsoft.com/en-us/azure/application-gateway/ingress-controller-overview#benefits-of-application-gateway-ingress-controller)
-   AGIC helps eliminate the need to have another load balancer/public IP in front of the AKS cluster and avoids multiple hops in your datapath before requests reach the AKS cluster. Application Gateway talks to pods using their private IP directly and does not require NodePort or KubeProxy services. This also brings better performance to your deployments.
 
-Ingress Controller is supported exclusively by Standard_v2 and WAF_v2 SKUs, which also brings you autoscaling benefits. Application Gateway can react in response to an increase or decrease in traffic load and scale accordingly, without consuming any resources from your AKS cluster.
+- AGIC helps eliminate the need to have another load balancer/public IP in front of the AKS cluster and avoids multiple hops in your datapath before requests reach the AKS cluster. Application Gateway talks to pods using their private IP directly and does not require NodePort or KubeProxy services. This also brings better performance to your deployments.
 
-Using Application Gateway in addition to AGIC also helps protect your AKS cluster by providing TLS policy and Web Application Firewall (WAF) functionality.
+- Ingress Controller is supported exclusively by Standard_v2 and WAF_v2 SKUs, which also brings you autoscaling benefits. Application Gateway can react in response to an increase or decrease in traffic load and scale accordingly, without consuming any resources from your AKS cluster.
+
+- Using Application Gateway in addition to AGIC also helps protect your AKS cluster by providing TLS policy and Web Application Firewall (WAF) functionality.
 
 2. [L7 Features](https://docs.microsoft.com/en-us/azure/application-gateway/ingress-controller-overview#benefits-of-application-gateway-ingress-controller)
    AGIC is configured via the Kubernetes Ingress resource, along with Service and Deployments/Pods. It provides a number of features, leveraging Azure’s native Application Gateway L7 load balancer. To name a few:
@@ -43,7 +75,30 @@ There are two ways to deploy AGIC for your AKS cluster. The first way is through
 
 ## Design Validations
 
-1. IP Address Assignment
+#### Create a sample deployment
+
+Create red,green and blue services and ingress using the Yaml files link [here](https://github.com/nehalineogi/aks-app-gw-ingress)
+
+```
+#
+# Create Namespace
+kubectl create namespace colors-ns
+#
+# Deployments
+#
+kubectl apply -f red-deployment.yaml
+kubectl apply -f green-deployment.yaml
+kubectl apply -f blue-deployment.yaml
+kubectl apply -f white-deployment.yaml
+#
+# Ingress
+#
+kubectl apply -f colors-fanout.yaml
+kubectl apply -f colors-virtual-host.yaml
+
+```
+
+#### IP Address Assignment
 
 ```
  k get nodes,pods,service -o wide -n colors-ns
@@ -70,7 +125,7 @@ service/red-service     ClusterIP   10.101.135.216   <none>        8080/TCP   25
 
 ```
 
-2. Fanout Ingress
+#### Fanout Ingress
 
 ```
 k get ingress colors-fanout-ingress -n colors-ns
@@ -98,10 +153,13 @@ Events:                        <none>
 
 ```
 
-3. On Prem Testing (Fanout)
+#### On Prem Testing (Fanout)
 
 ```
-Access via Application gateway
+Access via Application gateway (public IP)
+nehali@nehali-laptop:~$ dig akscolors.penguintrails.com +short
+nnaksappgw.eastus.cloudapp.azure.com.
+20.84.1.67
 nehali@nehali-laptop:~$ curl http://akscolors.penguintrails.com/red
 red
 nehali@nehali-laptop:~$ curl http://akscolors.penguintrails.com/green
@@ -110,9 +168,7 @@ nehali@nehali-laptop:~$ curl http://akscolors.penguintrails.com/blue
 blue
 nehali@nehali-laptop:~$ curl http://akscolors.penguintrails.com
 red
-nehali@nehali-laptop:~$ dig akscolors.penguintrails.com +short
-nnaksappgw.eastus.cloudapp.azure.com.
-20.84.1.67
+
 
 Directly access the PODs:
 nehali@nehali-laptop:~$ curl http://172.16.240.61:8080
@@ -124,7 +180,7 @@ red
 
 ```
 
-4. Virtual Host Ingress
+#### Virtual Host Ingress
 
 ```
 k get ingress colors-virtual-host-ingress -n colors-ns
@@ -156,7 +212,7 @@ Events:                       <none>
 
 ```
 
-5. On Prem Testing (Virtual Host)
+#### On Prem Testing (Virtual Host)
 
 ```
 dig aksred.penguintrails.com +short
@@ -184,14 +240,12 @@ red
 
 ```
 
-6. Application Gateway Validations
+#### Application Gateway Validations
 
 Path Based Inbound Rule
 
 ![Path based inbound rule](images/app-gw-path-based.png)
 
-## Tools and Traffic Flows
+## TODO
 
-1. kubectl command refernce
-2. dnsutils pod (To run basic connectivity commands)
-3. ssh into AKS nodes
+1. nginx ingress - update and consolidate content from the old artcile [here](https://github.com/nehalineogi/aks-nginx-ingress)
