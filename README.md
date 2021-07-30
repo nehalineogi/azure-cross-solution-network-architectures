@@ -22,7 +22,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - [AKS Private Cluster](aks/README-private-cluster.md)
   - [AKS Private Cluster Azure Front Door Integration](https://github.com/nehalineogi/aks-private-cluster-with-afd-premium)
 - [AKS Ingress Controllers](aks/README-ingress-controllers.md)
-- [AKS Private Cluster with Azure Front Door](https://github.com/nehalineogi/aks-private-cluster-with-afd-premium)
+- [AKS Private Cluster with Azure Front Door](aks/README-private-cluster-with-AFD.md)
 - Ingress Controllers
   - [AKS nginx ingress controller](https://github.com/nehalineogi/aks-nginx-ingress)
   - [AKS Application gateway as ingress controller](https://github.com/nehalineogi/aks-app-gw-ingress)

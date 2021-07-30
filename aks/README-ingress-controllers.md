@@ -26,11 +26,15 @@ Some ingress concepts - detailed link [here](https://kubernetes.io/docs/concepts
 
 A fanout configuration routes traffic from a single IP address to more than one Service, based on the HTTP URI being requested. An Ingress allows you to keep the number of load balancers down to a minimum. For example, a setup like:
 
+```
 foo.bar.com -> 178.91.123.132 ->
 / foo service1:4200
 / bar service2:8080
 
+```
+
 Fanout
+
 http://akscolors.penguintrails.com
 
 http://akscolors.penguintrails.com/red
@@ -43,9 +47,14 @@ http://akscolors.penguintrails.com/blue
 
 Name-based virtual hosts support routing HTTP traffic to multiple host names at the same IP address.
 
+```
 foo.bar.com --| |-> foo.bar.com service1:80
 | 178.91.123.132 |
 bar.foo.com --| |-> bar.foo.com service2:80
+
+```
+
+Virtual Host
 
 http://aksred.penguintrails.com
 
