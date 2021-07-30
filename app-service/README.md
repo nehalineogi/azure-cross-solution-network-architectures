@@ -1,6 +1,6 @@
 ## Azure Web APP, Function App, Logic App Architecture
 
-This architecture demonstrates the connectivity architecture and traffic flows Azure Web APP and Function app. This covers VNET integration, private endpoints and DNS architecture in a multi-region design
+This architecture demonstrates the connectivity architecture and traffic flows Azure Web APP and Function app when using VNET integration and private endpoints. This architecture also covers DNS architecture in a multi-region design when using private endpoints with web app
 
 ## Reference Architecture
 
@@ -17,28 +17,29 @@ Download Visio link here
 5. [Premium SKU requirement for Private Endpoints](https://docs.microsoft.com/en-us/azure/app-service/networking/private-endpoint)
 6. [DNS Private Zone with App Services](https://docs.microsoft.com/en-us/azure/app-service/web-sites-integrate-with-vnet#azure-dns-private-zones)
 
-## Design Components
+## Design Components and considerations
 
-1. Hub Using Azure DNS, Spokes with Custom DNS server in Hub VNET
-2. Centrazlied Private DNS Zones
-3. Private Endpoints Per region
-4. Private Endpoints Cross Region
-5. VNET link to Private Zone Zone for Registration
-6. VNET links to Priave DNS Zones for Resolution
-7. Front End App Service talking to BE App Service via Private Endpoints
-8. VNET Integration and Outbound NAT
-
-## Design Considerations and Planning
-
-1. Create Private Endpoints per region and establish routing for the other region to connect to the private endpoint.
-2. Create Private endpoints cross regions if end-to-end IP routing is not in place.
-3. Centralized Private DNS Zones vs Prviate DNS Zones Per region. In the above architecture both east and the west hubs are linked to the same Private DNS Zone in the east region.
-
-![DNS Zone VNET links](images/vnet-link-dns-zone.png)
+1. Hybrid DNS setup with Hub VNET Using Azure DNS, Spokes with Custom DNS server pointing to the HUB DNS server
+2. Private Endpoints Per region vs Private Endpoints Cross Region depending on your DR strategy and existing end-to-end routing.
+3. VNET links to Private Zone Zone for **Registration**
+4. VNET links to Priave DNS Zones for **Resolution**
+5. Front End App Service talking to BE App Service via Private Endpoints
+6. Egress Requirements for App services: Use VNET Integration and **Outbound NAT Gateway** for deterministic IP for outbound
+7. Create Private Endpoints per region and establish routing for the other region to connect to the private endpoint.
+8. Create Private endpoints cross regions if end-to-end IP routing is not in place.
+9. Centralized Private DNS Zones vs Prviate DNS Zones Per region. In the above architecture both east and the west hubs are linked to the same Private DNS Zone in the east region.
 
 ## Design Validations
 
-1. From FE Web APP ssh Console
+#### DNS Validations
+
+Make sure the private link DNS zone are linked to the corresponding VNETs
+
+![DNS Zone VNET links](images/vnet-link-dns-zone.png)
+
+#### From FE Web APP ssh Console
+
+Verify DNS resolution from Webapp console
 
 ```
 DNS Resolution for Private Endpoints From FrontEnd Webapp (ssh console)
@@ -62,10 +63,14 @@ root@c3feca61e67d:/home# curl ifconfig.io
 52.186.92.228
 ```
 
-2. DNS private zones
+#### DNS private zones
 
 DNS private zone for privatelink.azurewebsites.net in each regions. Note that a vnet can only be linked to once to the same private DNS zone.
 
 ![East DNS Zone](images/east-dns-zone.png)
 
 ![West DNS Zone](images/west-dns-zone.png)
+
+TODO
+
+1. Document Fuction app creating and validation
