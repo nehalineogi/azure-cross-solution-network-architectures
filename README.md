@@ -4,12 +4,12 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
 # Design Areas
 
-0. [Advanced Linux Networking](https://kubernetes.io/docs/concepts/cluster-administration/networking/) (Coming Soon...)
+0. Advanced Linux Networking (Coming Soon...)
 
-   - Overlay Networking - VXLAN, IPVLAN, MACVLAN, TUN/TAP drivers
+   - [Overlay Networking - VXLAN, IPVLAN, MACVLAN, TUN/TAP drivers](https://kubernetes.io/docs/concepts/cluster-administration/networking/)
    - Bird Internet Routing Daemon (BGP Routing)
    - Openswan VPN (IPsec Tunnels)
-   - IPtables ()
+   - IPtables
 
 1. [Azure Kubernetes Services (AKS)](aks/README-advanced.md)
 
@@ -25,18 +25,16 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
      - [AKS nginx ingress controller](https://github.com/nehalineogi/aks-nginx-ingress)
      - [AKS Application gateway as ingress controller](https://github.com/nehalineogi/aks-app-gw-ingress)
    - AKS with Azure firewall/NVA
-   - Core DNS and Azure DNS Integrations
-   - Kubernetes Network Model (Multus, Flannel,Weave, Calico, Cilium)
+   - Core DNS and Azure DNS Integrations (Coming soon...)
+   - Kubernetes Network Model - Multus, Flannel,Weave, Calico, Cilium (Coming Soon..)
    - Kubernets Serivce Mesh (Istio, Linkerd and Consul)
 
 2. [Azure Database Services](database-services/README.md)
 
    - [SQL Managed Instance](database-services/README.md)
-     - Single Region
-     - Multi region with Replication
-       DR Scenario
-       Multi Region Read
-       Database failover with Application connectivity
+     - Single Region (database-services/README.md)
+     - Multi region with Replication - DR Scenario (Coming Soon...)
+     - Database failover with Application connectivity
    - [Azure Data Factory(ADF)](database-services/README-ADF.md)
      - Managed VNET and Private Endpoints
      - Self hosted Integration Runtime (IR) In Azure
@@ -51,7 +49,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
    - [Securing APIM with Internal network mode and application gateway](apim/README.md)
    - [Self hosted gateway](apim/README.md)
    - [Azure Private DNS Zones integration](apim/README.md)
-   - [Letsencrypt Certificates and APIM Custom Domain](apim/README.md)
+   - Letsencrypt Certificates and APIM Custom Domain(Coming Soon...)
    - APIM with Azure firewall/NVA
    - APIM AAD and B2C Integration
    - APIM Multi-region Architecture
@@ -64,18 +62,19 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
    - [NAT Gateway Integration](app-service/README.md)
    - [Azure Private DNS Zone Planning](app-service/README.md)
 
-5. Bicep Automated Deployments (Coming Soon)
+5. Bicep Automated Deployments (Coming Soon...)
 
-# Tools of Trade (Work in Progress)
+# Tools of Trade (Work in progress)
 
 1. Database
 
-   - SQl Server Management Studio
+   - SQl Server Management Studio (SSMS)
    - Azure Data Management Studio
 
 2. Networking
 
-   - Wireshark
+   - linux networking tools
+   - Wireshark/tcpdump
    - dig
    - hping
 
@@ -84,9 +83,10 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
    - html
    - node.js
 4. DevOps
+   - github
    - Postman
 
-# Sample Applications
+# Build Sample Applications (Work in progress)
 
 1. Simple CRUD API Application
 2. Simple http server
