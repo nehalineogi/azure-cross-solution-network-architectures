@@ -1,6 +1,6 @@
 ## Azure API Management (APIM) Architecture
 
-This architecture demonstrates the connectivity architecture and traffic flows for API Management (APIM). APIM can be deployed in various modes. APIM in internal mode with Application gateway and Custom DNS. APIM can also be deployed in External with direct access from the internet.
+This architecture demonstrates the connectivity architecture and traffic flows to and from API Management (APIM). APIM can be deployed in various modes. The diagram shows APIM in internal mode with Application gateway and Custom DNS, APIM Self hosted gateway and APIM in External with direct access from the internet. Custom domain can be configured for all the three network models.
 
 ## Reference Architecture
 
@@ -19,21 +19,23 @@ Download postman APIM collection here
 
 ## Design Components
 
-1. APIM in Internal mode
-2. APIM in External mode
-3. Custom DNS using Azure Private DNS Zone
-4. Docker Desktop or On-Premises Kubernetes cluster to run API Management self hosted gateway
-5. Backend APIs running in Azure (AKS Cluster, Function App)
-6. Externally hosted APIs (example weather API or conference API)
-7. Backend API hosted on-premises
+1. APIM in Internal mode is accessible from on-premise via a private IP. APIM in internal mode can be deployed in conjunction with Application gateway for external access
+2. DNS Considerations:Internal network mode consideration is that the DNS needs to be maintained and configured by the user. Custom DNS using Azure Private DNS Zone
+3. APIM in External mode has direct access from the Intenet
+4. Backend APIs needs to be routable from APIM in internal mode or external mode.
+5. Docker Desktop or On-Premises Kubernetes cluster to run API Management self hosted gateway
+6. The diagram shows Backend APIs running in Azure (AKS Cluster, Function App)
+7. Externally hosted APIs (example weather API or conference API)
+8. Backend API hosted on-premises
+9. Custom domain can be configured with internal, external and self hosted gateway
 
 ## Design Considerations and Planning
 
-1. Azure Subnet planning for DMS subnet and SQL MI subnet
+1. Azure Subnet planning for APIM subnet.
 
 If using API version 2021-01-01-preview or later to deploy an Azure API Management, you don't have to use a subnet dedicated to API Management instances.
 
-2. DNS Resolution in Azure
+2. DNS Resolution in Azure (Internal Mode)
    In external VNET mode, Azure manages the DNS. For internal VNET mode, you have to manage your own DNS. Note that none of the service endpoints in Internal Mode are registered on the public DNS. The service endpoints will remain inaccessible until you configure DNS for the VNET. If using custom DNS on-premises should also resolve APIM endpoints below
 
 #
@@ -76,9 +78,7 @@ management CNAME 60 nneastappgw.eastus.cloudapp.azure.com
 
 ![Networking](images/network-connectivity-status.png)
 
-## Tools and Traffic Flows
+## TODO
 
-1. Postman
-2. Node.js application in AKS
-3. Function API application
-4. Docker Desktop to run self hosted gateway
+1. Writeup on custom domain
+2. Document Developer portal considerations.

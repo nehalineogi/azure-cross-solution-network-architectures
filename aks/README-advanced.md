@@ -20,11 +20,16 @@ Download Visio link here.
 
 ## Design Components
 
+0. Network Model Comparison [From Azure Documentation](https://docs.microsoft.com/en-us/azure/aks/concepts-network#compare-network-models)
+
+![AKS Advanced Networking](images/network-model-comparison.png)
+
 1. [Key Design considerations](https://docs.microsoft.com/en-us/azure/aks/concepts-network#azure-cni-advanced-networking)
 
 - Nodes and PODs get IPs from the same subnet. This could lead to IP exhaustion issue and need for a large IP space to be available.
+- Pods get full virtual network connectivity and can be directly reached via their private IP address from connected networks
 - Needs a large available IP address space.Common consideration is the assigned IP address range is too small to then add additional nodes when you scale or upgrade a cluster.
-- Most of the pod communication is to resources outside of the cluster.The network team may also not be able to issue a large enough IP address range to support your expected application demands.
+- The network team may also not be able to issue a large enough IP address range to support your expected application demands.
 - There is no user defined routes for pod connectivity.
 - Azure Network Policy support
 
