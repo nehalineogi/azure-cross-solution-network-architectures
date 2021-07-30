@@ -1,10 +1,10 @@
 ## Azure AKS Advanced/Azure CNI Networking
 
-This architecture demonstrates the connectivity architecture and traffic flows connecting Azure AKS Private Cluster environment with your on-premises environment.
+This architecture demonstrates the connectivity architecture and traffic flows for connecting Azure AKS Private Cluster environment with your on-premises environment. In the Private AKS cluster the control plane or the kube API server has an **internal IP address**. This IP is exposed via a private endpoint in the AKS subnet. The on-premises networks use the Private IP address of the Kube-API server hence both DNS and routing has to be in place between on-premises and AKS network..A private DNS zone is also created example - abcxyz.privatelink.<region>.azmk8s.io. AKS services exposed using internal load balancer. Egress paths from AKS cluster to Internet can be designed using External Load balancer (default) or using Azure Firewall/NVA/NAT gateway using userDefinedRouting setting in AKS
 
 ## Reference Architecture
 
-### Advanced/Azure CNI Networking
+#### This reference architecture uses Advanced/Azure CNI Networking
 
 ![AKS Advanced Networking](images/aks-private-cluster.png)
 
@@ -12,58 +12,77 @@ Download Visio link here.
 
 ## Azure Documentation links
 
-2. [Create Private Cluster](https://docs.microsoft.com/en-us/azure/aks/private-clusters)
-3. [AKS Private Cluster limitations](https://docs.microsoft.com/en-us/azure/aks/private-clusters#limitations)
-4. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
-5. [Internal Load Balancer](https://docs.microsoft.com/en-us/azure/aks/internal-lb)
-6. [Configure Private DNS Zone](https://docs.microsoft.com/en-us/azure/aks/private-clusters#configure-private-dns-zone)
+1. [Create Private Cluster](https://docs.microsoft.com/en-us/azure/aks/private-clusters)
+2. [AKS Private Cluster limitations](https://docs.microsoft.com/en-us/azure/aks/private-clusters#limitations)
+3. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
+4. [Internal Load Balancer](https://docs.microsoft.com/en-us/azure/aks/internal-lb)
+5. [Configure Private DNS Zone](https://docs.microsoft.com/en-us/azure/aks/private-clusters#configure-private-dns-zone)
+6. [Egress Path](https://docs.microsoft.com/en-us/azure/aks/egress-outboundtype#outbound-type-of-userdefinedrouting)
 
 ## Design Components and Planning
 
-1. [AKS Advanced Networking](https://docs.microsoft.com/en-us/azure/aks/concepts-network#azure-cni-advanced-networking)
-   The kubenet networking option is the default configuration for AKS cluster creation. With kubenet:
-
-With Azure CNI, a common issue is the assigned IP address range is too small to then add additional nodes when you scale or upgrade a cluster. The network team may also not be able to issue a large enough IP address range to support your expected application demands. 3. Node/Pod Limits 4. On-Prem routing 5. DNS Design 6. Inbound IP via Azure Load Balancer 7. Outbound IP via Azure load Balancer
-Unlike kubenet, traffic to endpoints in the same virtual network isn't NAT'd to the node's primary IP. The source address for traffic inside the virtual network is the pod IP. Traffic that's external to the virtual network still NATs to the node's primary IP.
-
-2. [IP Address Calculations](https://docs.microsoft.com/en-us/azure/aks/)
-   Azure CNI - that same basic /24 subnet range could only support a maximum of 8 nodes in the cluster
-   This node count could only support up to 240 pods (with a default maximum of 30 pods per node with Azure CNI)up to 27,610 pods (with a default maximum of 110 pods per node with kubenet)
-
-3. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
-
-Creates an Azure load balancer resource, configures an external IP address, and connects the requested pods to the load balancer backend pool. To allow customers' traffic to reach the application, load balancing rules are created on the desired ports.
-
-Diagram showing Load Balancer traffic flow in an AKS cluster
-![AKS Basic Networking](images/aks-loadbalancer.png)
-
-4. [Internal Load Balancer](https://docs.microsoft.com/en-us/azure/aks/internal-lb)
-
-If you'd like to specify IP address the the [link here](https://docs.microsoft.com/en-us/azure/aks/internal-lb#specify-an-ip-address)
-If you would like to use a specific IP address with the internal load balancer, add the loadBalancerIP property to the load balancer YAML manifest. In this scenario, the specified IP address must reside in the same subnet as the AKS cluster and must not already be assigned to a resource. For example, you shouldn't use an IP address in the range designated for the Kubernetes subnet.
-
-Check the [Prerequisites](https://docs.microsoft.com/en-us/azure/aks/configure-azure-cni)
-The cluster identity used by the AKS cluster must have at least Network Contributor permissions on the subnet within your virtual network.
+1. Planning is required routing Kube API private endpoint from on-premises or from other Azure VNETs.
+2. Hybrid DNS setup with private DNS zones for DNS resolution from on-premises in Enterprise environments. However, local hosts files can be used in lab/POCs.
+3. **Ingress Considerations:** While, both Internal and External load balancers can be used to expose Ingress services however, in a truely private cluster only Internal load balancer is used for Ingress. External Load balancer is used for egress.
+4. **Egress Considerations**: Egress Path options via Azure External Load balancer or using Azure Firewall/NVA
 
 ## Design Validations
 
-1. Kube API Access
+##### Create AKS Private Cluster
 
-AKS Private DNS Zone get and Private endpoint gets created.
+```
+az aks create \
+ --resource-group $RG \
+ --name $AKSCLUSTER \
+ --node-count 3 \
+ --generate-ssh-keys \
+ --enable-private-cluster \
+ --enable-addons monitoring \
+ --dns-name-prefix $AKSDNS \
+ --network-plugin $PLUGIN \
+ --service-cidr 10.101.0.0/16 \
+ --dns-service-ip 10.101.0.10 \
+ --docker-bridge-address 172.20.0.1/16 \
+ --vnet-subnet-id $SUBNET_ID \
+ --assign-identity $USERIDENTITY_ID \
+ --attach-acr $MYACR \
+ --max-pods 30 \
+ --verbose
+
+```
+
+#### Kube API Access
+
+With the above command AKS Private DNS Zone and Private endpoint gets created.
 
 ![AKS Private DNS Zone](images/aks-private-dns-zone.png)
 
+#### On-Premises to Kube API server connectivity
+
+Note the kubeAPI / cluster IP resolves to privatelink.eastus.azmk8s.io (private endpoint IP)
+
+```
 k cluster-info
 Kubernetes control plane is running at https://nnaks-private-b8afe38a.abc8bcf2-73d8-4d97-83d5-0ae74d9aa974.privatelink.eastus.azmk8s.io:443
 healthmodel-replicaset-service is running at https://nnaks-private-b8afe38a.abc8bcf2-73d8-4d97-83d5-0ae74d9aa974.privatelink.eastus.azmk8s.io:443/api/v1/namespaces/kube-system/services/healthmodel-replicaset-service/proxy
 CoreDNS is running at https://nnaks-private-b8afe38a.abc8bcf2-73d8-4d97-83d5-0ae74d9aa974.privatelink.eastus.azmk8s.io:443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
 Metrics-server is running at https://nnaks-private-b8afe38a.abc8bcf2-73d8-4d97-83d5-0ae74d9aa974.privatelink.eastus.azmk8s.io:443/api/v1/namespaces/kube-system/services/https:metrics-server:/proxy
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'
 
+```
+
+Note that the KubeAPI DNS resolves to private IP and hence routing to the private IP needs to be configured. Best practice to use the hybrid On-premises DNS best practices for DNS resolution of private endpoint from on-premises. However, a local hosts file can be leverage for lab/POC.
+
+```
 To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
 nehali@nehali-laptop:/mnt/c/Users/neneogi/Documents/repos/k8s/aks-azcli$ more /etc/hosts | grep nnaks-private-b8afe38a.abc8bcf2-73d8-4d97-83d5-0ae74d9aa974.privatelink.eastus.azmk8s.io
 172.16.238.4 nnaks-private-b8afe38a.abc8bcf2-73d8-4d97-83d5-0ae74d9aa974.privatelink.eastus.azmk8s.io
 
-2. IP Address Assignment
+```
+
+#### IP Address Assignment
+
+This deployment is using Azure CNI so the node and pod IPs are in the same subnet
 
 ```
 k get nodes,pods,service -o wide -n colors-ns
@@ -83,7 +102,9 @@ service/red-service-internal   LoadBalancer   10.101.218.208   172.16.238.98   8
 
 ```
 
-3. Node view
+#### Node view
+
+Note the Node inherits the DNS from VNET DNS setting and egress for the node via Azure External load balancer (NVA/Firewall options available)
 
 ```
  k get pods -o wide
@@ -154,7 +175,9 @@ root@aks-nodepool1-40840556-vmss000000:/# curl ifconfig.me
 
 ```
 
-6. POD View
+#### POD View
+
+Pod Inherits DNS from the Node and egress via external LB.
 
 ```
  k exec -it dnsutils -- sh
@@ -180,16 +203,12 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 search default.svc.cluster.local svc.cluster.local cluster.local 1grit5g0qs5exa0hhgg2i425ng.bx.internal.cloudapp.net
 nameserver 10.101.0.10
 options ndots:5
-/ # curl ifconfig.io
-sh: curl: not found
-/ # wget -qO- ifconfig.io
-wget: error getting response: Network unreachable
 / # wget -qO- ifconfig.me
 20.81.57.240
 
 ```
 
-7. Traffic from On-Premises to Azure
+#### Traffic validations from On-Premises to Azure
 
 ```
 
@@ -203,22 +222,22 @@ eth5: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
         RX errors 0  dropped 0  overruns 0  frame 0
         TX packets 0  bytes 0 (0.0 B)
         TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+Internal Load Balancer Service IP
 nehali@nehali-laptop:~$ curl  http://172.16.238.98:8080
 red
+
+Directly Hitting the POD IP:
 nehali@nehali-laptop:~$ curl  http://172.16.238.11:8080
 red
+
+Public IP Via External Load Balancer
 nehali@nehali-laptop:~$ curl  http://52.226.99.79:8080
 red
 
 
 ```
 
-## Tools and Traffic Flows
+#### TODO
 
-1. kubectl command refernce
-2. dnsutils pod (To run basic connectivity commands)
-3. ssh into AKS nodes
-
-```
-
-```
+1. Test Preview features (AKS run command)
