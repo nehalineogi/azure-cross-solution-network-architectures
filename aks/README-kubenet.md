@@ -12,9 +12,10 @@ Download Visio link here.
 
 ## Azure Documentation links
 
+1. [Choosing a network model](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#choose-a-network-model-to-use)
 2. [IP Address Planning](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#ip-address-availability-and-exhaustion)
 3. [AKS Basic Networking](https://docs.microsoft.com/en-us/azure/aks/concepts-network#kubenet-basic-networking)
-4. [AKS CNI Networking](https://docs.microsoft.com/en-us/azure/aks/configure-azure-cni)
+4. [AKS CNI Design Considerations](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#limitations--considerations-for-kubenet)
 5. [AKS Services](https://docs.microsoft.com/en-us/azure/aks/concepts-network#services)
 
 ## Design Components and Planning
@@ -24,12 +25,13 @@ Download Visio link here.
 The kubenet networking option is the default configuration for AKS cluster creation.Some design considerations for Kubenet
 
 - Nodes receive an IP address from the Azure subnet (NODE CIDR). You can deploy these nodes in existing Azure VNET or a new VNET.
-- Pods receive an IP address from a POD CIDR which is logically different address space than the NODE CIDR
+- Pods receive an IP address from a POD CIDR which is logically different address space than the NODE CIDR. Direct pod addressing isn't supported for kubenet due to kubenet design.
+- Route tables and user-defined routes are required for using kubenet, which adds complexity to operations.
 - AKS Uses Network address translation (NAT) so that the pods can reach resources on the Azure virtual and on-prem resources. The source IP address of the traffic is translated to the node's primary IP address
 - Inbound connectivity using Internal or External load Balancer
-- Use Kubnet when uou have limited IP address space.
+- Use Kubnet when you have limited IP address space on Azure VNET
 - Most of the pod communication is within the cluster.
-- You don't need advanced AKS features such as virtual nodes or Azure Network Policy.
+- Azure Network Policy is not supported but calico policies are supported
 
 #### [IP Address Calculations](https://docs.microsoft.com/en-us/azure/aks/)
 
@@ -273,3 +275,4 @@ red
 ## TODO
 
 1. Reference link to egress via firewall/NAT gateway
+2. Section for Calico Policy

@@ -1,6 +1,6 @@
-## Azure AKS Advanced/Azure CNI Networking
+## Azure AKS Advanced/CNI Networking
 
-This architecture demonstrates the connectivity architecture and traffic flows connecting Azure AKS environment with your on-premises environment.
+This architecture uses the for AKS Advanced/CNI Network Model. Observe that the AKS Nodes **and** PODs receive IP address from Azure subnet (NODE CIDR). Note the traffic flows for inbound connectivity to AKS via Internal and External Load balancers.This architecture also demonstrates connectivity and flows to and from on-premises. Note that on-premises network can directly reach both NODE and pod networks. Outbound flows from AKS pods to internet traverse the Azure load balancer. There are other design options to egress via Azure firewall/NVA or Azure NAT Gateway.
 
 ## Reference Architecture
 
@@ -12,43 +12,70 @@ Download Visio link here.
 
 ## Azure Documentation links
 
+1. [Choose a Network Model](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#choose-a-network-model-to-use)
 2. [IP Address Planning](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#ip-address-availability-and-exhaustion)
 3. [Configure AKS Advanced Networking](https://docs.microsoft.com/en-us/azure/aks/configure-azure-cni)
 4. [AKS CNI Networking](https://docs.microsoft.com/en-us/azure/aks/configure-azure-cni)
 5. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
 
-## Design Components and Planning
+## Design Components
 
-1. [AKS Advanced Networking](https://docs.microsoft.com/en-us/azure/aks/concepts-network#azure-cni-advanced-networking)
-   The kubenet networking option is the default configuration for AKS cluster creation. With kubenet:
+1. [Key Design considerations](https://docs.microsoft.com/en-us/azure/aks/concepts-network#azure-cni-advanced-networking)
 
-With Azure CNI, a common issue is the assigned IP address range is too small to then add additional nodes when you scale or upgrade a cluster. The network team may also not be able to issue a large enough IP address range to support your expected application demands. 3. Node/Pod Limits 4. On-Prem routing 5. DNS Design 6. Inbound IP via Azure Load Balancer 7. Outbound IP via Azure load Balancer
-Unlike kubenet, traffic to endpoints in the same virtual network isn't NAT'd to the node's primary IP. The source address for traffic inside the virtual network is the pod IP. Traffic that's external to the virtual network still NATs to the node's primary IP.
+- Nodes and PODs get IPs from the same subnet. This could lead to IP exhaustion issue and need for a large IP space to be available.
+- Needs a large available IP address space.Common consideration is the assigned IP address range is too small to then add additional nodes when you scale or upgrade a cluster.
+- Most of the pod communication is to resources outside of the cluster.The network team may also not be able to issue a large enough IP address range to support your expected application demands.
+- There is no user defined routes for pod connectivity.
+- Azure Network Policy support
 
-2. [IP Address Calculations](https://docs.microsoft.com/en-us/azure/aks/)
-   Azure CNI - that same basic /24 subnet range could only support a maximum of 8 nodes in the cluster
-   This node count could only support up to 240 pods (with a default maximum of 30 pods per node with Azure CNI)up to 27,610 pods (with a default maximum of 110 pods per node with kubenet)
+2. [IP Address Calculations](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#ip-address-availability-and-exhaustion)
+   Azure CNI - that same basic /24 subnet (251 usable IPs) range could only support a maximum of 8 nodes in the cluster
+   This node count could only support up to 240 (8x30) pods (with a default maximum of 30 pods per node with Azure CNI).
 
 3. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
 
-Creates an Azure load balancer resource, configures an external IP address, and connects the requested pods to the load balancer backend pool. To allow customers' traffic to reach the application, load balancing rules are created on the desired ports.
+AKS Uses [services](https://docs.microsoft.com/en-us/azure/aks/concepts-network#services) to provide inbound connectivity to pods insides the AKS cluster. The three service types are (Cluster IP, NodePort and LoadBalancer). In the archictecture above, the service type is LoadBalancer. AKS Creates an Azure load balancer resource, configures an external IP address, and connects the requested pods to the load balancer backend pool. To allow customers' traffic to reach the application, load balancing rules are created on the desired ports.Internal load balancer and external load balancer can be used at the same time. All egress traffic from the NODEs and PODs use the loadbalancer IP for outbound traffic.
 
 Diagram showing Load Balancer traffic flow in an AKS cluster
 ![AKS Basic Networking](images/aks-loadbalancer.png)
 
 4. [Internal Load Balancer](https://docs.microsoft.com/en-us/azure/aks/internal-lb)
-
-If you'd like to specify IP address the the [link here](https://docs.microsoft.com/en-us/azure/aks/internal-lb#specify-an-ip-address)
-If you would like to use a specific IP address with the internal load balancer, add the loadBalancerIP property to the load balancer YAML manifest. In this scenario, the specified IP address must reside in the same subnet as the AKS cluster and must not already be assigned to a resource. For example, you shouldn't use an IP address in the range designated for the Kubernetes subnet.
-
-Check the [Prerequisites](https://docs.microsoft.com/en-us/azure/aks/configure-azure-cni)
-The cluster identity used by the AKS cluster must have at least Network Contributor permissions on the subnet within your virtual network.
+   Internal load balancer can be used to expose the services. This exposed IP will reside on the AKS-subnet. If you'd like to specify a specific IP address following instructions in [link here](https://docs.microsoft.com/en-us/azure/aks/internal-lb#specify-an-ip-address).
 
 ## Design Validations
 
-1. Pre-assigned IP addresses for PODs based on --max-pods setting
-   ![Route table](images/aks-advanced-pod-ip-assignment.png)
-2. IP Address Assignment
+#### Cluster Deployment
+
+The AKS cluster in the diagram is deployed using these settings (Note: bicep automated deployment coming soon....)
+
+```
+az aks create \
+ --resource-group $RG \
+ --name $AKSCLUSTER \
+ --node-count 3 \
+ --generate-ssh-keys \
+ --enable-addons monitoring \
+ --dns-name-prefix $AKSDNS \
+ --network-plugin $PLUGIN \
+ --service-cidr 10.101.0.0/16 \
+ --dns-service-ip 10.101.0.10 \
+ --docker-bridge-address 172.20.0.1/16 \
+ --vnet-subnet-id $SUBNET_ID \
+ --enable-managed-identity \
+ --attach-acr $MYACR \
+ --max-pods 30 \
+ --verbose
+
+```
+
+#### IP Address Assignment
+
+Pre-assigned IP addresses for PODs based on --max-pods=30 setting setting
+Screen capture of the Azure VNET and AKS subnet:
+
+![Route table](images/aks-advanced-pod-ip-assignment.png)
+
+Note that AKS nodes and pods get IPs from the same AKS subnet
 
 ```
 k get nodes,pods,service -o wide -n colors-ns
@@ -68,7 +95,9 @@ service/red-service-internal   LoadBalancer   10.101.54.70     172.16.240.97   8
 
 ```
 
-3. Node view
+####Node view
+
+Note that node inherits the DNS from the Azure VNET DNS setting. The outbound IP for the node is the External Load balancer outbound SNAT.
 
 ```
 k get nodes,pods -o wide
@@ -142,7 +171,9 @@ root@aks-nodepool1-38290826-vmss000002:/# curl ifconfig.io
 
 ```
 
-6. POD View
+####POD View
+
+Note that the outbound IP of the POD is the External Load balancer SNAT.
 
 ```
 k exec -it dnsutils -- sh
@@ -174,7 +205,10 @@ options ndots:5
 
 ```
 
-7. On Premises view
+####Traffic flows to and from On-premises
+
+**From AKS to On-premises**
+Note: On-Premises server sees the Node IP.
 
 ```
 k exec -it dnsutils -- sh
@@ -213,7 +247,30 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 
 ```
 
-8. Azure VM View
+**From On-Premises to AKS:**
+Note that the AKS pods are directly reachable
+
+```
+nehali@nehali-laptop:~$ ifconfig eth5
+eth5: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+        inet 192.168.199.2  netmask 255.255.255.128  broadcast 192.168.199.127
+        inet6 fe80::d9b2:eb5a:4d72:3918  prefixlen 64  scopeid 0xfd<compat,link,site,host>
+        ether 00:ff:96:aa:71:26  (Ethernet)
+        RX packets 0  bytes 0 (0.0 B)
+        RX errors 0  dropped 0  overruns 0  frame 0
+        TX packets 0  bytes 0 (0.0 B)
+        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+
+nehali@nehali-laptop:~$ curl  http://172.16.240.97:8080
+red
+nehali@nehali-laptop:~$ curl  172.16.240.50:8080
+red
+
+```
+
+####Azure VM View
+
+Note: Azure VM on the same VNET sees the actual POD IP.
 
 ```
 POD:
@@ -259,29 +316,9 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 
 ```
 
-9. Traffic from On-Premises to Azure
-
-```
-nehali@nehali-laptop:~$ ifconfig eth5
-eth5: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 192.168.199.2  netmask 255.255.255.128  broadcast 192.168.199.127
-        inet6 fe80::d9b2:eb5a:4d72:3918  prefixlen 64  scopeid 0xfd<compat,link,site,host>
-        ether 00:ff:96:aa:71:26  (Ethernet)
-        RX packets 0  bytes 0 (0.0 B)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 0  bytes 0 (0.0 B)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-
-nehali@nehali-laptop:~$ curl  http://172.16.240.97:8080
-red
-nehali@nehali-laptop:~$ curl  172.16.240.50:8080
-red
-
-```
-
-## Validations
-
 ### External Service
+
+Note the Endpoints are up. Node the Type:LoadBalancer and exposed IP is public
 
 ```
 k describe service red-service -n colors-ns
@@ -311,6 +348,8 @@ Events:
 
 ### Internal Service
 
+Note the type: Load balancer and the exposed IP is private
+
 ```
  k describe service red-service-internal -n colors-ns
 Name:                     red-service-internal
@@ -337,8 +376,6 @@ Events:
 
 ```
 
-## Tools and Traffic Flows
+## TODO
 
-1. kubectl command refernce
-2. dnsutils pod (To run basic connectivity commands)
-3. ssh into AKS nodes
+1. Azure Network Policy Validations

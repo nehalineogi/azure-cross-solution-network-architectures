@@ -4,39 +4,15 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
 # Design Areas
 
-1. [Azure Database Services](database-services/README.md)
+0. [Advanced Linux Networking](https://kubernetes.io/docs/concepts/cluster-administration/networking/) (Coming Soon...)
 
-   - [SQL Managed Instance](database-services/README.md)
-     - Single Region
-     - Multi region with Replication
-       DR Scenario
-       Multi Region Read
-       Database failover with Application connectivity
-   - [Azure Data Factory(ADF)](database-services/README-ADF.md)
-     - Managed VNET and Private Endpoints
-     - Self hosted Integration Runtime (IR) In Azure
-     - Self hosted Integration Runtime (IR) On Premises
-   - Azure SQL Database
-   - Azure Synapse
-   - OSS databases - mysql and postgres
+   - Overlay Networking - VXLAN, IPVLAN, MACVLAN, TUN/TAP drivers
+   - Bird Internet Routing Daemon (BGP Routing)
+   - Openswan VPN (IPsec Tunnels)
+   - IPtables ()
 
-2. [Azure API Management(APIM)](apim/README.md)
+1. [Azure Kubernetes Services (AKS)](aks/README-advanced.md)
 
-   - [External network mode](apim/README.md)
-   - [Securing APIM with Internal network mode and application gateway](apim/README.md)
-   - [Self hosted gateway](apim/README.md)
-   - [Azure Private DNS Zones integration](apim/README.md)
-   - [Letsencrypt Certificates and APIM Custom Domain](apim/README.md)
-   - APIM with Azure firewall/NVA
-   - APIM AAD and B2C Integration
-   - APIM Multi-region Architecture
-
-3. [Azure Kubernetes Services (AKS)](aks/README-advanced.md)
-
-   - Advanced Linux Networking
-     - VXLAN, IPVLAN, MACVLAN, TUN/TAP drivers
-     - Bird Internet Routing Daemon
-     - IPtables
    - [Docker Networking](aks/README-docker-multihost.md)
      - [Single Host](aks/README-docker-singlehost.md)
      - [Multi Host](aks/README-docker-multihost.md)
@@ -53,6 +29,33 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
    - Kubernetes Network Model (Multus, Flannel,Weave, Calico, Cilium)
    - Kubernets Serivce Mesh (Istio, Linkerd and Consul)
 
+2. [Azure Database Services](database-services/README.md)
+
+   - [SQL Managed Instance](database-services/README.md)
+     - Single Region
+     - Multi region with Replication
+       DR Scenario
+       Multi Region Read
+       Database failover with Application connectivity
+   - [Azure Data Factory(ADF)](database-services/README-ADF.md)
+     - Managed VNET and Private Endpoints
+     - Self hosted Integration Runtime (IR) In Azure
+     - Self hosted Integration Runtime (IR) On Premises
+   - Azure SQL Database
+   - Azure Synapse
+   - OSS databases - mysql and postgres
+
+3. [Azure API Management(APIM)](apim/README.md)
+
+   - [External network mode](apim/README.md)
+   - [Securing APIM with Internal network mode and application gateway](apim/README.md)
+   - [Self hosted gateway](apim/README.md)
+   - [Azure Private DNS Zones integration](apim/README.md)
+   - [Letsencrypt Certificates and APIM Custom Domain](apim/README.md)
+   - APIM with Azure firewall/NVA
+   - APIM AAD and B2C Integration
+   - APIM Multi-region Architecture
+
 4. [Azure App-service Webapp](app-service/README.md)
 
    - [Private Endpoint](app-service/README.md)
@@ -61,9 +64,9 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
    - [NAT Gateway Integration](app-service/README.md)
    - [Azure Private DNS Zone Planning](app-service/README.md)
 
-5. Bicep Automated Deployments
+5. Bicep Automated Deployments (Coming Soon)
 
-# Tools of Trade
+# Tools of Trade (Work in Progress)
 
 1. Database
 
@@ -93,13 +96,16 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
 Special thank you to my collegues
 
+- [David O'Keefe](https://www.linkedin.com/in/david-o-keefe/)
+- [Shaun Croucher](https://github.com/shcrouch)
+- [Xavier Elizondo](https://github.com/xelizondo)
 - [Heather Tze](https://github.com/hsze)
 - [Daniel Mueser](https://github.com/dmauser)
+- [Sowmyan Soman Chullikkattil](https://github.com/sowsan)
 - [Mike Richter](https://github.com/michaelsrichter)
 - [Sumit Sengupta](https://github.com/sumitsengupta)
 - [Mike Shelton](https://www.linkedin.com/in/mshelt)
 - [Tommy Falgout](https://github.com/lastcoolnameleft)
 - [Devanshi Joshi](https://github.com/devanshidiaries)
-- [Sowmyan Soman Chullikkattil](https://github.com/sowsan)
 
 ## Acknowledgments
