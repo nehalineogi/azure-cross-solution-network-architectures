@@ -1,8 +1,8 @@
-# appdev-AKS-database-networking
+# Cross Solution Network Architectures
 
 This is a repo of cross solution network connectivity designs with Azure PaaS services, Azure Kubernetes Services(AKS) and on-premise connectivity. The design are based on real world experiences working with Partners and customers in various ADS (Azure Design Sessions). The goal is to create a reusable reference architectures and content based on real world examples based out of working with partners and collaborating with cross solution CSAs. This repo will contain downloadable artifacts like visios, postman collections and test applications for various designs. Learn about tools of trades from various SME CSAs to validate designs,connectivity, view application and traffic flows.
 
-# Cross Solution Network Architectures
+# Design Areas
 
 1. [Azure Database Services](database-services/README.md)
 
@@ -17,7 +17,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
      - Self hosted Integration Runtime (IR) In Azure
      - Self hosted Integration Runtime (IR) On Premises
    - Azure SQL Database
-   - Azure Syanpse
+   - Azure Synapse
    - OSS databases - mysql and postgres
 
 2. [Azure API Management(APIM)](apim/README.md)
