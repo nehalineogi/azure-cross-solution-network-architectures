@@ -242,7 +242,7 @@ red
 
 This is supported in Azure CNI mode only. For details see the application gateway ingress controller document [here](README-ingress-controllers.md)
 
-````
+```
 k get nodes,pods,service,ingress  -n colors-ns -o wide
 Warning: extensions/v1beta1 Ingress is deprecated in v1.14+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
 NAME                                     STATUS   ROLES   AGE   VERSION    INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
@@ -271,8 +271,8 @@ service/red-service-internal       LoadBalancer   10.101.218.208   172.16.238.98
 NAME                                             CLASS    HOSTS                                                                                       ADDRESS         PORTS   AGE
 ingress.extensions/colors-fanout-ingress         <none>   akscolors.penguintrails.com                                                                 104.211.0.182   80      2m27s
 ingress.extensions/colors-virtual-host-ingress   <none>   aksred.penguintrails.com,aksgreen.penguintrails.com,aksblue.penguintrails.com + 1 more...   104.211.0.182   80      52s
+```
 
-```#### TODO
+#### TODO
 
 1. Test Preview features (AKS run command)
-````
