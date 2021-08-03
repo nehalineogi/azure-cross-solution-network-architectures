@@ -23,7 +23,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
   - [AKS Private Cluster with Azure Front Door](aks/README-private-cluster-with-AFD.md)
 - [Ingress Controllers](aks/README-ingress-appgw.md)
   - [AKS Application gateway Ingress Controller (AGIC)](aks/README-ingress-appgw.md)
-    [Nginx Ingress controller](aks/README-ingress-nginx.md)
+  - [Nginx Ingress controller](aks/README-ingress-nginx.md)
 - [AKS Egress with Azure firewall/NVA](aks/README-aks-egress.md)
 - AKS Multiple Node Pools
 - Core DNS and Azure DNS Integrations (Coming soon...)

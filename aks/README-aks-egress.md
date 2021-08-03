@@ -28,6 +28,9 @@ Download Visio link here.
 1. [Assymetric Routing Issue with Standard Load Balancer Design](https://docs.microsoft.com/en-us/azure/firewall/integrate-lb#asymmetric-routing)
 
 When firewall or NVA is deployed in conjuction with the Azure Load balancer assymetric routing issue occurs when a AKS subnet has a default route going to the firewall's private IP address. In this case, the incoming traffic is received via load balancer public IP address, but the return path goes through the firewall's private IP address. Since the firewall is stateful, it drops the returning packet because the firewall isn't aware of such an established session. The way to fix the assymetric routing issue is to create a NAT rule on the firewall pointing to the Load balancer IP for Ingress traffic and create a UDR for the firewall public IP to bypass the firewall for the return traffic.
+
+**From Azure Documentation link [here](https://docs.microsoft.com/en-us/azure/firewall/integrate-lb#asymmetric-routing):**
+
 ![Firewall LB Assymetric Routing issue](images/firewall-lb-asymmetric.png)
 
 4. [OutboundType](https://docs.microsoft.com/en-us/azure/aks/limit-egress-traffic#deploy-aks-with-outbound-type-of-udr-to-the-existing-network)
@@ -287,6 +290,6 @@ After adding the firewall rule below
 
 ## TODO
 
-1. Open case for bug - authorized ranges
+1. Open documnetation case/bug - authorized ranges
 2. Sentinel on firewall logging
 3. Check docker.io rule
