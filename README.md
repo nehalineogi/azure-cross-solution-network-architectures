@@ -25,8 +25,8 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
   - [AKS Application ateway Ingress Controller (AGIC)](aks/README-ingress-appgw.md)
   - [Nginx Ingress controller](aks/README-ingress-nginx.md)
 - [AKS Egress with Azure firewall/NVA](aks/README-aks-egress.md)
+- [AKS Multiple Nodepool Design](aks/README-multinode.md)
 - Core DNS and Azure DNS Integrations (Coming soon...)
-- AKS Multiple Node Pools
 - Kubernetes Network Model - Multus, Flannel,Weave, Calico, Cilium
 - Kubernets Serivce Mesh (Istio, Linkerd and Consul)
 
