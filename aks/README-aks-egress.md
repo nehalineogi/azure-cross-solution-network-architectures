@@ -223,11 +223,15 @@ nginx-service   LoadBalancer   10.41.195.139   20.81.68.64   8080:32459/TCP   43
 
 ```
 
-#### Traffic flows from Internet to AKS (via Azure firewall)
+#### Firewall NAT: Traffic flows from Internet to AKS (via Azure firewall)
 
 Test to firewall Public IP
 40.87.106.169:80 ---NAT---> 20.81.68.64:8080
 Return traffic bypasses the firewall
+**firewall NAT**
+![firewall-route-table](images/aks-egress-fw-nat.png)
+
+validation from the internet:
 
 ```
  curl -I 40.87.106.169
@@ -242,12 +246,11 @@ Cache-Control: no-cache
 
 ```
 
-Note the /32 for the firewall IP
-**firewall route table**
-![firewall-route-table](images/aks-egress-fwrt.png)
+#### Firewall route table
 
-**firewall NAT**
-![firewall-route-table](images/aks-egress-fw-nat.png)
+Note the /32 for the firewall IP
+
+![firewall-route-table](images/aks-egress-fwrt.png)
 
 #### Traffic flow from POD to Internet (via Firewall)
 
