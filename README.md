@@ -21,11 +21,11 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - [Advanced/Azure CNI Networking](aks/README-advanced.md)
 - [AKS Private Cluster](aks/README-private-cluster.md)
   - [AKS Private Cluster with Azure Front Door](aks/README-private-cluster-with-AFD.md)
-- [AKS Ingress Controllers](aks/README-ingress-controllers.md)
-- Ingress Controllers
-  - [AKS nginx ingress controller](https://github.com/nehalineogi/aks-nginx-ingress)
-  - [AKS Application gateway as ingress controller](https://github.com/nehalineogi/aks-app-gw-ingress)
-- AKS with Azure firewall/NVA
+- [Ingress Controllers](aks/README-ingress-appgw.md)
+  - [AKS Application gateway Ingress Controller (AGIC)](aks/README-ingress-appgw.md)
+    [Nginx Ingress controller](aks/README-ingress-nginx.md)
+- [AKS Egress with Azure firewall/NVA](aks/README-aks-egress.md)
+- AKS Multiple Node Pools
 - Core DNS and Azure DNS Integrations (Coming soon...)
 - Kubernetes Network Model - Multus, Flannel,Weave, Calico, Cilium (Coming Soon..)
 - Kubernets Serivce Mesh (Istio, Linkerd and Consul)

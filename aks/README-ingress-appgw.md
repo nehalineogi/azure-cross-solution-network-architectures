@@ -1,6 +1,6 @@
-## Azure AKS Ingress Controllers
+## Azure AKS Application Gateway Ingress Controller (AGIC)
 
-This architecture demonstrates the connectivity architecture and traffic flows for using L7 load balancer to expose AKS services to the Internet. The Application Gateway Ingress Controller (AGIC) is a kubernetes application which make it possible for AKS customers to leverage Azure's nativce Application Gateway L7 load balancer.
+This architecture demonstrates the connectivity architecture and traffic flows for using L7 load balancer to expose AKS services to the Internet. The Application Gateway Ingress Controller (AGIC) is a kubernetes application which make it possible for AKS customers to leverage Azure's native Application Gateway L7 load balancer. Application gateway talks to the pods using the their private IP (Azure CNI Network) and does not require NodePort services. This reduces one hop in the traffic flow
 
 ## Reference Architecture
 
@@ -64,6 +64,8 @@ http://aksblue.penguintrails.com
 
 ## Design Components and Planning
 
+0. Only Supported in **Azure CNI Networking Mode** (See detailed explanation below)
+
 1. [Benefits of Application Gateway](https://docs.microsoft.com/en-us/azure/application-gateway/ingress-controller-overview#benefits-of-application-gateway-ingress-controller)
 
    - AGIC helps eliminate the need to have another load balancer/public IP in front of the AKS cluster and avoids multiple hops in your datapath before requests reach the AKS cluster. Application Gateway talks to pods using their private IP directly and does not require NodePort or KubeProxy services. This also brings better performance to your deployments.
@@ -86,11 +88,24 @@ http://aksblue.penguintrails.com
 
 There are two ways to deploy AGIC for your AKS cluster. The first way is through Helm; the second is through AKS as an add-on. The primary benefit of deploying AGIC as an AKS add-on is that it's much simpler than deploying through Helm. For a new setup, you can deploy a new Application Gateway and a new AKS cluster with AGIC enabled as an add-on in one line in Azure CLI. The add-on is also a fully managed service, which provides added benefits such as automatic updates and increased support. Both ways of deploying AGIC (Helm and AKS add-on) are fully supported by Microsoft. Additionally, the add-on allows for better integration with AKS as a first class add-on
 
+## Enable AGIC
+
+1. Create the Application Gateway in the same VNET as AKS cluster or in a peer VNET.
+2. Enable AGIC from the Command line or Azure Portal
+
+```
+az aks enable-addons -n $AKSCLUSTER -g $RG -a ingress-appgw --appgw-id $AKS_APPGW_ID
+
+```
+
+Enable AGIC from Azure Portal
+![Enable AGIC](images/appgw-enable-ingress.png)
+
 ## Design Validations
 
 #### Create a sample deployment
 
-Create red,green and blue services and ingress using the Yaml files link [here](https://github.com/nehalineogi/aks-app-gw-ingress)
+Create red,green and blue services and ingress using the YAML files link [here](https://github.com/nehalineogi/aks-app-gw-ingress)
 
 ```
 #
@@ -255,9 +270,123 @@ red
 
 #### Application Gateway Validations
 
-Path Based Inbound Rule
+##### Front End Listners (Based on the host headers)
+
+![Path based inbound rule](images/appgw-listeners.png)
+
+##### App GW Backend Pools (red, green and blue service)
+
+![Path based inbound rule](images/appgw-backend-pools.png)
+
+##### Backed pods for red-pool
+
+![Path based inbound rule](images/appgw-red-pool.png)
+
+##### Path Based Routing Rule
 
 ![Path based inbound rule](images/app-gw-path-based.png)
+
+## Load Balancer and App Gateway Co-existenace
+
+Note LoadBalancer Service with External IP. Ingress services of the type Cluster-IP.
+
+```
+k get service,Ingress -n colors-ns
+Warning: extensions/v1beta1 Ingress is deprecated in v1.14+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
+NAME                             TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)          AGE
+service/blue-service             ClusterIP      10.101.223.65    <none>          8080/TCP         3m46s
+service/blue-service-external    LoadBalancer   10.101.117.215   52.142.19.89    8080:30101/TCP   33s
+service/green-service            ClusterIP      10.101.93.184    <none>          8080/TCP         3m49s
+service/green-service-external   LoadBalancer   10.101.21.196    52.226.2.143    8080:31752/TCP   38s
+service/red-service              ClusterIP      10.101.182.196   <none>          8080/TCP         4m3s
+service/red-service-external     LoadBalancer   10.101.98.223    52.142.17.248   8080:32696/TCP   5m10s
+
+NAME                                             CLASS    HOSTS                                                                                       ADDRESS         PORTS   AGE
+ingress.extensions/colors-fanout-ingress         <none>   akscolors.penguintrails.com                                                                 104.211.0.182   80      3m40s
+ingress.extensions/colors-virtual-host-ingress   <none>   aksred.penguintrails.com,aksgreen.penguintrails.com,aksblue.penguintrails.com + 1 more...   104.211.0.182   80
+
+
+```
+
+##### Validations
+
+```
+Load Balancer IPs (3 Different IPs)
+nehali@nehali-laptop:~$ curl 52.142.19.89:8080
+blue
+nehali@nehali-laptop:~$ curl 52.142.17.248:8080
+red
+nehali@nehali-laptop:~$ curl 52.226.2.143:8080
+green
+
+Ingress Testing:
+
+nehali@nehali-laptop:~$ dig +short akscolors.penguintrails.com
+nnaksappgw.eastus.cloudapp.azure.com.
+104.211.0.182
+nehali@nehali-laptop:~$ dig +short  aksred.penguintrails.com
+nnaksappgw.eastus.cloudapp.azure.com.
+104.211.0.182
+
+nehali@nehali-laptop:~$ curl akscolors.penguintrails.com/red
+red
+nehali@nehali-laptop:~$ curl akscolors.penguintrails.com/green
+green
+nehali@nehali-laptop:~$ curl akscolors.penguintrails.com/blue
+blue
+nehali@nehali-laptop:~$ curl aksred.penguintrails.com
+red
+nehali@nehali-laptop:~$ curl aksgreen.penguintrails.com
+green
+nehali@nehali-laptop:~$ curl aksblue.penguintrails.com
+blue
+
+```
+
+#### Application Gateway with Kubenet Network (Not Supported)
+
+```
+k get nodes,pods,service,ingress -A | grep -i ingress
+Warning: extensions/v1beta1 Ingress is deprecated in v1.14+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
+kube-system   pod/ingress-appgw-deployment-5f49d4c468-ddcrc   1/1     Running   0          36m
+
+
+k get nodes,pods,service,ingress -o wide -n colors-ns
+Warning: extensions/v1beta1 Ingress is deprecated in v1.14+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
+NAME                                     STATUS   ROLES   AGE   VERSION    INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
+node/aks-nodepool1-62766439-vmss000000   Ready    agent   15d   v1.19.11   172.16.239.4   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
+node/aks-nodepool1-62766439-vmss000001   Ready    agent   15d   v1.19.11   172.16.239.5   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
+node/aks-nodepool1-62766439-vmss000002   Ready    agent   15d   v1.19.11   172.16.239.6   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
+
+NAME                                    READY   STATUS    RESTARTS   AGE     IP            NODE                                NOMINATED NODE   READINESS GATES
+pod/blue-deployment-d5ccf9445-4g7dw     1/1     Running   0          87s     10.244.0.10   aks-nodepool1-62766439-vmss000001   <none>           <none>
+pod/blue-deployment-d5ccf9445-6njwz     1/1     Running   0          87s     10.244.1.11   aks-nodepool1-62766439-vmss000002   <none>           <none>
+pod/blue-deployment-d5ccf9445-q7l64     1/1     Running   0          87s     10.244.2.11   aks-nodepool1-62766439-vmss000000   <none>           <none>
+pod/green-deployment-59cfdc54fb-6fkp2   1/1     Running   0          91s     10.244.0.9    aks-nodepool1-62766439-vmss000001   <none>           <none>
+pod/green-deployment-59cfdc54fb-hd88k   1/1     Running   0          91s     10.244.1.10   aks-nodepool1-62766439-vmss000002   <none>           <none>
+pod/green-deployment-59cfdc54fb-m8m9j   1/1     Running   0          91s     10.244.2.10   aks-nodepool1-62766439-vmss000000   <none>           <none>
+pod/red-deployment-5f589f64c6-djnz8     1/1     Running   0          2m33s   10.244.1.9    aks-nodepool1-62766439-vmss000002   <none>           <none>
+pod/red-deployment-5f589f64c6-nrjsk     1/1     Running   0          2m33s   10.244.2.9    aks-nodepool1-62766439-vmss000000   <none>           <none>
+pod/red-deployment-5f589f64c6-xv59t     1/1     Running   0          2m33s   10.244.0.8    aks-nodepool1-62766439-vmss000001   <none>           <none>
+
+NAME                           TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE     SELECTOR
+service/blue-service           ClusterIP      10.101.246.124   <none>        8080/TCP         87s     app=blue
+service/green-service          ClusterIP      10.101.59.114    <none>        8080/TCP         91s     app=green
+service/red-service            ClusterIP      10.101.141.74    <none>        8080/TCP         2m13s   app=red
+service/red-service-external   LoadBalancer   10.101.47.205    40.88.55.42   8080:32282/TCP   2m33s   app=red
+
+NAME                                             CLASS    HOSTS                                                                                       ADDRESS         PORTS   AGE
+ingress.extensions/colors-fanout-ingress         <none>   akscolors.penguintrails.com                                                                 104.211.0.182   80      60s
+ingress.extensions/colors-virtual-host-ingress   <none>   aksred.penguintrails.com,aksgreen.penguintrails.com,aksblue.penguintrails.com + 1 more...   104.211.0.182   80
+
+```
+
+Application Gateway does not have routing to PODs inside the Cluster because PODs are not on the node network. All backend services showing unhealthy
+
+![Application GW Kubnet](images/appgw-kubenet.png)
+
+Red POD IPs not reachable from Application Gateway
+![Application GW Kubnet](images/backend-pool-kubenet.png)
 
 ## TODO
 

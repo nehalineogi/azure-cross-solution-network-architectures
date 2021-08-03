@@ -71,6 +71,6 @@ DNS private zone for privatelink.azurewebsites.net in each regions. Note that a 
 
 ![West DNS Zone](images/west-dns-zone.png)
 
-TODO
+#### TODO
 
 1. Document Fuction app creating and validation

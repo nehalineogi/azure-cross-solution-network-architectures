@@ -68,6 +68,8 @@ Events:                   <none>
 
 #### View the Private Link Services
 
+Note: No connection yet.
+
 ![View PLS Connections before](images/pls-before.png)
 
 #### Add Origin in Azure Front Door (Note: Enable Private Endpoint)
@@ -148,7 +150,13 @@ Date: Fri, 30 Jul 2021 21:04:28 GMT
 
 ```
 
+#### Origin Health Validation
+
+In case the front end web site does not load validate the origin health
+
+![origin health validation](images/origin-health.png)
+
 #### TODO
 
 1. Bring your own Certificates
-2. Add the full diagram
+2. Add ADF to the private cluster diagram to complete the full picture
