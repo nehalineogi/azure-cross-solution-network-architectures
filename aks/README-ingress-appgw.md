@@ -90,7 +90,7 @@ There are two ways to deploy AGIC for your AKS cluster. The first way is through
 
 ## Enable AGIC
 
-1. Create the Application Gateway in the same VNET as AKS cluster or in a peer VNET.
+1. Create the Application Gateway in the same VNET as AKS cluster or in a peered VNET.
 2. Enable AGIC from the Command line or Azure Portal
 
 ```
@@ -105,7 +105,7 @@ Enable AGIC from Azure Portal
 
 #### Create a sample deployment
 
-Create red,green and blue services and ingress using the YAML files link [here](https://github.com/nehalineogi/aks-app-gw-ingress)
+Create red,green and blue services and ingress using the YAML files link [here](yaml/)
 
 ```
 #
@@ -114,15 +114,24 @@ kubectl create namespace colors-ns
 #
 # Deployments
 #
-kubectl apply -f red-deployment.yaml
-kubectl apply -f green-deployment.yaml
-kubectl apply -f blue-deployment.yaml
-kubectl apply -f white-deployment.yaml
+
+kubectl apply -f red-cluster-ip.yaml
+kubectl apply -f green-cluster-ip.yaml
+kubectl apply -f blue-cluster-ip.yaml
+kubectl get nodes,pods,services -o wide -n colors-ns
+
+
 #
-# Ingress
+# fanout
 #
-kubectl apply -f colors-fanout.yaml
-kubectl apply -f colors-virtual-host.yaml
+kubectl apply -f fanout.yaml
+kubectl get ingress -o wide -n colors-ns
+
+#
+# virtual host
+#
+kubectl apply -f virtualhost.yaml
+kubectl get ingress -o wide -n colors-ns
 
 ```
 
@@ -272,7 +281,7 @@ red
 
 ##### Front End Listners (Based on the host headers)
 
-![Path based inbound rule](images/appgw-listeners.png)
+![Path based inbound rule](images/aks-appgw-listeners.png)
 
 ##### App GW Backend Pools (red, green and blue service)
 
@@ -283,6 +292,8 @@ red
 ![Path based inbound rule](images/appgw-red-pool.png)
 
 ##### Path Based Routing Rule
+
+![Path based inbound rule](images/appgw-routing-rules.png)
 
 ![Path based inbound rule](images/app-gw-path-based.png)
 
