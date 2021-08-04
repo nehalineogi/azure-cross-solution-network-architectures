@@ -20,6 +20,8 @@ Download Visio link here.
 
 #### Add a Node pool, with node-public-ips and tag the nodes
 
+Add a new nodepool to existing cluster in a new subnet(Prevew feature) link [here](https://docs.microsoft.com/en-us/azure/aks/use-multiple-node-pools#add-a-node-pool-with-a-unique-subnet-preview)
+
 ```
 az aks nodepool add \
  --resource-group aks-basic-rg \
@@ -35,7 +37,8 @@ az aks nodepool add \
 
 #### Create a sample deployment
 
-Note use the nodeSelector to select the new node pool
+Note use the **nodeSelector** to select the new node pool
+
 k create ns demo-ns-mynodepool
 k apply -f deployment-mynodepool.yaml
 

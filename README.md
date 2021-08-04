@@ -22,7 +22,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - [AKS Private Cluster](aks/README-private-cluster.md)
   - [AKS Private Cluster with Azure Front Door](aks/README-private-cluster-with-AFD.md)
 - [Ingress Controllers](aks/README-ingress-appgw.md)
-  - [AKS Application ateway Ingress Controller (AGIC)](aks/README-ingress-appgw.md)
+  - [AKS Application Gateway Ingress Controller (AGIC)](aks/README-ingress-appgw.md)
   - [Nginx Ingress controller](aks/README-ingress-nginx.md)
 - [AKS Egress with Azure firewall/NVA](aks/README-aks-egress.md)
 - [AKS Multiple Nodepool Design](aks/README-multinode.md)
@@ -40,7 +40,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
   - Managed VNET and Private Endpoints
   - Self hosted Integration Runtime (IR) In Azure
   - Self hosted Integration Runtime (IR) On Premises
-- Azure SQL Database
+- Azure SQL Database (PaaS Service)
 - Azure Synapse
 - OSS databases - mysql and postgres
 
@@ -63,7 +63,11 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - [NAT Gateway Integration](app-service/README.md)
 - [Azure Private DNS Zone Planning](app-service/README.md)
 
-### Bicep Automated Deployments (Coming Soon...)
+### DevOps and Automation
+
+- Bicep Automated deployments (Coming Soon...)
+- GitOps for Application deployment
+- CI/CD pipelines using Github Actions
 
 # Tools of Trade (Work in progress)
 

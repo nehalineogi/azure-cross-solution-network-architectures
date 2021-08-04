@@ -12,12 +12,13 @@ Download Visio link here.
 
 ## Azure Documentation links
 
-1. [Create Private Cluster](https://docs.microsoft.com/en-us/azure/aks/private-clusters)
-2. [AKS Private Cluster limitations](https://docs.microsoft.com/en-us/azure/aks/private-clusters#limitations)
-3. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
-4. [Internal Load Balancer](https://docs.microsoft.com/en-us/azure/aks/internal-lb)
-5. [Configure Private DNS Zone](https://docs.microsoft.com/en-us/azure/aks/private-clusters#configure-private-dns-zone)
-6. [Egress Path](https://docs.microsoft.com/en-us/azure/aks/egress-outboundtype#outbound-type-of-userdefinedrouting)
+1. [AKS Baseline architecture](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks/secure-baseline-aks)
+2. [Create Private Cluster](https://docs.microsoft.com/en-us/azure/aks/private-clusters)
+3. [AKS Private Cluster limitations](https://docs.microsoft.com/en-us/azure/aks/private-clusters#limitations)
+4. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
+5. [Internal Load Balancer](https://docs.microsoft.com/en-us/azure/aks/internal-lb)
+6. [Configure Private DNS Zone](https://docs.microsoft.com/en-us/azure/aks/private-clusters#configure-private-dns-zone)
+7. [Egress Path](https://docs.microsoft.com/en-us/azure/aks/egress-outboundtype#outbound-type-of-userdefinedrouting)
 
 ## Design Components and Planning
 

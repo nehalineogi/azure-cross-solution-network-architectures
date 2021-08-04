@@ -1,6 +1,6 @@
 ## Azure API Management (APIM) Architecture
 
-This architecture demonstrates the connectivity architecture and traffic flows to and from API Management (APIM). APIM can be deployed in various modes. The diagram shows APIM in internal mode with Application gateway and Custom DNS, APIM Self hosted gateway and APIM in External with direct access from the internet. Custom domain can be configured for all the three network models.
+This architecture demonstrates the connectivity architecture and traffic flows to and from API Management (APIM). APIM can be deployed in various modes. The diagram shows APIM in internal mode with Application gateway and Custom DNS, APIM Self hosted gateway and APIM in External mode with direct access from the internet. Custom domain can be configured for all the three network models.
 
 ## Reference Architecture
 
@@ -21,7 +21,7 @@ Download postman APIM collection here
 
 1. APIM in Internal mode is accessible from on-premise via a private IP. APIM in internal mode can be deployed in conjunction with Application gateway for external access.
 2. **DNS Considerations:** Internal network mode consideration is that the DNS needs to be maintained and configured by the user. Custom DNS using Azure Private DNS Zone.
-3. APIM in External mode is directly accesible from the Intenet
+3. APIM in External mode is directly accesible from the Intenet. APIM in external mode the external DNS resolution for APIM endpoints is provided by the service.
 4. Backend APIs needs to be routable from APIM in internal mode or external mode.
 5. Use Docker host or On-Premises Kubernetes cluster to run API Management self hosted gateway
 6. The diagram shows Backend APIs running in Azure (AKS Cluster, Function App), externally hosted APIs (example weather API or conference API) and Backend API hosted on-premises
