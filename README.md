@@ -1,22 +1,25 @@
 # Cross Solution Network Architectures
 
-This is a repo of cross solution network connectivity designs with Azure PaaS services, Azure Kubernetes Services(AKS) and on-premise connectivity. The design are based on real world experiences working with Partners and customers in various ADS (Azure Design Sessions). The goal is to create a reusable artifacts like reference architectures and content based on real world examples based out of working with partners and collaborating with cross solution CSAs. This repo will contain downloadable artifacts like bicep automated deployments, io.draw diagram,visios, postman collections and test applications for various designs. Learn about tools of trades from various SME CSAs to validate designs,connectivity, view application and traffic flows.
+This is a repo of cross solution network connectivity designs with Azure PaaS services, Azure Kubernetes Services(AKS) and on-premise connectivity. These designs are based on real world experiences working with partners,customers and cross solution CSAs in various ADS (Azure Design Sessions). This repo will contain downloadable artifacts like bicep automated deployments, architecture diagrams, postman collections and tools to test applications for various designs. Learn about tools of trades from various SME CSAs to validate designs,connectivity, view application and traffic flows.
 
 # Design Areas
 
-### Advanced Linux Networking (Coming Soon...)
+### Advanced Linux Networking
 
-- [Overlay Networking - VXLAN, IPVLAN, MACVLAN, TUN/TAP drivers](https://kubernetes.io/docs/concepts/cluster-administration/networking/)
-- Bird Internet Routing Daemon (BGP Routing)
+- [VXLAN with two linux hosts (As good as it gets!)](advanced-linux-networking/linux-vxlan.md)
+- BIRD Internet Routing Daemon (BGP Routing on linux) (Coming Soon...)
 - Openswan VPN (IPsec Tunnels)
-- IPtables
+- The perfect NVA with linux
+- IPtables and eBPF
+- Cluster Networking - [IPVLAN, MACVLAN, TUN/TAP drivers](https://kubernetes.io/docs/concepts/cluster-administration/networking/)
 
 ### [Azure Kubernetes Services (AKS)](aks/README-advanced.md)
 
 - [Docker Networking](aks/README-docker-multihost.md)
   - [Single Host](aks/README-docker-singlehost.md)
   - [Multi Host](aks/README-docker-multihost.md)
-  - kind Cluster (Kubernetes In Docker) (Coming soon...)
+  - Bicep automated deployment (Coming soon...)
+  - kind Cluster (Kubernetes In Docker)
 - [Basic/Kubenet Networking](aks/README-kubenet.md)
 - [Advanced/Azure CNI Networking](aks/README-advanced.md)
 - [AKS Private Cluster](aks/README-private-cluster.md)
@@ -55,21 +58,25 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - APIM AAD and B2C Integration
 - APIM Multi-region Architecture
 
-### [Azure App-service Webapp](app-service/README.md)
+### [Azure App-service Networking ](app-service/README.md)
 
-- [Private Endpoint](app-service/README.md)
+- [Private Endpoint Integration](app-service/README.md)
 - [Service Endpoint](app-service/README.md)
 - [VNET Integration](app-service/README.md)
 - [NAT Gateway Integration](app-service/README.md)
 - [Azure Private DNS Zone Planning](app-service/README.md)
+- Azure App-Service with firewall for outbound traffic filtering (coming soon!)
 
 ### DevOps and Automation
 
 - Bicep Automated deployments (Coming Soon...)
+- Azure DevOps
 - GitOps for Application deployment
 - CI/CD pipelines using Github Actions
 
 # Tools of Trade (Work in progress)
+
+0. VSCode Extentions
 
 1. Database
 
@@ -78,15 +85,17 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
 2. Networking
 
-   - linux networking tools
+   - Microsoft Whiteboard
+   - Linux Networking
    - Wireshark/tcpdump
    - dig
-   - hping
+   - hping, tcptraceroute
 
 3. Application
    - python
    - html
    - node.js
+   - mysql
 4. DevOps
    - github
    - Postman

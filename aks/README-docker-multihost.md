@@ -450,6 +450,35 @@ IP 10.0.1.4 > 10.0.1.3: ICMP echo request, id 54, seq 3, length 64
 IP 10.0.1.3 > 10.0.1.4: ICMP echo reply, id 54, seq 3, length 64
 ```
 
+#### Cleanup services, swarm cluster
+
+```
+
+root@docker-host-1:~# docker service ls
+ID             NAME          MODE         REPLICAS   IMAGE                     PORTS
+dimkgkean8tk   web-service   replicated   3/2        nginxdemos/hello:latest
+root@docker-host-1:~# docker service rm  web-service
+web-service
+
+
+root@docker-host-2:~# docker swarm leave
+Node left the swarm.
+
+
+root@docker-host-1:~# docker swarm leave
+Error response from daemon: You are attempting to leave the swarm on a node that is participating as a manager. Removing the last manager erases all current state of the swarm. Use `--force` to ignore this message.
+root@docker-host-1:~# docker swarm leave --force
+Node left the swarm.
+
+root@docker-host-1:~# docker network rm docker_gwbridge
+docker_gwbridge
+
+root@docker-host-2:~# docker network rm docker_gwbridge
+docker_gwbridge
+root@docker-host-2:~#
+
+```
+
 ### TODO
 
 1. Enable encryption on overlay and capture packets
