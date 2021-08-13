@@ -9,6 +9,7 @@ Review architecture options to expose AKS Private Cluster (Internal Load Balance
 ##### Option with Azure Front Door Premium and Private Link Service
 
 ![alt text for image](images/afd-premium-aks-private-cluster.png)
+[Dowload visio](../Visios/AFD-private-cluster.vsdx)
 
 ## Azure Documentation
 
@@ -88,7 +89,7 @@ Note: Once you enable a Private Link origin and approve the private endpoint con
 
 ![View PLS Connections](images/pls-after.png)
 
-#### Update ADF route to use the new PLS orgin
+#### Update A route to use the new PLS orgin
 
 ![Update AFD Route](images/update-route.png)
 
@@ -159,4 +160,4 @@ In case the front end web site does not load validate the origin health
 #### TODO
 
 1. Bring your own Certificates
-2. Add ADF to the private cluster diagram to complete the full picture
+2. Add AFD to the private cluster diagram to complete the full picture
