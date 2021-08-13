@@ -9,7 +9,7 @@ Review architecture options to expose AKS Private Cluster (Internal Load Balance
 ##### Option with Azure Front Door Premium and Private Link Service
 
 ![alt text for image](images/afd-premium-aks-private-cluster.png)
-[Dowload visio](../Visios/AFD-private-cluster.vsdx)
+[Download Visio](../Visios/AFD-private-cluster.vsdx)
 
 ## Azure Documentation
 
