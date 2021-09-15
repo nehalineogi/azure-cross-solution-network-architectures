@@ -36,7 +36,7 @@ API Git                 nnapi-default.scm.azure-api.net
 
 # Backend API
 
-A backend in APIM is an HTTP service that implements the CRUD operations. This could running with Azure PaaS services like AKS or Azure Functions. This could also be running on a IaaS VM in Auzure or On-Premises.  The backend API URLs are referenced in the APIs created with APIM.
+A backend in APIM is an HTTP service that implements the CRUD operations. This could running with Azure PaaS services like AKS, Azure Functions or Azure logic APPs. This could also be running on a IaaS VM in Auzure or On-Premises.  The backend API URLs are referenced in the APIs created with APIM.
 
 ![APIM Architecture](images/common/backend-api.png)
 
