@@ -57,9 +57,9 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - [APIM with Azure firewall/NVA](apim/README-firewall.md)
 - [APIM Identity - AAD and B2C Integration](apim/README-identity.md)
 - [APIM Multi-region Architecture](apim/README-mulitregion.md)
-- [Self hosted gateway](apim/README-internal.md)
-- [Azure Private DNS Zones integration](apim/README-internal.md)
-- [Letsencrypt Certificates and APIM Custom Domain](apim/README-common.md)
+- [Self hosted gateway](apim/README-internal.md#api-self-hosted-gateway)
+- [Azure Private DNS Zones integration](apim/README-internal.md#design-components-and-guidelines)
+- [Letsencrypt Certificates and APIM Custom Domain](apim/README-common.md#letsencrypt-certificates-and-custom-domain)
 - [Network Troubleshooting](apim/README-troubleshooting.md)
 
 ### [Azure App-service Networking ](app-service/README.md)
