@@ -13,7 +13,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - IPtables and eBPF
 - Cluster Networking - [IPVLAN, MACVLAN, TUN/TAP drivers](https://kubernetes.io/docs/concepts/cluster-administration/networking/)
 
-### [Azure Kubernetes Services (AKS)](aks/README-advanced.md)
+### [Azure Kubernetes Services (AKS) Networking Series](aks/README-advanced.md)
 
 - [Docker Networking](aks/README-docker-multihost.md)
   - [Single Host](aks/README-docker-singlehost.md)
@@ -47,16 +47,20 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - Azure Synapse
 - OSS databases - mysql and postgres
 
-### [Azure API Management(APIM)](apim/README.md)
+### [Azure API Management(APIM) Networking Series](apim/README.md)
 
-- [External network mode](apim/README.md)
-- [Securing APIM with Internal network mode and application gateway](apim/README.md)
-- [Self hosted gateway](apim/README.md)
-- [Azure Private DNS Zones integration](apim/README.md)
-- Letsencrypt Certificates and APIM Custom Domain(Coming Soon...)
-- APIM with Azure firewall/NVA
-- APIM AAD and B2C Integration
-- APIM Multi-region Architecture
+- [APIM Big Picture view](apim/README-common.md)
+- [Default mode](apim/README-default.md)
+- [External network mode](apim/README-external.md)
+- [Internal network mode](apim/README-internal.md)
+- [Internal network mode with Azure Application Gateway](apim/README-appgw.md)
+- [APIM with Azure firewall/NVA](apim/README-firewall.md)
+- [APIM Identity - AAD and B2C Integration](apim/README-identity.md)
+- [APIM Multi-region Architecture](apim/README-mulitregion.md)
+- [Self hosted gateway](apim/README-internal.md)
+- [Azure Private DNS Zones integration](apim/README-internal.md)
+- [Letsencrypt Certificates and APIM Custom Domain](apim/README-common.md)
+- [Network Troubleshooting](apim/README-troubleshooting.md)
 
 ### [Azure App-service Networking ](app-service/README.md)
 
