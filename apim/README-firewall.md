@@ -1,6 +1,6 @@
 # Azure API Management (APIM) with NVA/Azure firewall
 
-This architecture demonstrates the connectivity architecture and traffic flows to API Management (APIM) endpoints using Azure firewall/NVA. APIM can be deployed in various modes. The diagram shows APIM in external mode and Azure firewall/NVA in the desgin. 
+This architecture demonstrates the connectivity architecture and traffic flows to API Management (APIM) endpoints using Azure firewall/NVA. APIM can be deployed in various modes. The diagram shows APIM in External Mode and Azure firewall/NVA in the desgin. 
 
 # Azure Documentation links
 
@@ -17,12 +17,12 @@ This architecture demonstrates the connectivity architecture and traffic flows t
 
 ![APIM Architecture](images/external/external-apim-with-firewall.png)
 
-# Pre-requisites
-Using Azure documentation link [here](https://docs.microsoft.com/en-us/azure/api-management/import-and-publish) ensure that you've external APIM in the external mode.
+# Prerequisites
+Using Azure documentation link [here](https://docs.microsoft.com/en-us/azure/api-management/import-and-publish) ensure that you've deployed APIM in External Mode.
 
 Refer to common documentation link [here](README-common.md) for more details on pre-requisites
-1. APIM in deployed in External mode.
-2. Products,APIs and subscriptions created
+1. APIM in deployed in External Mode.
+2. Products, APIs and subscriptions created
 3. VPN or Private Connectivity is optional in this design
 4. Internal and External APIs routable from APIM subnet
 5. Azure Provided default DNS resolution for API endpoints.
@@ -36,15 +36,15 @@ Refer to common documentation link [here](README-common.md) for more details on 
 0. **Traffic Flows**
    
    1. Blue/Cyan : Backend API Connections
-   2. Green: Developer Portal and API Gateway Access from Internet lands on the Azure firewall
-   3. Red: No VPN to On-premises
-   4. Purple: Self-hosted APIM Gateway(On-Premises) outbound connection to APIM Management plane in Azure
+   2. Green: Developer Portal and API Gateway Access from internet lands on the Azure firewall
+   3. Red: No VPN to on-premises
+   4. Purple: Self-hosted APIM Gateway (on-premises) outbound connection to APIM Management plane in Azure
    5. Service Endpoints Connection
 
 
-1. Main difference between external mode APIM and this architecture is the firewall/NVA consideration
+1. Main difference between External Mode APIM and this architecture is the firewall/NVA consideration
    
-2. APIM in External mode is accessible from the internet. Note : VPN connectivity to on-premises is not needed (it's optional). External DNS Resolution works for the default domain
+2. APIM in External Mode is accessible from the internet. Note : VPN connectivity to on-premises is not needed (it's optional). External DNS Resolution works for the default domain
 
 **APIM External Mode default hostnames**
 Note: All resolve to public IP: 40.71.32.102. However in this use case with firewall/NVA Custom DNS is required and should point to the firewall front end public IP address: 52.152.203.253. See DNS considerations below.
@@ -62,27 +62,26 @@ API Git nnapi-external.scm.azure-api.net
 
 
 ```
-3. Backend APIs needs to be routable from APIM in internal mode.
-4. Use Docker host or On-Premises Kubernetes cluster to run API Management self hosted gateway
+3. Backend APIs needs to be routable from APIM in Internal Mode.
+4. Use Docker host or on-premises Kubernetes cluster to run API Management self-hosted gateway
 5. The diagram shows Backend APIs running in Azure (AKS Cluster, Function App), externally hosted APIs (example weather API or conference API) and Backend API hosted on-premises
-
-5. Internal APIs hosted On-premises and in Azure (AKS or Azure Functions)
-6. External API (Echo and Conference APIs)
-7. Self hosted Gateway Consideration: Backend APIs (192.168.1.232) needs to be routable from Self hosted APIM Gateway within the on-premises environment. Management.penguintrails.com resolves to public IP.
-8. When there is a firweall/NVA deployed in Azure VNET, there will be an Assymetric Routing Issue and you will see an error to connect to the management endpoint.
+6. Internal APIs hosted on-premises and in Azure (AKS or Azure Functions)
+7. External API (Echo and Conference APIs)
+8. Self hosted Gateway Consideration: Backend APIs (192.168.1.232) need to be routable from self-hosted APIM Gateway within the on-premises environment. Management.penguintrails.com resolves to public IP.
+9. When there is a firweall/NVA deployed in Azure VNET, there will be an Asymetric Routing Issue and you will see an error to connect to the management endpoint.
 
  ![fw-error](images/external/fw-error.png)
 
    
-[Assymetric Routing Issue with Standard Load Balancer Design](https://docs.microsoft.com/en-us/azure/firewall/integrate-lb#asymmetric-routing)
+[Asymetric Routing Issue with Standard Load Balancer Design](https://docs.microsoft.com/en-us/azure/firewall/integrate-lb#asymmetric-routing)
 
-When firewall or NVA is deployed in conjuction with the Azure Load balancer assymetric routing issue occurs when a APIM subnet has a default route going to the firewall's private IP address. In this case, the incoming traffic to the APIM is received via load balancer public IP address, but the return path goes through the firewall's private IP address. Since the firewall is stateful, it drops the returning packet because the firewall isn't aware of such an established session. The way to fix the assymetric routing issue is to create a NAT rule on the firewall pointing to the Load balancer IP for Ingress traffic and create a UDR for the firewall public IP to bypass the firewall for the return traffic.
+When firewall or NVA is deployed in conjuction with the Azure Load balancer asymetric routing issue occurs when a APIM subnet has a default route going to the firewall's private IP address. In this case, the incoming traffic to the APIM is received via load balancer public IP address, but the return path goes through the firewall's private IP address. Since the firewall is stateful, it drops the returning packet because the firewall isn't aware of such an established session. The way to fix the asymetric routing issue is to create a NAT rule on the firewall pointing to the Load balancer IP for ingress traffic and create a UDR for the firewall public IP to bypass the firewall for the return traffic.
 
 **From Azure Documentation link [here](https://docs.microsoft.com/en-us/azure/firewall/integrate-lb#asymmetric-routing):**
 
-![Firewall LB Assymetric Routing issue](images/external/firewall-lb-asymmetric.png)
+![Firewall LB Asymetric Routing issue](images/external/firewall-lb-asymmetric.png)
 
-9. Workaround for Assymetric Routing
+9. Workaround for Asymetric Routing
     
     [Control Plane IP](https://docs.microsoft.com/en-us/azure/api-management/api-management-using-with-vnet?tabs=stv2#control-plane-ip-addresses) should be configured to bypass the firewall.
 
@@ -91,9 +90,13 @@ When firewall or NVA is deployed in conjuction with the Azure Load balancer assy
 10. Enable Service Endpoints for the following services for optimal routing.
 
 Azure SQL
+
 Azure Storage
+
 Azure Event Hub
+
 Azure Key Vault (v2 platform)
+
 
 ![fw-apimi-subnet](images/external/fw-apim-subnet.png) 
 
@@ -105,7 +108,7 @@ shavamanifestcdnprod1.azureedge.net,qos.prod.warm.ingest.monitor.core.windows.ne
 
 ![firewall-rules](images/external/fw-rules.png)  
 
-12. **DNS Custom domain considerations:** APIM External mode is accessible from the internet. APIM Public DNS is setup and Custom domain is deployoed with Letsencrypt Certificates in the keyvault. Custom domain points to the firewall public IP address
+12. **DNS Custom domain considerations:** APIM External Mode is accessible from the internet. APIM Public DNS is setup and Custom domain is deployoed with LetsEncrypt Certificates in the keyvault. Custom domain points to the firewall public IP address
 
 
    ![firewall-public-DNS](images/external/fw-public-DNS.png)
@@ -129,17 +132,17 @@ nehali@nehali-laptop:~$ dig +short mgt-external.penguintrails.com
 
 ![fw-DNAT](images/external/fw-DNAT.png)
 
-2. APIM Subnet Route table and Service endpoint configuration
+2. APIM Subnet Route table and Service Endpoint configuration
    
 ![fw-apimi-subnet](images/external/fw-apim-subnet.png) 
 
-3. Firewall deny logs troubleshooting using sentinel 
+3. Firewall deny logs troubleshooting using Sentinel 
    
 ![fw-deny-logs](images/external/fw-deny-logs.png)
 ![fw-logs-2](images/external/fw-logs-2.png)
 ![firewall-troubleshooting](images/external/fw-troubleshooting-logs.png)
 
-4. Use APIM network conectivity status to troubleshoot further erros
+4. Use APIM network conectivity status to troubleshoot further errors
    
 ![fw-network-connectivity-status](images/external/fw-network-connectivity-status.png)  
 
@@ -169,7 +172,7 @@ shavamanifestcdnprod1.azureedge.net,qos.prod.warm.ingest.monitor.core.windows.ne
 
 
 
-## API Self Hosted Gateway
+## API Self-hosted Gateway
 
 1. Deploy Gateway in Portal 
 
@@ -180,7 +183,7 @@ shavamanifestcdnprod1.azureedge.net,qos.prod.warm.ingest.monitor.core.windows.ne
 
 ![APIM Architecture](images/external/self-hosted-api.png)
 
-3. Deploy Gateway on Prem using the env.conf and the docker run command
+3. Deploy Gateway on-premises using the env.conf and the docker run command
 
  
 ```
@@ -197,7 +200,7 @@ crosoft.com/azure-api-management/gateway:latest
 
 ```
 
-Adjust the listening port per your environment. Default is 80 and 443. In this example it's change to 6001 and 6002.
+Adjust the listening port per your environment. Default is 80 and 443. In this example it's change to 7001 and 7002.
 
 ```
 
@@ -220,25 +223,25 @@ tcp        0      0 172.17.0.2:38912        52.152.203.253:443      ESTABLISHED
 
 
 ```
-4. Validate self hosted gateway container is running and online. For any troubleshooting the container use the following command:
+4. Validate self-hosted gateway container is running and online. For any troubleshooting the container use the following command:
    
 ```
 docker logs 53 --follow
 
 ```
 
-5. Validate local api running on 192.168.1.232
+5. Validate local API running on 192.168.1.232
 
    1. On 192.168.1.232
     node app.js
 Server started on port 3001...
 Mysql Connected...
 
-   2. Test local api connection using curl or postman
+   2. Test local API connection using curl or postman
         
         curl --location --request GET 'https://127.0.0.1:7002/self/api/products' --header 'Ocp-Apim-Subscription-Key: XXXXea'
 
-   3. Self hosted container logs:
+   3. Self-hosted container logs:
 
 Successful Connection:
    
