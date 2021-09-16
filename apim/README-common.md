@@ -43,7 +43,7 @@ A backend in APIM is an HTTP service that implements the CRUD operations. This c
 
 # Products
 
-APIM Products contains on or more APIs. Developers subscribe to products using the developer portal and cosume the APIs
+APIM Products contains one or more APIs. Developers subscribe to products using the developer portal and cosume the APIs.
 ![APIM Architecture](images/common/products.png)
 
 # Subscriptions
@@ -56,9 +56,9 @@ In APIM, API consumers access APIs using subscription keys. Azure documentation 
 
 This section is the key area of focus for the series of reference architectures. Each of these modes are detailed out in next sections.
 
-**Default/None mode**: This mode does not integrate with an Azure VNET. APIM Endpoints are accessible from the internet.
+**Default/None mode**: This mode **does not integrate with an Azure VNET**. APIM Endpoints are accessible from the internet.
 
-**Internal Mode**:  APIM is deployed in an Azure subnet and has a virtual IP (VIP) in the APIM subnet. APIM Endpoints are not accessible from the Intenet but accessible within the VNET and private connection. APIM can access backend APIs within the VNETs and over the private connection to an on-premises datacenter.  Note: Use APIM with application gateway for public access
+**Internal Mode**:  APIM is deployed in an Azure subnet and has a virtual IP (VIP) in the APIM subnet. APIM Endpoints are not accessible from the Intenet but accessible within the VNET and private connection. APIM can access backend APIs within the VNETs and over the private connection to an on-premises datacenter.  Note: Use APIM with application gateway for public access.
 
 **External Mode**: APIM is deployed in an Azure subnet. APIM endpoints are accessible from the public internet. Backend APIs and resources are accessible within the VNET and using a private connection.
 
@@ -67,7 +67,7 @@ Example:
  ![APIM Architecture](images/external/apim-mode.png)
 
 # Developer/Consumer Portal
-Developer portal is used by consumers (developers) to access the APIs. Developer portal can be customized. Developer portal is exposed via private IP in case of the internal mode APIM. DNS Considerations apply.
+Developer portal is used by consumers (developers) to access the APIs. Developer portal can be customized. Developer portal is exposed via private IP in case of the internal mode APIM. DNS considerations apply.
 
  ![APIM Architecture](images/internal/dev-portal.png)
 
