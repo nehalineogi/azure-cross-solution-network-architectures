@@ -1,26 +1,48 @@
-## Azure API Management (APIM) Multi-region Architecture
+# Azure API Management (APIM) Multi-region Architecture
 
-This architecture shows APIM with multi-region deployment.APIM in multi-region mode requires Premium tier and also note that only the gateway component of API Management is deployed to all regions. The developer portal is hosted in the Primary region only.  Two options are discussed here - one with the default multi-region deployment and one with Azure Traffic manager for more granular control over the routing
+This architecture shows APIM with multi-region deployment. APIM in multi-region mode requires premium tier. Note that only the APIM gateway component of API Management is deployed to all regions. The developer portal is hosted in the Primary region only.  Two DNS load balancing options are discussed here - one with the default multi-region deployment and one with Azure Traffic manager for more granular control over the routing
 
 
-## Reference Architecture
+# Reference Architecture
 
 ![APIM Architecture](images/multi-region/apim-multi-region.png)
 
 
-## Azure Documentation links
+# Azure Documentation links
 
 1. [APIM Multi-region](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-deploy-multi-region)
 2. [APIM Multi-region with Traffic Manager](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-deploy-multi-region#-use-custom-routing-to-api-management-regional-gateways)
 
 
-## Desgin Components and Considerations
-1. Note: This architecture represents APIM in External Mode
-2. Default Option routes requests to the correspoding regional gateway based on the lowest latency
-3. Azure TM Option give more granular control over routing and load balancing options
-4. Developer Portal is hosted in Primary region only. In case of Primary region outage access to the developer portal will be impacted until primary region comes back online. Secondary region will service the API traffic.
-5. Failover Design considerations
-6. APIM in Internal Mode can be leveraged with Traffic manager in front of the Application Gateway 
+
+
+# Desgin Components and Considerations
+0. **Traffic Flows**
+   
+   1. Cyan : Backend API Connections
+   2. Green: Developer Portal and API Gateway Access for External Consumers
+   3. Blue: API Gateway endpoint Access
+   4. Orange: Default DNS load balancing option
+   5. Purple: DNS Load balancing with Azure Traffic Manager (TM)
+ 
+
+1. This architecture represents APIM in External Mode however, traffic manager can be deployed in front of the Application Gateway in internal mode.
+2. Default option (Option#1) routes requests to the correspoding regional gateway based on the lowest latency.
+3. Azure TM Option (Option#2) gives more granular control over routing and load balancing options
+4. Failover Design considerations: Developer Portal is hosted in Primary region only. In case of Primary region outage access to the developer portal will be impacted until primary region comes back online. Secondary region will service the API traffic.
+
+
+# Pre-requisites
+Using Azure documentation link [here](https://docs.microsoft.com/en-us/azure/api-management/import-and-publish) ensure that APIM is in External Mode.
+
+Refer to common documentation link [here](README-common.md) for more details on prerequisites
+1. APIM is deployed in External Mode (**Premium tier required**)
+2. Products, APIs and subscriptions created
+3. VPN or Private Connectivity is optional in this design
+4. Internal and External APIs routable from APIM subnet
+5. Azure Provided default DNS resolution for API endpoints.
+6. Developer Portal Published
+7. Troubleshooting Notes - [here](README-troubleshooting.md).
 
 
 
@@ -73,7 +95,7 @@ apimgmthsajvdzotyzpmfmhrqfh7xjnq7k0gzo6cmn9u2d5s5l.cloudapp.net.
 
 # Multi-region (Option#2) DNS Resolution with Custom domain and Traffic Manager
 
-Note the the equal weight traffic manager resolving the EastUS and West US IPs
+Note the equal weight traffic manager routing method is resolving the EastUS and West US IPs
 
 ```
 nehali@nehali-laptop:~$ dig +short apimtm.penguintrails.com

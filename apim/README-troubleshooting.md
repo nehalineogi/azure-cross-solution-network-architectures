@@ -1,6 +1,6 @@
 
 # Network Troubleshooting
-This is a collection of errors at various stages during the deployment and some troubleshooting tips
+This is a collection of errors (and corresponding troubleshooting tip) at various stages across the different scenarios during the deployment. 
 
 # Azure Documentation links
 [Common Network Issues](https://docs.microsoft.com/en-us/azure/api-management/api-management-using-with-vnet?tabs=stv2#force-tunneling-traffic-to-on-premises-firewall-using-expressroute-or-network-virtual-appliance)

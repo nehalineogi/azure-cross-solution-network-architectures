@@ -1,5 +1,5 @@
 
-# Developer Portal Identity Integration
+# APIM Developer Portal Identity Integration
 
 This architecture shows how to enable access to the developer portal using both Azure AD (AAD B2B) and Azure AD B2C. Includes screen captures showing the overall sign in experience.
 
@@ -15,10 +15,21 @@ This architecture shows how to enable access to the developer portal using both 
 
 # Design Components and Considerations
 
-1. Note: The above diagram shows the Internal Mode but it can be used with External and Default mode as well. Detailed implementation of [internal](README-internal.md) and [external](README-external.md) is explained in previous sections in this series.
+0. **Traffic Flows**
+   
+   1. Blue/Cyan : Backend API Connections
+   2. Green: Developer Portal Sign in experience using AAD
+   3. Red: Developer Portal Sign-in experience  using B2C
+  
+
+1. Note: The above diagram shows the APIM internal mode with Application gateway but it can be used with External and Default mode as well. Detailed implementation of [internal](README-internal.md) and [external](README-external.md) is explained in previous sections in this series.
 2. Basic Authentication is the default methad the is available with API Management.
 3. AAD Auth allows access to the developer portal from users from Azure AD or Corporate AD accounts sync'd to AAD using Azure AD Connect
 4. AAD B2C Auth (Requires Premium Tier)
+5. There are three different tenants
+   1. AAD Tenant(Custom Domain: penguintrails.com, default domain: xxxx.onmicrosoft.com)
+   2. B2C Tenant (nnb2cdomain.onmicrosoft.com) associated with AAD tenant(penguintrails.com)
+   3. Tenant where APIM resources are deployed.
 
 
 # Pre-requisites
@@ -122,16 +133,20 @@ Make sure the following prequisites are completed. More documentation here.
 ![b2c Dev Portal](images/identity/b2c-register-application.png)
 
 
-## published API in Azure API Management
-![b2c Dev Portal](images/identity/b2c-publish-portal.png)
 
 
-## APIM Side Configuration
+
+## APIM Configuration in Azure Portal
+
 Add Identity Provider to APi Management Portal
 ![b2c Dev Portal](images/identity/b2c-add-identity-provider.png)
 
+## Publish the API in Azure API Management
+
+![b2c Dev Portal](images/identity/b2c-publish-portal.png)
 
 ## Full Sign in experience
+
 ![b2c Dev Portal](images/identity/b2c-sign-up-experience.png)
 
 ## User Created

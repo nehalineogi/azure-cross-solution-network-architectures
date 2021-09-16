@@ -1,6 +1,6 @@
 ## Azure API Management (APIM) Internal Mode with Application Gateway
 
- APIM can be deployed in various modes. APIM in Internal Mode is accessible via private IP (172.16.6.9). APIM in Internal Mode can be deployed in conjunction with Application gateway for external access. This architecture diagram shows APIM in Internal Mode with Application gateway and Custom domains for APIM endpoints.
+ APIM can be deployed in various modes. APIM in internal mode is accessible via private IP (172.16.6.9) only. APIM in internal mode can be deployed in conjunction with Azure Application Gateway for external access. This architecture diagram shows APIM in Internal Mode with Application gateway and custom domains for APIM endpoints.
 
 ## Reference Architecture
 
@@ -22,7 +22,7 @@
    2. Green: Developer Portal Access from on-premises and External Consumers using custom domain
    3. Red: Developer Portal Access from Internet using default domain (Not allowed in Internal Mode)
    4. Purple: Self-hosted APIM Gateway on-premises outbound connection to APIM Management plane
-   5. Note: VPN/Private Connectivity is optional. APIM endpoints are exposed on the application gateway.
+   5. Note: VPN/Private Connectivity is optional. APIM endpoints are exposed via the application gateway.
 
 1. APIM in Internal Mode is accessible via private IP (172.16.6.9) only. APIM in Internal Mode deployed in conjunction with Application gateway for external access to APIM endpoints.
    

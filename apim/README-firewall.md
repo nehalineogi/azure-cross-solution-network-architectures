@@ -1,6 +1,6 @@
 # Azure API Management (APIM) with NVA/Azure firewall
 
-This architecture demonstrates the connectivity architecture and traffic flows to API Management (APIM) endpoints using Azure firewall/NVA. APIM can be deployed in various modes. The diagram shows APIM in External Mode and Azure firewall/NVA in the desgin. 
+This architecture demonstrates the connectivity architecture and traffic flows to and from API Management (APIM) endpoints when there is an Azure firewall/NVA(Network Virtual Appliance) in the design. APIM can be deployed in various modes. The diagram shows APIM in External Mode and Azure firewall/NVA in the desgin. Main consideration for this design is that When firewall or NVA is deployed in conjuction with APIM assymetric routing issue occurs for the return traffic when a APIM subnet has a default route(0/0) going to the firewall's private IP address. 
 
 # Azure Documentation links
 
@@ -22,11 +22,11 @@ Using Azure documentation link [here](https://docs.microsoft.com/en-us/azure/api
 
 Refer to common documentation link [here](README-common.md) for more details on pre-requisites
 1. APIM in deployed in External Mode.
-2. Products, APIs and subscriptions created
-3. VPN or Private Connectivity is optional in this design
-4. Internal and External APIs routable from APIM subnet
+2. Products, APIs and subscriptions created.
+3. VPN or Private Connectivity is optional in this design.
+4. Internal and External APIs routable from APIM subnet.
 5. Azure Provided default DNS resolution for API endpoints.
-6. Developer Portal Published
+6. Developer Portal Published.
 7. Troubleshooting Notes - [here](README-troubleshooting.md).
 
 
@@ -68,14 +68,15 @@ API Git nnapi-external.scm.azure-api.net
 6. Internal APIs hosted on-premises and in Azure (AKS or Azure Functions)
 7. External API (Echo and Conference APIs)
 8. Self hosted Gateway Consideration: Backend APIs (192.168.1.232) need to be routable from self-hosted APIM Gateway within the on-premises environment. Management.penguintrails.com resolves to public IP.
-9. When there is a firweall/NVA deployed in Azure VNET, there will be an Asymetric Routing Issue and you will see an error to connect to the management endpoint.
+9. When there is a firweall/NVA deployed in Azure VNET, there will be an Asymetric Routing Issue and you will see an error to in the Azure portal showing connectivity issue to the management endpoint.
 
  ![fw-error](images/external/fw-error.png)
 
-   
-[Asymetric Routing Issue with Standard Load Balancer Design](https://docs.microsoft.com/en-us/azure/firewall/integrate-lb#asymmetric-routing)
+#Root Cause for the Assymetric Routing Issue
 
-When firewall or NVA is deployed in conjuction with the Azure Load balancer asymetric routing issue occurs when a APIM subnet has a default route going to the firewall's private IP address. In this case, the incoming traffic to the APIM is received via load balancer public IP address, but the return path goes through the firewall's private IP address. Since the firewall is stateful, it drops the returning packet because the firewall isn't aware of such an established session. The way to fix the asymetric routing issue is to create a NAT rule on the firewall pointing to the Load balancer IP for ingress traffic and create a UDR for the firewall public IP to bypass the firewall for the return traffic.
+[Assymetric Routing Issue with Standard Load Balancer Design](https://docs.microsoft.com/en-us/azure/firewall/integrate-lb#asymmetric-routing)
+
+When firewall or NVA is deployed in conjuction with the Azure Load balancer assymetric routing issue occurs when a APIM subnet has a default route going to the firewall's private IP address. In this case, the incoming traffic to the APIM is received via load balancer public IP address, but the return path goes through the firewall's private IP address. Since the firewall is stateful, it drops the returning packet because the firewall isn't aware of such an established session. The way to fix the asymetric routing issue is to create a NAT rule on the firewall pointing to the Load balancer IP for ingress traffic and create a UDR for the firewall public IP to bypass the firewall for the return traffic.
 
 **From Azure Documentation link [here](https://docs.microsoft.com/en-us/azure/firewall/integrate-lb#asymmetric-routing):**
 
@@ -157,7 +158,7 @@ shavamanifestcdnprod1.azureedge.net,qos.prod.warm.ingest.monitor.core.windows.ne
    
 # Validations
 
-1. Via Firewall using host header (Note: firewall IP 52.152.203.253 NAT'd to APIM External Mode IP:public: 40.71.32.102  )
+1. External consumer via Firewall using host header (Note: firewall IP 52.152.203.253 NAT'd to APIM External Mode IP:public: 40.71.32.102  )
 
     curl --location --request GET 'https://52.152.203.253/conference/sessions' --header 'Ocp-Apim-Subscription-Key: XXXXea' --header 'Host: api-external.penguintrails.com'
 

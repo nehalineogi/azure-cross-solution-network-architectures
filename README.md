@@ -60,7 +60,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - [Self hosted gateway](apim/README-internal.md#api-self-hosted-gateway)
 - [Azure Private DNS Zones integration](https://github.com/nehalineogi/azure-cross-solution-network-architectures/blob/main/apim/README-internal.md#design-components-and-guidelines)
 - [LetsEncrypt Certificates and APIM Custom Domain](https://github.com/nehalineogi/azure-cross-solution-network-architectures/blob/main/apim/README-common.md#letsencrypt-certificates-and-custom-domain)
-- [Network Troubleshooting](README-troubleshooting.md)
+- [Network Troubleshooting](apim/README-troubleshooting.md)
 - Postman Collection - Coming soon!
 
 ### [Azure App-service Networking ](app-service/README.md)
