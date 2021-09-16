@@ -58,7 +58,7 @@ This section is the key area of focus for the series of reference architectures.
 
 **Default/None mode**: This mode **does not integrate with an Azure VNET**. APIM Endpoints are accessible from the internet.
 
-**Internal Mode**:  APIM is deployed in an Azure subnet and has a virtual IP (VIP) in the APIM subnet. APIM Endpoints are not accessible from the Intenet but accessible within the VNET and private connection. APIM can access backend APIs within the VNETs and over the private connection to an on-premises datacenter.  Note: Use APIM with application gateway for public access.
+**Internal Mode**:  APIM is deployed in an Azure subnet and has a virtual IP (VIP) in the APIM subnet. APIM Endpoints are not accessible from the Intenet but accessible within the VNET and over a private connection. APIM can access backend APIs within the VNETs and over the private connection to an on-premises datacenter.  Note: Use APIM with application gateway for inbound public access to APIM endpoints.
 
 **External Mode**: APIM is deployed in an Azure subnet. APIM endpoints are accessible from the public internet. Backend APIs and resources are accessible within the VNET and using a private connection.
 
@@ -78,7 +78,8 @@ Azure portal is used by the administrator to configure and manage an APIM PaaS s
  ![APIM Architecture](images/common/azure-portal.png)
 
 # LetsEncrypt Certificates and Custom Domain
-Example:
+
+APIM endpoints by default have Azure managed DNS using azure-api.net subdomain. In this example we expose these endpoints using a custom domain - penguintrails.com. The example below shows how to create a valid letencrypt certificate and use Azure Key Vault to store the certificates. 
 
 1. Install Certbot utility link [here](https://github.com/certbot/certbot/releases/tag/v1.19.0)
 2. Create a wildcard certificate. (Note: For individual certificated add more domains after -d)
@@ -99,16 +100,22 @@ Navigate to c:\certbot and validate.
 Example in WSL environment:
 From :  /mnt/c/Certbot/live/penguintrails.com/
 
+```
      openssl pkcs12 -export -inkey privkey.pem -in cert.pem -certfile chain.pem -out penguintrails-letsencrypt.pfx
-     
-     Note: These certificates are valid for 90 days
 
+```     
+    ** Note: These certificates are valid for 90 days**
+
+```
      penguintrails-letsencrypt.pfx -nokeys | openssl x509 -noout -startdate -enddate
      
      Enter Import Password:
      
      notBefore=Jul 23 20:23:54 2021 GMT
      notAfter=Oct 21 20:23:52 2021 GMT
+
+
+```
 
 5. Enable Managed Identity
     ![APIM Architecture](images/common/managed-identity.png)
@@ -122,7 +129,8 @@ From :  /mnt/c/Certbot/live/penguintrails.com/
        ![APIM Architecture](images/common/custom-domain.png)
 
 # Custom Domain and DNS Considerations
-APIM in Internal Mode DNS is managed by the user. APIM in External Mode Default DNS resolution is provided by Azure DNS. For Custom Domain, the user needs to do the DNS configuration.
+APIM in Internal Mode DNS is managed by the user. APIM in External Mode Default DNS resolution is provided by Azure DNS. For Custom Domain, the user needs to do the manage DNS configuration.
+Azure Private and public DNS zone can be leveraged.
 
 ```
 #APIM default domain
@@ -144,9 +152,9 @@ APIM in Internal Mode DNS is managed by the user. APIM in External Mode Default 
 ```
 
 # Other Design Components
-Please refer to specific article in these series for more details on other design components
+Please refer to specific article in this series for more details on other design components
 
-1. Identity Components (Refer to the identity article here)
+1. Identity Components (AAD and B2C)
 2. APIM Internal Mode with Application Gateway
 3. APIM with Azure Firewall
 4. APIM Multi-region
