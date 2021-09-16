@@ -1,6 +1,6 @@
 # Azure API Management (APIM) Architecture
 
-This architecture shows the big picture view of Azure API Management (APIM) and introduction to the terminology and common design components used in different sections of this series.This reference architecture also demonstrates the high level place of APIM in different modes (Internal,External and Default/None). The main focuse of this series is the different networking modes which are detailed out in seperate sections throught this series.
+This architecture shows the big picture view of Azure API Management (APIM) and introduction to the terminology and common design components used in different sections of this series. This reference architecture also demonstrates the high level placement of APIM in different modes (Internal,External and Default/None). The main focus of this series is the different networking modes which are detailed out in seperate sections throughout the series.
 
 # Reference Architecture
 
