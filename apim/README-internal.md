@@ -1,6 +1,6 @@
 ## Azure API Management (APIM) Architecture
 
-This architecture demonstrates the connectivity architecture and traffic flows to and from API Management (APIM). APIM can be deployed in various modes. APIM can be deployed insdie an Azure Virtual Network (VNET) to access backedn services with the network. The diagram shows APIM in internal mode only. Note: For design option for external access with Application gateway and Custom DNS refer to the next article. Main consideration for APIM is internal modes is it's more secure and it's not reachable from the public internet for external consumers however, DNS needs to be configured manually.
+This architecture demonstrates the connectivity architecture and traffic flows to and from API Management (APIM). APIM can be deployed in various modes. APIM can be deployed inside an Azure Virtual Network (VNET) to access backend services with the network. The diagram shows APIM in Internal Mode only. Note: For design option for external access with Application gateway and Custom DNS refer to the next article. Main consideration for APIM in Internal Mode is it's more secure and it's not reachable from the public internet for external consumers. However, DNS needs to be configured manually.
 
 ## Azure Documentation links
 
@@ -22,13 +22,13 @@ This architecture demonstrates the connectivity architecture and traffic flows t
 0. **Traffic Flows**
    
    1. Blue/Cyan : Backend API Connections
-   2. Green: Developer Portal Access from On-Prem
-   3. Red: Developer Portal Access from Internet (Not allowed in Internal mode)
-   4. Purple: Self-hosted APIM Gateway On-Prem outbound connection to APIM Management plane
+   2. Green: Developer Portal Access from on-premises
+   3. Red: Developer Portal Access from Internet (Not allowed in Internal Mode)
+   4. Purple: Self-hosted APIM Gateway on-premises outbound connection to APIM Management plane
 
 
-1. APIM in Internal mode is accessible from on-premise **via a private IP.** Note: APIM in internal mode can be deployed in conjunction with Application gateway for external access. Detailed implementation with application gateway in the next section.
-2. **DNS Considerations:** In APIM Internal network mode DNS needs to be maintained and configured by the user. Custom domain using Azure Private DNS Zone and hybrid DNS should be leveraged. For POC/labs a local hosts file can be used.
+1. APIM in Internal mode is accessible from on-premise **via a private IP.** Note: APIM in Internal Mode can be deployed in conjunction with Application gateway for external access. Detailed implementation with application gateway in the next section.
+2. **DNS Considerations:** In APIM Internal Mode, DNS needs to be maintained and configured by the user. Custom domain using Azure Private DNS Zone and hybrid DNS should be leveraged. For POC/labs a local hosts file can be used.
 ```
 # api default domain
 #
@@ -49,21 +49,21 @@ This architecture demonstrates the connectivity architecture and traffic flows t
 ```
 ![APIM Architecture](images/internal/private-dns-zone.png)
 
-3. Backend APIs needs to be routable from APIM in internal mode.
-4. Use Docker host or On-Premises Kubernetes cluster to run API Management self hosted gateway
-5. The diagram shows Backend APIs running in Azure (AKS Cluster, Function App), externally hosted APIs (example weather API or conference API) and Backend API hosted on-premises
-6. APIM Custom domain and Letsencrypt Certificate deployed
+3. Backend APIs needs to be routable from APIM in Internal Mode.
+4. Use Docker host or on-premises Kubernetes cluster to run API Management self-hosted gateway
+5. The diagram shows Backend APIs running in Azure (AKS Cluster, Function App), externally hosted APIs (example weather API or conference API) and Backend APIs hosted on-premises
+6. APIM Custom domain and LetsEncrypt Certificate deployed
    ![APIM Architecture](images/internal/custom-domain.png)
-7. Internal APIs hosted On-premises and in Azure (AKS or Azure Functions)
+7. Internal APIs hosted on-premises and in Azure (AKS or Azure Functions)
 8. External API (Echo and Conference APIs)
-9.  Self hosted Gateway Consideration: Backend APIs need to be routable from Self hosted APIM Gateway. Management.penguintrails.com resolves to private IP and needs to be routable over VPN/Private connection.
+9.  Self-hosted Gateway Consideration: Backend APIs need to be routable from self-hosted APIM Gateway. Management.penguintrails.com resolves to private IP and needs to be routable over VPN/Private connection.
   
 # Pre-requisites
-Using Azure documentation link [here](https://docs.microsoft.com/en-us/azure/api-management/import-and-publish) ensure that you've external APIM in the internal mode.
+Using Azure documentation link [here](https://docs.microsoft.com/en-us/azure/api-management/import-and-publish) ensure that you've deployed APIM in the Internal Mode.
 
 Refer to common documentation link [here](README-common.md) for more details on pre-requisites
-1. APIM in deployed in internal mode.
-2. Products,APIs and subscriptions created
+1. APIM is deployed in Internal Mode.
+2. Products, APIs and subscriptions created
 3. VPN or Private Connectivity is required in this design
 4. Internal and External APIs routable from APIM subnet
 5. Azure Provided default DNS resolution for API endpoints.
@@ -79,19 +79,19 @@ Note: Private Connectivity and DNS configuration is required
    ![APIM Architecture](images/internal/mode.png)
    ![APIM Architecture](images/internal/apim-overview.png)
 
-1. From On-Premises validate connection to an backend API running in Azure. Using host headers validate that both default domain and custom domain should work.
+1. From on-premises, validate connection to a backend API running in Azure. Using host headers, validate that both default domain and custom domains work.
 
     curl --location --request GET 'http://172.16.6.9/internal/listUsers' --header 'Host: nnapi.azure-api.net'
     curl --location --request GET 'http://172.16.6.9/internal/ListUsers' --header 'Host: nnapi.penguintrails.com'
 
-2. From On-premises validate connection to an External API  (Demo Conference API)
+2. From on-premises validate connection to an External API  (Demo Conference API)
 
     curl --location --request GET 'https://nnapi.azure-api.net/conference/sessions' --header 'Ocp-Apim-Subscription-Key: XXXXX'
     curl --location --request GET 'https://nnapi.penguintrails.com/conference/sessions' --header 'Ocp-Apim-Subscription-Key: XXXXX'
 
 3. Verify Developer Portal Access
     
-    Access developer Portal via Private Window using "developer.penguintrails.com". Developer portal resolves to private IP and reachable over VPN/ExR connection. Navigate to API and products.  API call will fail because of the subscription key requirement. You'll need to register to see subscriptions.
+    Access developer Portal via Private Window using "developer.penguintrails.com". Developer portal resolves to private IP and is reachable over VPN/ExR connection. Navigate to API and products.  API call will fail because of the subscription key requirement. You'll need to register to see subscriptions.
 
 
     ![APIM Architecture](images/internal/dev-portal.png)
@@ -138,7 +138,7 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 ```
 
 
-## API Self Hosted Gateway
+## API Self-hosted Gateway
 
 1. Deploy Gateway in Portal 
 
@@ -146,7 +146,7 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 2. Add APIs
 ![APIM Architecture](images/internal/self-hosted-api.png)
 
-3. Deploy Gateway on Prem using the env.conf and the docker run command
+3. Deploy Gateway on-premises using the env.conf and the docker run command
 
  
 ```
@@ -163,7 +163,7 @@ crosoft.com/azure-api-management/gateway:latest
 
 ```
 
-Adjust the listening port per your environment. Default is 80 and 443. In this example it's change to 6001 and 6002.
+Adjust the listening port per your environment. Default is 80 and 443. In this example it's changed to 6001 and 6002.
 
 ```
 
@@ -186,7 +186,7 @@ HPING management.penguintrails.com (eth0 172.16.6.9): S set, 40 headers + 0 data
 tcp     1302      0 172.17.0.2:36140        172.16.6.9:443          ESTABLISHED
 
 ```
-3. Validate self hosted gateway container is running and online. For any troubleshooting the container use the following command:
+3. Validate self-hosted gateway container is running and online. For any troubleshooting of the container, use the following command:
    
 ```
 docker logs 2e --follow
