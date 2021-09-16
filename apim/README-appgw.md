@@ -1,6 +1,6 @@
 ## Azure API Management (APIM) Internal Mode with Application Gateway
 
-This architecture demonstrates connectivity architecture and traffic flows to API Management (APIM) gateways and developer portal. APIM can be deployed in various modes. APIM in internal mode is accessible via private IP (172.16.6.9). APIM in internal mode can be deployed in conjunction with Application gateway for external access. This architecture diagram shows APIM in internal mode with Application gateway and Custom domain. 
+This architecture demonstrates connectivity architecture and traffic flows to API Management (APIM) gateways and developer portal. APIM can be deployed in various modes. APIM in Internal Mode is accessible via private IP (172.16.6.9). APIM in Internal Mode can be deployed in conjunction with Application gateway for external access. This architecture diagram shows APIM in Internal Mode with Application gateway and Custom domain.
 
 ## Reference Architecture
 
@@ -16,15 +16,17 @@ This architecture demonstrates connectivity architecture and traffic flows to AP
 3. [APIM Self Hosted Gateway](https://docs.microsoft.com/en-us/azure/api-management/self-hosted-gateway-overview)
 
 ## Design Components
-1. APIM in internal mode is accessible via private IP (172.16.6.9) only. APIM in internal mode deployed in conjunction with Application gateway for external access.
-2. VPN/Private Connectivity:  External Consumers and developers would access the developer portal via application gateway. Note: With VPN connectivity internal consumers can access the developer portal and APIM directly. See DNS considerations. **Self hosted gateway will work with or without private connectivity** as long as management.penguintrails.com is resovles correctly and is routable from on-premises.
+1. APIM in Internal Mode is accessible via private IP (172.16.6.9) only. APIM in Internal Mode deployed in conjunction with Application gateway for external access.
+2. VPN/Private Connectivity: External Consumers and developers would access the developer portal via application gateway. Note: With VPN connectivity, internal consumers can access the developer portal and APIM directly. See DNS considerations. **Self-hosted gateway will work with or without private connectivity** as long as management.penguintrails.com resovles correctly and is routable from on-premises.
 
   
-3. In internal network mode the DNS needs to be maintained and configured by the user. Custom domains using Azure Private DNS Zone and Public DNS can be leveraged. **Note: that Default DNS Domains not accessible from the internet in internal Mode.**
-   
-   Default Domains
+3. In Internal Network mode, the DNS needs to be maintained and configured by the user. Custom domains using Azure Private DNS Zone and Public DNS can be leveraged. **Note: that Default DNS Domains not accessible from the internet in Internal Mode.**
+
+```
+Default Domains
 https://nnapi.developer.azure-api.net
 http://nnapi.azure-api.net
+```
 
 4. Custom domain and DNS Considerations
 
@@ -45,20 +47,20 @@ nneastappgw.eastus.cloudapp.azure.com.
 
 ```
 
-5. Backend APIs needs to be routable from APIM. If VPN is available On-Prem APIs will be reachable for Azure API. Otherwise, leverage self hosted APIM gateway
+5. Backend APIs needs to be routable from APIM. If VPN is available, on-premises APIs will be reachable for Azure API. Otherwise, leverage self-hosted APIM gateway
    
-6. Use Docker host or On-Premises Kubernetes cluster to run API Management self hosted gateway
+6. Use Docker host or on-premises Kubernetes cluster to run API Management self-hosted gateway
 7. The diagram shows Backend APIs running in Azure (AKS Cluster, Function App), externally hosted APIs (example weather API or conference API) and Backend API hosted on-premises
 
-7.  Self Hosted Gateway Considerations  - Management.penguintrails.com DNS should resolve from On-premises or where the the gateway is hosted.
+7.  Self-hosted Gateway Considerations  - Management.penguintrails.com DNS should resolve from on-premises or where the the gateway is hosted.
 8.  Identity Considerations - Management.penguintrails.com should resolve correctly for AAD and B2C to work correctly.
 9.  Application Gateway VNET is linked to Private DNS Zone for internal resolution of the custom domain.
 
 ## Pre-requisites
 
-1. Deploy APIM In internal Mode
+1. Deploy APIM In Internal Mode
 2. One Published Product with API
-3. Deverloper Portal Published (with branding optional)
+3. Developer Portal Published (with branding optional)
 
 
 
@@ -123,16 +125,16 @@ Please refer to Azure documentation links for detailed implementation. These scr
 ```
 
 
-## Self Hosted Gateway
+## Self-hosted Gateway
 
-### Azure Portal side configuration Configuration and Validation
+### Azure Portal side Configuration and Validation
 
 ![APIM Architecture](images/appgw/self-host-gw.png)
 ![APIM Architecture](images/appgw/self-host-gw-docker-config.png)
 
 
 
-### On-Premises side: env.conf and docker run commands
+### On-premises side: env.conf and docker run commands
 ```
 config.service.endpoint=https://management.penguintrails.com/subscriptions/XXXXX/resourceGroups/nn-api-rg/providers/Microsoft.ApiManagement/service/nnapi?api-version=2021-01-0
 1-preview
