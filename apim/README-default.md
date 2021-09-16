@@ -1,6 +1,6 @@
 ## Azure API Management (APIM) Default Mode
 
-This architecture demonstrates the connectivity architecture and traffic flows to devloper portal, API gateway and other management endpoints with APIM. APIM can be deployed in various modes. The diagram shows APIM in default virtual network mode which is set to "none". APIM in default mode has direct access from the internet** and no VNET integration**. This is a simple mode for POC/lab scenarios. Custom domain,identity and self hosted gateways can be configured for all the three network models.
+This architecture demonstrates the connectivity architecture and traffic flows to devloper portal, API gateway and other management endpoints with APIM. APIM can be deployed in various modes. The diagram shows APIM in default virtual network mode which is set to "none". APIM in default mode has direct access from the internet **and no VNET integration**. This is a simple mode for POC/lab scenarios. Custom domain, identity and self-hosted gateways can be configured for all the three network models.
 
 ## Reference Architecture
 
@@ -17,12 +17,12 @@ This architecture demonstrates the connectivity architecture and traffic flows t
 ## Design Components
 
 1. APIM In default/none mode has **No VNET integration**
-2. 0. **Traffic Flows**
+2. **Traffic Flows**
    
    1. Blue/Cyan : Backend API Connections
-   2. Green: Developer Portal and API Gateway Access from On-Prem
-   3. Red: No VPN to On-premises
-   4. Purple: Self-hosted APIM Gateway(On-Premises) outbound connection to APIM Management plane in Azure
+   2. Green: Developer Portal and API Gateway Access from on-premises
+   3. Red: No VPN to on-premises
+   4. Purple: Self-hosted APIM Gateway (on-premises) outbound connection to APIM Management plane in Azure
 
 
 3. APIM in default mode is accessible from the internet. Note : VPN connectivity to on-premises is not needed (it's optional). Default DNS Resolution is provided by Azure DNS
@@ -45,7 +45,7 @@ API Git                 nnapi-default.scm.azure-api.net
 ```
 4. **DNS Custom domain considerations:** 
    
-   APIM default mode is accessible from the internet. Default DNS Resolution is provided by Azure DNS. Note:APIM custom domain with user managed DNS is also supported.
+   APIM default mode is accessible from the internet. Default DNS Resolution is provided by Azure DNS. Note: APIM custom domain with user managed DNS is also supported.
 
 ```
 nehali@nehali-laptop:~$ dig nnapi-default.azure-api.net +short
@@ -61,11 +61,11 @@ apimgmthswl9re3lmxzql1trcem4vhzns3wi7pgownizflvlit.cloudapp.net.
 13.92.61.44
 ```
 5. Backend APIs need to be pubicly accessible (Example Echo API, Conference API or API running on linux host with public IP address)
-6. Use Docker host or On-Premises Kubernetes cluster to run API Management self hosted gateway
+6. Use Docker host or on-premises Kubernetes cluster to run API Management self-hosted gateway
 
 7. Self hosted Gateway Consideration:
    
-    Backend APIs (192.168.1.232) needs to be routable from Self hosted APIM Gateway within the on-premises environment. Management.penguintrails.com resolves to public IP.
+    Backend APIs (192.168.1.232) needs to be routable from self-hosted APIM Gateway within the on-premises environment. Management.penguintrails.com resolves to public IP.
 
 
 
@@ -75,7 +75,7 @@ Using Azure documentation link [here](https://docs.microsoft.com/en-us/azure/api
 
 Refer to common documentation link [here](README-common.md) for more details on pre-requisites
 1. APIM in deployed in default/none mode.
-2. Products,APIs and subscriptions created
+2. Products, APIs and subscriptions created
 3. VPN or Private Connectivity is not applicable in this design.
 4. External APIs only
 5. Azure Provided default DNS resolution for API endpoints.
@@ -91,7 +91,7 @@ Refer to common documentation link [here](README-common.md) for more details on 
    ![APIM Architecture](images/default/apim-mode.png)
    ![APIM Architecture](images/default/apim-overview.png)
 
-2. From On-Premises validate connection to External IP (Echo API). 
+2. From on-premises validate connection to External IP (Echo API). 
 
       Default Domain:
 
@@ -99,7 +99,7 @@ Refer to common documentation link [here](README-common.md) for more details on 
 
    
 
-3. From On-premises validate connection to an External API hosted on a Linux VM in Azure (**Note backend API connection is via Public IP only**)
+3. From on-premises validate connection to an External API hosted on a Linux VM in Azure (**Note backend API connection is via Public IP only**)
 
    Default Domain
 
@@ -141,7 +141,7 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 ```
 
 
-## API Self Hosted Gateway
+## API Self-hosted Gateway
 
 1. Deploy Gateway in Portal 
 
@@ -155,7 +155,7 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 3. Deploy Gateway on Prem using the env.conf and the docker run command
 
  
-Note: Adjust the listening port per your environment. Default is 80 and 443. In this example it's change to 9001 and 9002.
+Note: Adjust the listening port per your environment. Default is 80 and 443. In this example it's changed to 9001 and 9002.
 
 ```
 
@@ -192,17 +192,15 @@ tcp       93      0 172.17.0.2:41546        13.92.61.44:443         ESTABLISHED
 tcp        0      0 172.17.0.2:41554        13.92.61.44:443         ESTABLISHED
 /app $
 
-
-
 ```
-4. Validate self hosted gateway container is running and online. For any troubleshooting the container use the following command:
+4. Validate self-hosted gateway container is running and online. For any troubleshooting of the container, use the following command:
    
 ```
 docker logs 04 --follow
 
 ```
 
-5. Validate local api running on 192.168.1.232
+5. Validate local API running on 192.168.1.232
 
 ```
    1. On 192.168.1.232
@@ -225,6 +223,4 @@ Successful Connection:
 ```
 [Info] 2021-09-14T11:00:01.607, isRequestSuccess: True, totalTime: 17, category: GatewayLogs, callerIpAddress: 172.17.0.1, timeGenerated: 09/14/2021 23:00:01, region: eastus-onprem, correlationId: ecaf6b37-65cd-41bf-92f2-c370958feb55, method: GET, url: https://127.0.0.1:9002/self/api/products, backendResponseCode: 200, responseCode: 200, responseSize: 627, cache: none, backendTime: 8, apiId: self-hosted-api, operationId: wsl-linux-get-products, apimSubscriptionId: all-apis, clientProtocol: HTTP/1.1, backendProtocol: HTTP/1.1, apiRevision: 1, clientTlsVersion: 1.2, backendMethod: GET, backendUrl: http://192.168.1.232:3001/api/products
 
-
 ```   
-
