@@ -12,7 +12,7 @@ This is a collection of errors (and corresponding troubleshooting tip) at variou
 
 # Network Connectivity Status
 
-Verify Network connectivity status
+Verify Network connectivity status. If the status is not healthy review DNS, VPN/Routing, Firewall/NVA design considerations for Internal vs External mode.
 
 ![Network Health](images/external/fw-network-connectivity-status.png)
 
