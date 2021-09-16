@@ -16,7 +16,7 @@ This architecture shows the big picture view of Azure API Management (APIM) and 
 # Design Components and Terminology
 
 # APIM Endpoints
-Note: APIM creates a facades for your APIs. There are various endpoints
+Note: APIM creates facades for your APIs. There are various endpoints
 
 Example:
 
@@ -36,7 +36,7 @@ API Git                 nnapi-default.scm.azure-api.net
 
 # Backend API
 
-A backend in APIM is an HTTP service that implements the CRUD operations. This could running with Azure PaaS services like AKS, Azure Functions or Azure logic APPs. This could also be running on a IaaS VM in Auzure or On-Premises.  The backend API URLs are referenced in the APIs created with APIM.
+A backend in APIM is an HTTP service that implements the CRUD operations. This could run in Azure PaaS services like AKS, Azure Functions or Azure logic APPs. This could also run on a IaaS VM in Azure or on-premises.  The backend API URLs are referenced in the APIs created with APIM.
 
 ![APIM Architecture](images/common/backend-api.png)
 
@@ -54,11 +54,11 @@ In APIM, API consumers access APIs using subscription keys. Azure documentation 
 
 # APIM Network Modes
 
-**Default/None mode**: This mode does not integrate with Azure VNET. APIM Endpoints are accessible from the internet
+**Default/None mode**: This mode does not integrate with an Azure VNET. APIM Endpoints are accessible from the internet.
 
 **Internal Mode**:  APIM is deployed in an Azure subnet and has a virtual IP (VIP) in the APIM subnet. APIM Endpoints are not accessible from the Intenet but accessible within the VNET and private connection. APIM can access backend APIs within the VNETs and over the private connection to an on-premises datacenter.  Note: Use APIM with application gateway for public access
 
-**External Mode**: APIM is deployed in an Azure subnet. APIM endpoints are accessible from the public internet. Backend API and resources are accessible within the VNET and using a private connection.
+**External Mode**: APIM is deployed in an Azure subnet. APIM endpoints are accessible from the public internet. Backend APIs and resources are accessible within the VNET and using a private connection.
 
 Example:
 
@@ -71,7 +71,7 @@ Developer portal is used by consumers (developers) to access the APIs. Developer
 
 # Azure Portal
 
-Azure portal is used by the administrator to configure and manage APIM PaaS service
+Azure portal is used by the administrator to configure and manage an APIM PaaS service
 
  ![APIM Architecture](images/common/azure-portal.png)
 
@@ -97,14 +97,16 @@ Navigate to c:\certbot and validate.
 Example in WSL environment:
 From :  /mnt/c/Certbot/live/penguintrails.com/
 
-      openssl pkcs12 -export -inkey privkey.pem -in cert.pem -certfile chain.pem -out penguintrails-letsencrypt.pfx
+     openssl pkcs12 -export -inkey privkey.pem -in cert.pem -certfile chain.pem -out penguintrails-letsencrypt.pfx
      
      Note: These certificates are valid for 90 days
 
      penguintrails-letsencrypt.pfx -nokeys | openssl x509 -noout -startdate -enddate
-Enter Import Password:
-notBefore=Jul 23 20:23:54 2021 GMT
-notAfter=Oct 21 20:23:52 2021 GMT
+     
+     Enter Import Password:
+     
+     notBefore=Jul 23 20:23:54 2021 GMT
+     notAfter=Oct 21 20:23:52 2021 GMT
 
 5. Enable Managed Identity
     ![APIM Architecture](images/common/managed-identity.png)
@@ -114,11 +116,11 @@ notAfter=Oct 21 20:23:52 2021 GMT
     ![APIM Architecture](images/common/keyvault.png)
      ![APIM Architecture](images/common/access-policy.png)
 
-7. Add custom domain for each of the APIM endpoints
+7. Add a custom domain for each of the APIM endpoints
        ![APIM Architecture](images/common/custom-domain.png)
 
 # Custom Domain and DNS Considerations
-APIM in internal Mode DNS is managed by the User. APIM in external mode Default DNS resolution is provided by Azure DNS. For custom domain, user need to do the DNS configuration.
+APIM in Internal Mode DNS is managed by the user. APIM in External Mode Default DNS resolution is provided by Azure DNS. For Custom Domain, the user needs to do the DNS configuration.
 
 ```
 #APIM default domain
