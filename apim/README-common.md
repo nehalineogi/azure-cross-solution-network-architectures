@@ -1,6 +1,6 @@
 # Azure API Management (APIM) Architecture
 
-This architecture shows the big picture view of Azure API Management (APIM) and introduction to the terminology and common design components used in different sections of this series. 
+This architecture shows the big picture view of Azure API Management (APIM) and introduction to the terminology and common design components used in different sections of this series.This reference architecture also demonstrates the high level place of APIM in different modes (Internal,External and Default/None). The main focuse of this series is the different networking modes which are detailed out in seperate sections throught this series.
 
 # Reference Architecture
 
@@ -16,7 +16,7 @@ This architecture shows the big picture view of Azure API Management (APIM) and 
 # Design Components and Terminology
 
 # APIM Endpoints
-Note: APIM creates facades for your APIs. There are various endpoints
+Note: APIM creates a secure facade for your APIs. The varios sevice endpoints with APIM are listed below. Default service endpoints are registered in public DNS for External and Default mode. N**one of the service endpoints are registered on public DNS in internal mode.**
 
 Example:
 
@@ -36,14 +36,14 @@ API Git                 nnapi-default.scm.azure-api.net
 
 # Backend API
 
-A backend in APIM is an HTTP service that implements the CRUD operations. This could run in Azure PaaS services like AKS, Azure Functions or Azure logic APPs. This could also run on a IaaS VM in Azure or on-premises.  The backend API URLs are referenced in the APIs created with APIM.
+A backend in APIM is an HTTP service that implements the CRUD operations. This could run in Azure PaaS services like AKS, Azure Functions or Azure logic Apps. This could also run on a IaaS VM in Azure or on-premises.  The backend API URLs are referenced in the APIs created with APIM.
 
 ![APIM Architecture](images/common/backend-api.png)
 
 
 # Products
 
-APIM Products contains on or more APIs
+APIM Products contains on or more APIs. Developers subscribe to products using the developer portal and cosume the APIs
 ![APIM Architecture](images/common/products.png)
 
 # Subscriptions
@@ -53,6 +53,8 @@ In APIM, API consumers access APIs using subscription keys. Azure documentation 
 
 
 # APIM Network Modes
+
+This section is the key area of focus for the series of reference architectures. Each of these modes are detailed out in next sections.
 
 **Default/None mode**: This mode does not integrate with an Azure VNET. APIM Endpoints are accessible from the internet.
 
@@ -65,7 +67,7 @@ Example:
  ![APIM Architecture](images/external/apim-mode.png)
 
 # Developer/Consumer Portal
-Developer portal is used by consumers (developers) to access the APIs. Developer portal can be customized. Developer portal is exposed via private IP in case of the internal mode APIM.
+Developer portal is used by consumers (developers) to access the APIs. Developer portal can be customized. Developer portal is exposed via private IP in case of the internal mode APIM. DNS Considerations apply.
 
  ![APIM Architecture](images/internal/dev-portal.png)
 

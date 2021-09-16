@@ -11,6 +11,6 @@ This is a series of architecture that covers various networking designs and patt
 - [APIM Identity - AAD and B2C Integration](README-identity.md)
 - [APIM Multi-region Architecture](README-mulitregion.md)
 - [Self-hosted gateway](README-internal.md#api-self-hosted-gateway)
-- [Azure Private DNS Zones integration](README-internal.md)
-- [LetsEncrypt Certificates and APIM Custom Domain](README-common.md#letsencrypt-certificates-and-custom-domain)
+- [Azure Private DNS Zones integration](https://github.com/nehalineogi/azure-cross-solution-network-architectures/blob/main/apim/README-internal.md#design-components-and-guidelines)
+- [LetsEncrypt Certificates and APIM Custom Domain](https://github.com/nehalineogi/azure-cross-solution-network-architectures/blob/main/apim/README-common.md#letsencrypt-certificates-and-custom-domain)
 - [Network Troubleshooting](README-troubleshooting.md)
