@@ -1,6 +1,6 @@
 ## Azure API Management (APIM) Architecture
 
-This architecture demonstrates the connectivity architecture and traffic flows to and from API Management (APIM). APIM can be deployed in various modes. APIM can be deployed inside an Azure Virtual Network (VNET) to access backend services with the network. The diagram shows APIM in Internal Mode only. Note: For design option for external access with Application gateway and Custom DNS refer to the next article. Main consideration for APIM in Internal Mode is it's more secure and it's not reachable from the public internet for external consumers. However, DNS needs to be configured manually.
+This architecture demonstrates the connectivity architecture and traffic flows to and from API Management (APIM). APIM can be deployed in various modes. APIM can be deployed inside an Azure Virtual Network (VNET) to access backend services with the network. This diagram shows APIM in Internal Mode only. Note: For design option for external access with Application gateway and Custom DNS refer to the next article. Main consideration for APIM in Internal Mode is it's more secure and it's not reachable from the public internet for external consumers. However, DNS needs to be configured manually.
 
 ## Azure Documentation links
 
@@ -25,9 +25,10 @@ This architecture demonstrates the connectivity architecture and traffic flows t
    2. Green: Developer Portal Access from on-premises
    3. Red: Developer Portal Access from Internet (Not allowed in Internal Mode)
    4. Purple: Self-hosted APIM Gateway on-premises outbound connection to APIM Management plane
+   5. Note: VPN/Private Connectivity is required.
 
 
-1. APIM in Internal mode is accessible from on-premise **via a private IP.** Note: APIM in Internal Mode can be deployed in conjunction with Application gateway for external access. Detailed implementation with application gateway in the next section.
+1. APIM in Internal mode is accessible from on-premise **via a private IP.** - 172.16.6.9 in this example. Note: APIM in Internal Mode can be deployed in conjunction with Application gateway for external access. Detailed implementation with application gateway in the next section.
 2. **DNS Considerations:** In APIM Internal Mode, DNS needs to be maintained and configured by the user. Custom domain using Azure Private DNS Zone and hybrid DNS should be leveraged. For POC/labs a local hosts file can be used.
 ```
 # api default domain
@@ -47,27 +48,29 @@ This architecture demonstrates the connectivity architecture and traffic flows t
 172.16.6.9 scm.penguintrails.com
 
 ```
+Azure Private DNS Zone
 ![APIM Architecture](images/internal/private-dns-zone.png)
 
 3. Backend APIs needs to be routable from APIM in Internal Mode.
-4. Use Docker host or on-premises Kubernetes cluster to run API Management self-hosted gateway
-5. The diagram shows Backend APIs running in Azure (AKS Cluster, Function App), externally hosted APIs (example weather API or conference API) and Backend APIs hosted on-premises
-6. APIM Custom domain and LetsEncrypt Certificate deployed
+
+4. Backend APIs: The diagram shows Backend APIs running in Azure (AKS Cluster, Function App), externally hosted APIs (example weather API or conference API) and Backend APIs hosted on-premises
+5. APIM Custom domain and LetsEncrypt Certificate deployed
    ![APIM Architecture](images/internal/custom-domain.png)
-7. Internal APIs hosted on-premises and in Azure (AKS or Azure Functions)
-8. External API (Echo and Conference APIs)
-9.  Self-hosted Gateway Consideration: Backend APIs need to be routable from self-hosted APIM Gateway. Management.penguintrails.com resolves to private IP and needs to be routable over VPN/Private connection.
+
+6.  Self-hosted Gateway Consideration: 
+   * Use Docker host or on-premises Kubernetes cluster to run API Management self-hosted gateway 
+   * Backend APIs need to be routable from self-hosted APIM Gateway. Management.penguintrails.com resolves to private IP and needs to be routable over VPN/Private connection.
   
 # Pre-requisites
 Using Azure documentation link [here](https://docs.microsoft.com/en-us/azure/api-management/import-and-publish) ensure that you've deployed APIM in the Internal Mode.
 
 Refer to common documentation link [here](README-common.md) for more details on pre-requisites
 1. APIM is deployed in Internal Mode.
-2. Products, APIs and subscriptions created
-3. VPN or Private Connectivity is required in this design
-4. Internal and External APIs routable from APIM subnet
+2. Products, APIs and subscriptions created.
+3. VPN or Private Connectivity is required in this design.
+4. Internal and External APIs routable from APIM subnet.
 5. Azure Provided default DNS resolution for API endpoints.
-6. Developer Portal Published
+6. Developer Portal Published.
 7. Troubleshooting Notes - [here](README-troubleshooting.md).
 
 

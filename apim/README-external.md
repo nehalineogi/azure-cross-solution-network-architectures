@@ -1,6 +1,6 @@
 # Azure API Management (APIM) External Mode
 
-This architecture demonstrates the connectivity architecture and traffic flows to and from API Management (APIM). APIM can be deployed in various modes. The diagram shows APIM in External Mode with Custom DNS, APIM self-hosted gateway. Main consideration for APIM in External Mode is that it's reachable from the public internet for external consumers with minimal DNS configuration.
+This architecture demonstrates the connectivity architecture and traffic flows to and from API Management (APIM). APIM can be deployed in various modes. This diagram shows APIM in External Mode with Custom DNS and APIM self-hosted gateway. Main consideration for APIM in External Mode is that it's reachable from the public internet for external consumers with minimal DNS configuration.
 
 # Azure Documentation links
 
@@ -19,7 +19,7 @@ This architecture demonstrates the connectivity architecture and traffic flows t
 0. **Traffic Flows**
    
    1. Blue/Cyan : Backend API Connections
-   2. Green: Developer Portal and API Gateway Access from On-Prem
+   2. Green: Developer Portal and API Gateway Access from On-Premises and External Consumers
    3. Red: No VPN to On-premises
    4. Purple: Self-hosted APIM Gateway(On-Premises) outbound connection to APIM Management plane in Azure
 
@@ -41,12 +41,16 @@ API Management Endpoint nnapi-external.management.azure-api.net
 API Git nnapi-external.scm.azure-api.net
 ```
 
-2. **DNS Custom domain considerations:** APIM External Mode is accessible from the internet. APIM Public DNS is set up and Custom domain is deployoed with LetsEncrypt Certificates in the keyvault
+2. **DNS Custom domain considerations:** APIM External Mode is accessible from the internet. APIM Public DNS is set up and Custom domain is deployoed with LetsEncrypt Certificates in the keyvault.
 
+Public DNS
 
    ![APIM Architecture](images/external/public-DNS.png)
+
+Custom Domain and Keyvault Certificate integration
    ![APIM Architecture](images/external/apim-custom-domains.png)
 
+Example
 ```
     dig +short api-external.penguintrails.com
 nnapi-external.azure-api.net.
@@ -64,14 +68,15 @@ apimgmthsbkt9pesb7u9kyu94q3o8fn5nnanvvv8rykjsxmmxr.cloudapp.net.
 40.71.32.102
 
 ```
-3. Backend APIs needs to be routable from APIM in Internal Mode.
-4. Use Docker host or on-premises Kubernetes cluster to run API Management self-hosted gateway
-5. The diagram shows Backend APIs running in Azure (AKS Cluster, Function App), externally hosted APIs (example weather API or conference API) and Backend API hosted on-premises
-6. Internal APIs hosted On-premises and in Azure (AKS or Azure Functions)
-7. External API (Echo and Conference APIs)
-8. Self hosted Gateway Consideration: Backend APIs (192.168.1.232) needs to be routable from Self hosted APIM Gateway within the on-premises environment. Management.penguintrails.com resolves to public IP.
-  
+1. Backend APIs needs to be routable from APIM in Internal Mode.
 
+2. APIs: The diagram shows Backend APIs running in Azure (AKS Cluster, Function App), externally hosted APIs (example weather API or conference API) and Backend API hosted on-premises
+
+3. Self hosted Gateway Consideration: 
+   
+    * Use Docker host or on-premises Kubernetes cluster to run API Management self-hosted gateway
+   * Backend APIs (192.168.1.232) needs to be routable from Self hosted APIM Gateway within the on-premises environment. Management.penguintrails.com resolves to public IP.
+  
 
 # Pre-requisites
 Using Azure documentation link [here](https://docs.microsoft.com/en-us/azure/api-management/import-and-publish) ensure that APIM is in External Mode.

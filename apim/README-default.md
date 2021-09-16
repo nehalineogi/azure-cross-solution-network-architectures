@@ -20,15 +20,15 @@ This architecture demonstrates the connectivity architecture and traffic flows t
 2. **Traffic Flows**
    
    1. Blue/Cyan : Backend API Connections
-   2. Green: Developer Portal and API Gateway Access from on-premises
+   2. Green: Developer Portal and API Gateway Access from on-premises and from Internet
    3. Red: No VPN to on-premises
    4. Purple: Self-hosted APIM Gateway (on-premises) outbound connection to APIM Management plane in Azure
 
 
-3. APIM in default mode is accessible from the internet. Note : VPN connectivity to on-premises is not needed (it's optional). Default DNS Resolution is provided by Azure DNS
+3. Default DNS: APIM in default mode is accessible from the internet. Note : VPN connectivity to on-premises is not needed (it's optional). Default DNS Resolution is provided by Azure DNS
 
 **APIM default Mode default hostnames**
-Note: All resolve to public IP: 13.92.61.44
+Note: All resolve to APIM VIP - public IP: 13.92.61.44
 
 ```
 API Gateway :           nnapi-default.azure-api.net
@@ -60,12 +60,12 @@ nehali@nehali-laptop:~$ dig nnapi-default.management.azure-api.net +short
 apimgmthswl9re3lmxzql1trcem4vhzns3wi7pgownizflvlit.cloudapp.net.
 13.92.61.44
 ```
-5. Backend APIs need to be pubicly accessible (Example Echo API, Conference API or API running on linux host with public IP address)
-6. Use Docker host or on-premises Kubernetes cluster to run API Management self-hosted gateway
+5. Backend APIs need to be pubicly accessible (Example Echo API, Conference API or API running on linux host with** public IP address**)
 
-7. Self hosted Gateway Consideration:
-   
-    Backend APIs (192.168.1.232) needs to be routable from self-hosted APIM Gateway within the on-premises environment. Management.penguintrails.com resolves to public IP.
+
+6. Self hosted Gateway Consideration:
+   * Use Docker host or on-premises Kubernetes cluster to run API Management self-hosted gateway
+   * Backend APIs (192.168.1.232) needs to be routable from self-hosted APIM Gateway within the on-premises environment. Management.penguintrails.com resolves to public IP of the APIM (13.92.61.44)
 
 
 
@@ -152,7 +152,7 @@ listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
 
 ![APIM Architecture](images/default/self-host-api.png)
 
-3. Deploy Gateway on Prem using the env.conf and the docker run command
+3. Deploy Gateway on an Premises Docker host (in this example running on WSL linux) using the env.conf and the docker run command
 
  
 Note: Adjust the listening port per your environment. Default is 80 and 443. In this example it's changed to 9001 and 9002.
