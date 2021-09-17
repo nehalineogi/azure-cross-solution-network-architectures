@@ -43,7 +43,8 @@ Validate routing to the backend API (in this case 172.16.1.5) is not routable fr
 lastError: { "elapsed": 20039, "source": "request-forwarder", "path": "forward-request\forward-request", "reason": "BackendConnectionFailure", "message": "connection timed out: 172.16.1.5:3001", "section": "backend" }, errors: [
 
 
-```# API Testing via Postman
+```
+# API Testing via Postman
 
 
 Review http and https settings on the APIM Web service URL
@@ -148,10 +149,11 @@ Accept-Encoding: gzip, deflate, br
 
 Potential Issue: NSG on the APIM or Backend API subnet
 
-GET http://http//52.142.39.37/internal/ListUsers
-Error: getaddrinfo ENOTFOUND http
+
 
 ```
+GET http://http//52.142.39.37/internal/ListUsers
+Error: getaddrinfo ENOTFOUND http
 HTTP/1.1 400 Bad Request
 content-length: 213
 content-type: application/json
