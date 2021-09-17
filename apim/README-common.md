@@ -82,7 +82,7 @@ Azure portal is used by the administrator to configure and manage an APIM PaaS s
 APIM endpoints by default have Azure managed DNS using azure-api.net subdomain. In this example we expose these endpoints using a custom domain - penguintrails.com. The example below shows how to create a valid letencrypt certificate and use Azure Key Vault to store the certificates. 
 
 1. Install Certbot utility link [here](https://github.com/certbot/certbot/releases/tag/v1.19.0)
-2. Create a wildcard certificate. (Note: For individual certificated add more domains after -d)
+2. Create a wildcard certificate. (Note: For individual certificates add more domains after -d)
 In Powershell:
 
 certbot certonly --manual --preferred-challenges dns -d *.penguintrails.com
@@ -125,7 +125,7 @@ From :  /mnt/c/Certbot/live/penguintrails.com/
     ![APIM Architecture](images/common/keyvault.png)
      ![APIM Architecture](images/common/access-policy.png)
 
-7. Add a custom domain for each of the APIM endpoints
+7. Add a custom domain for each of the APIM endpoints (developer portal, management, gateway, scm and legacy portal(if needed))
        ![APIM Architecture](images/common/custom-domain.png)
 
 # Custom Domain and DNS Considerations
@@ -158,9 +158,5 @@ Please refer to specific article in this series for more details on other design
 2. APIM Internal Mode with Application Gateway
 3. APIM with Azure Firewall
 4. APIM Multi-region
-
-
-
-# Postman Collection
-Reach out to me if you need access to my postman collection. Still figuring out the best way to share collection with the subscription keys.
+5. Postman Collection
 

@@ -29,7 +29,7 @@
 2. VPN/Private Connectivity: External Consumers and developers would access the developer portal via application gateway. Note: With VPN connectivity, internal consumers can access the developer portal and APIM directly. See DNS considerations. **Self-hosted gateway will work with or without private connectivity** as long as management.penguintrails.com resolves correctly and is routable from on-premises.
 
   
-3. In Internal Network mode, the DNS needs to be maintained and configured by the user. Custom domains using Azure Private DNS Zone and Public DNS can be leveraged. **Note: that Default DNS endpoints below not accessible from the internet in Internal Mode.**
+3. In Internal Network mode,  **DNS needs to be maintained and configured by the user**. Custom domains using Azure Private DNS Zone and Public DNS can be leveraged. **Note: that Default DNS endpoints below not accessible from the internet in Internal Mode.**
 
 ```
 Default Domains
@@ -47,7 +47,7 @@ For external consumers, use custom domain with APIM.  DNS resovles to public IP 
 dig nnapi.penguintrails.com +short
 nneastappgw.eastus.cloudapp.azure.com.
 52.142.39.37
- dig developer.penguintrails.com +short
+dig developer.penguintrails.com +short
 nneastappgw.eastus.cloudapp.azure.com.
 52.142.39.37
 dig management.penguintrails.com +short

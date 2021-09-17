@@ -20,7 +20,7 @@ Verify Network connectivity status. If the status is not healthy review DNS, VPN
 
 # Routing to backend API
 
-Validate routing to the backend API
+Validate routing to the backend API, review NSGs and if firewall /NVA IP needs to be whitelisted
 
 
 ```
@@ -36,7 +36,14 @@ vary: Origin
 
 ```
 
-# API Testing via Postman
+
+Validate routing to the backend API (in this case 172.16.1.5) is not routable from on-premises resulting in this error
+
+```
+lastError: { "elapsed": 20039, "source": "request-forwarder", "path": "forward-request\forward-request", "reason": "BackendConnectionFailure", "message": "connection timed out: 172.16.1.5:3001", "section": "backend" }, errors: [
+
+
+```# API Testing via Postman
 
 
 Review http and https settings on the APIM Web service URL
@@ -98,6 +105,14 @@ content-type: text/plain; charset=utf-8
 ocp-apim-trace-location: https://apimstxlgadtm0vo1piuszfu.blob.core.windows.net/apiinspectorcontainer/lXIOgxyWd3s0TMWRpkHxMw2-3?sv=2019-07-07&sr=b&sig=6u6XW%2FrA0KLx9MxUe8NjyF6NZ4lUrR%2BTk0mN5EfUytE%3D&se=2021-08-30T20%3A30%3A55Z&sp=r&traceId=7c68459c0531447ab5de1605843a68ae
 vary: Origin
     HTTP  request from172.16.6.6:50748 toechoapi.cloudapp.net:80. Url: echoapi.cloudapp.net/api/resource. Action: Deny. Norule matched. Proceeding with default action
+
+```
+
+Default domain in external mode fails because the return traffic gets assymetric. Use custom domain when you have a firewall/NVA in the design.
+
+```
+GET http://nnapi-external.azure-api.net/internal/listUsers
+Error: connect ETIMEDOUT 40.71.32.102:80
 
 ```
 

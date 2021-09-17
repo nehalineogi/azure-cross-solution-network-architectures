@@ -1,0 +1,484 @@
+{
+	"info": {
+		"_postman_id": "52e12d2c-ca3f-4493-8046-ec344a29780a",
+		"name": "APIM-External-Mode-Shared",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "default-domain",
+			"item": [
+				{
+					"name": "GET-sessions-via-firewall-with-host-headers Copy",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": "{{APIM-sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Host",
+								"value": "{{APIM-custom-domain}}",
+								"type": "text"
+							},
+							{
+								"key": "Host",
+								"value": "{{APIM-default-domain}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://{{APIM-Firewall-IP}}/internal/listUsers",
+							"protocol": "http",
+							"host": [
+								"{{APIM-Firewall-IP}}"
+							],
+							"path": [
+								"internal",
+								"listUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET-linuxdev-internal-listUsers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": "{{APIM-sub-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{APIM-default-domain}}/internal/listUsers",
+							"protocol": "http",
+							"host": [
+								"{{APIM-default-domain}}"
+							],
+							"path": [
+								"internal",
+								"listUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET-ECHO-API",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": "{{APIM-sub-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{APIM-default-domain}}/echo/resource?param1=sample",
+							"protocol": "https",
+							"host": [
+								"{{APIM-default-domain}}"
+							],
+							"path": [
+								"echo",
+								"resource"
+							],
+							"query": [
+								{
+									"key": "param1",
+									"value": "sample"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET-sessions",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": "{{APIM-sub-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{APIM-default-domain}}/conference/sessions",
+							"protocol": "https",
+							"host": [
+								"{{APIM-default-domain}}"
+							],
+							"path": [
+								"conference",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "custom-domain",
+			"item": [
+				{
+					"name": "GET-ECHO-API",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": "{{APIM-sub-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{APIM-custom-domain}}/echo/resource?param1=sample",
+							"protocol": "https",
+							"host": [
+								"{{APIM-custom-domain}}"
+							],
+							"path": [
+								"echo",
+								"resource"
+							],
+							"query": [
+								{
+									"key": "param1",
+									"value": "sample"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET-sessions-conference-api",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": "{{APIM-sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Host",
+								"value": "{{APIM-custom-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{APIM-custom-domain}}/conference/sessions",
+							"protocol": "https",
+							"host": [
+								"{{APIM-custom-domain}}"
+							],
+							"path": [
+								"conference",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET-sessions-via-firewall-IP",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": "{{APIM-sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Host",
+								"value": "{{APIM-custom-domain}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://{{APIM-Firewall-IP}}/conference/sessions",
+							"protocol": "https",
+							"host": [
+								"{{APIM-Firewall-IP}}"
+							],
+							"path": [
+								"conference",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET-linuxdev-internal-listUsers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": "{{APIM-sub-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{APIM-custom-domain}}/internal/listUsers",
+							"protocol": "http",
+							"host": [
+								"{{APIM-custom-domain}}"
+							],
+							"path": [
+								"internal",
+								"listUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET-linuxdev-external-listUsers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": "{{APIM-sub-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://{{APIM-custom-domain}}/External/listUsers",
+							"protocol": "http",
+							"host": [
+								"{{APIM-custom-domain}}"
+							],
+							"path": [
+								"External",
+								"listUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET-sessions-conference-api",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"type": "text",
+								"value": "{{APIM-sub-key}}"
+							},
+							{
+								"key": "Ocp-Apim-Trace",
+								"type": "text",
+								"value": "true",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "https://{{APIM-custom-domain}}/conference/sessions",
+							"protocol": "https",
+							"host": [
+								"{{APIM-custom-domain}}"
+							],
+							"path": [
+								"conference",
+								"sessions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Self-host-gateway",
+			"item": [
+				{
+					"name": "GET-WSL-local",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": "{{APIM-sub-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://127.0.0.1:7002/self/api/products",
+							"protocol": "https",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7002",
+							"path": [
+								"self",
+								"api",
+								"products"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET-internal-listUsers-fails",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": "{{APIM-sub-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://127.0.0.1:7002/self/listUsers",
+							"protocol": "https",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7002",
+							"path": [
+								"self",
+								"listUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET-linuxdev-external",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": "{{APIM-sub-key}}",
+								"type": "text"
+							},
+							{
+								"key": "Host",
+								"value": "{{APIM-custom-domain}}",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "http://127.0.0.1:7001/external/listUsers",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7001",
+							"path": [
+								"external",
+								"listUsers"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET-echo-api",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Ocp-Apim-Subscription-Key",
+								"value": "{{APIM-sub-key}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "https://127.0.0.1:7002/echo/resource?param1=sample",
+							"protocol": "https",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "7002",
+							"path": [
+								"echo",
+								"resource"
+							],
+							"query": [
+								{
+									"key": "param1",
+									"value": "sample"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "APIM-sub-key",
+			"value": "xxxx"
+		},
+		{
+			"key": "APIM-default-domain",
+			"value": "xxxx.azure-api.net"
+		},
+		{
+			"key": "APIM-custom-domain",
+			"value": "xxx.mydomain.com"
+		},
+		{
+			"key": "APIM-Firewall-IP",
+			"value": "x.x.x.x"
+		},
+		{
+			"key": "APIM-JWT-Bearer",
+			"value": "Bearer xxxxx"
+		}
+	]
+}

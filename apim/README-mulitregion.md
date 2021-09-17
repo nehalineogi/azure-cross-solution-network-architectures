@@ -1,6 +1,6 @@
 # Azure API Management (APIM) Multi-region Architecture
 
-This architecture shows APIM with multi-region deployment. APIM in multi-region mode requires premium tier. Note that only the APIM gateway component of API Management is deployed to all regions. The developer portal is hosted in the Primary region only.  Two DNS load balancing options are discussed here - one with the default multi-region deployment and one with Azure Traffic manager for more granular control over the routing
+This architecture shows APIM with multi-region deployment. APIM in multi-region mode requires premium tier. Note that only the APIM gateway component of API Management is deployed to all regions. The developer portal is hosted in the Primary region only.  Two DNS load balancing options are discussed here - one with the default multi-region deployment and one with Azure Traffic manager for more granular control over the routing.
 
 
 # Reference Architecture
