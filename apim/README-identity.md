@@ -158,4 +158,5 @@ Add Identity Provider to APi Management Portal
 
 # TODO:
 
-1. [Protect backend API](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-protect-backend-with-aad)
+1. Add JWT token policy
+2. [Protect backend API](https://docs.microsoft.com/en-us/azure/api-management/api-management-howto-protect-backend-with-aad)
