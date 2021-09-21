@@ -88,6 +88,11 @@ When firewall or NVA is deployed in conjuction with the Azure Load balancer assy
 
 ![firewall-route-table](images/external/fw-route-table.png) 
 
+For On-Premises traffic ensure propagate gateway routes is enabled. Otherwise, the traffic will get assymetric.
+
+![firewall-route-table](images/external/fw-propagate-routes.png) 
+
+
 10. Enable Service Endpoints for the following services for optimal routing.
 
 Azure SQL

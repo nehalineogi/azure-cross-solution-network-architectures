@@ -121,6 +121,7 @@ Make sure the following prequisites are completed. More documentation here.
 
 ## Signup and Signin User flows that are created in your tenant
 ![b2c Dev Portal](images/identity/b2c-tenant-signin-up-user-flow.png)
+![b2c Dev Portal](images/identity/idp.png)
 ![b2c Dev Portal](images/identity/b2c-claims.png)
 ![b2c Dev Portal](images/identity/b2c-user-attributes.png)
 

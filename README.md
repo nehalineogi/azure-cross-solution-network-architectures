@@ -54,6 +54,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - [External network mode](apim/README-external.md)
 - [Internal network mode](apim/README-internal.md)
 - [Internal network mode with Azure Application Gateway](apim/README-appgw.md)
+- [Internal network mode with AKS Backend API](apim/README-AKS-Function.md)
 - [APIM with Azure firewall/NVA](apim/README-firewall.md)
 - [APIM Identity - AAD and B2C Integration](apim/README-identity.md)
 - [APIM Multi-region Architecture](apim/README-mulitregion.md)

@@ -1,6 +1,6 @@
 ## Azure AKS Advanced/Azure CNI Networking
 
-This architecture demonstrates the connectivity architecture and traffic flows for connecting Azure AKS Private Cluster environment with your on-premises environment. In the Private AKS cluster the control plane or the kube API server has an **internal IP address**. This IP is exposed via a private endpoint in the AKS subnet. The on-premises networks use the Private IP address of the Kube-API server hence both DNS and routing has to be in place between on-premises and AKS network..A private DNS zone is also created example - abcxyz.privatelink.<region>.azmk8s.io. AKS services exposed using internal load balancer. Egress paths from AKS cluster to Internet can be designed using External Load balancer (default) or using Azure Firewall/NVA/NAT gateway using userDefinedRouting setting in AKS
+This architecture demonstrates the connectivity architecture and traffic flows for connecting Azure AKS Private Cluster environment with your on-premises environment. In the Private AKS cluster the control plane or the kube API server has an **internal IP address**. This IP is exposed via a private endpoint in the AKS subnet. The on-premises networks use the Private IP address of the Kube-API server hence **both DNS and routing** has to be in place between on-premises and AKS network..A private DNS zone is also created example - abcxyz.privatelink.<region>.azmk8s.io. AKS services exposed using internal load balancer. Egress paths from AKS cluster to Internet can be designed using External Load balancer (default) or using Azure Firewall/NVA/NAT gateway using userDefinedRouting setting in AKS
 
 ## Reference Architecture
 
@@ -22,16 +22,98 @@ Download Visio link here.
 
 ## Design Components and Planning
 
-1. Planning is required routing Kube API private endpoint from on-premises or from other Azure VNETs.
-2. Hybrid DNS setup with private DNS zones for DNS resolution from on-premises in Enterprise environments. However, local hosts files can be used in lab/POCs.
-3. **Ingress Considerations:** While, both Internal and External load balancers can be used to expose Ingress services however, in a truely private cluster only Internal load balancer is used for Ingress. External Load balancer is used for egress.
-4. **Egress Considerations**: Egress Path options via Azure External Load balancer or using Azure Firewall/NVA
+1. Private Cluster is supported in Basic/Kubenet and AzureCNI mode. The above diagram show Azure CNI.
+2. Private Cluster can be deployed in existing or new VNET.
+3. Planning is required routing Kube API private endpoint from on-premises or from other Azure VNETs.
+4. Hybrid DNS setup with private DNS zones for DNS resolution from on-premises in Enterprise environments. However, local hosts files can be used in lab/POCs.
+5. **Ingress Considerations:** While, both Internal and External load balancers can be used to expose Ingress services however, in a truely private cluster only Internal load balancer is used for Ingress. External Load balancer is used for egress.
+6. **Egress Considerations**: Egress Path options via Azure External Load balancer or using Azure Firewall/NVA
+7. Options for connecting to Private cluster. Azure documentation link [here](https://docs.microsoft.com/en-us/azure/aks/private-clusters#options-for-connecting-to-the-private-cluster). This this architecture we have On-Premises connectivity and also example of AKS run command
+* Create a VM in the same Azure Virtual Network (VNet) as the AKS cluster.
+* Use a VM in a separate network and set up Virtual network peering. See the section below for more information on this option.
+* Use an Express Route or VPN connection.
+* Use the AKS Run Command feature.
 
-## Design Validations
-
-##### Create AKS Private Cluster
+8. Common errors without DNS and Routing in place.
 
 ```
+kubectl get pods -o wide
+Unable to connect to the server: dial tcp: i/o timeout
+
+```
+From Azure Portal. You need to be connected to Azure VNET or have VPN/Private connectivity in place.
+![AKS Advanced Networking](images/aks-private-cluster-error.png)
+
+## Quickstart
+
+### Azure CNI (New VNET)
+az aks create --resource-group aks-private-rg --name aks-private-cluster  --load-balancer-sku standard   --enable-private-cluster   --network-plugin azure --verbose
+
+### Kubenet (New VNET)
+az aks create --resource-group aks-private-rg --name aks-private-cluster  --load-balancer-sku standard   --enable-private-cluster  --verbose
+
+## Private Cluster ( Azure CNI in Existing VNET)
+
+1. Set the variables for existing resources
+
+
+
+```
+# 
+# Set variables (for existing resources)
+#
+MYACR=nnacr101
+VNETRG=nn-rg-east
+VNET=nn-hub-vnet-east
+SUBNET=aks-private-cluster-subnet
+USERIDENTITY=aks-user-managed-identity
+
+
+
+```
+
+2. Set the variable for new resources
+
+```
+# 
+# Variables for new resources
+#
+RG=aks-private-cluster-rg
+AKSCLUSTER=nnaks-private
+AKSDNS=nnaks-private
+LOC="eastus"
+PLUGIN=azure
+
+```
+
+3. Create ACR and User Identity
+   
+```
+#
+# create ACR and User Idenity
+#
+az group create --name $RG --location $LOC
+az identity create --name $USERIDENTITY --resource-group $RG
+az acr create -n $MYACR -g $RG --sku basic
+
+
+
+USERIDENTITY_ID=$(az identity show --resource-group $RG --name $USERIDENTITY --query id -o tsv)
+echo $USERIDENTITY_ID
+
+SUBNET_ID=$(az network vnet subnet show --resource-group $VNETRG --vnet-name $VNET --name $SUBNET --query id -o tsv)
+echo $SUBNET_ID
+
+```
+
+4. Create a more AKS Private Cluster
+
+```
+az identity create --name $USERIDENTITY --resource-group $RG
+az identity list --query "[].{Name:name, Id:id, Location:location}" -o table 
+USERIDENTITY_ID=$(az identity show --resource-group $RG --name $USERIDENTITY --query id -o tsv)
+echo $USERIDENTITY_ID
+
 az aks create \
  --resource-group $RG \
  --name $AKSCLUSTER \
@@ -52,13 +134,13 @@ az aks create \
 
 ```
 
-#### Kube API Access
+## Kube API Access
 
 With the above command AKS Private DNS Zone and Private endpoint gets created.
 
 ![AKS Private DNS Zone](images/aks-private-dns-zone.png)
 
-#### On-Premises to Kube API server connectivity
+## On-Premises to Kube API server connectivity
 
 Note the kubeAPI / cluster IP resolves to privatelink.eastus.azmk8s.io (private endpoint IP)
 
@@ -81,7 +163,7 @@ nehali@nehali-laptop:/mnt/c/Users/neneogi/Documents/repos/k8s/aks-azcli$ more /e
 
 ```
 
-#### IP Address Assignment
+## IP Address Assignment
 
 This deployment is using Azure CNI so the node and pod IPs are in the same subnet
 
@@ -102,8 +184,10 @@ service/red-service            LoadBalancer   10.101.154.43    52.226.99.79    8
 service/red-service-internal   LoadBalancer   10.101.218.208   172.16.238.98   8080:31418/TCP   25m   app=red
 
 ```
+## Portal Validation
 
-#### Node view
+
+##  Node view
 
 Note the Node inherits the DNS from VNET DNS setting and egress for the node via Azure External load balancer (NVA/Firewall options available)
 
@@ -176,7 +260,7 @@ root@aks-nodepool1-40840556-vmss000000:/# curl ifconfig.me
 
 ```
 
-#### POD View
+## POD View
 
 Pod Inherits DNS from the Node and egress via external LB.
 
@@ -209,7 +293,7 @@ options ndots:5
 
 ```
 
-#### Traffic validations from On-Premises to Azure
+## Traffic validations from On-Premises to Azure
 
 ```
 
@@ -239,7 +323,7 @@ red
 
 ```
 
-#### Application Gateway Ingress with Private Cluster in Azure CNI Mode
+## Application Gateway Ingress with Private Cluster in Azure CNI Mode
 
 This is supported in Azure CNI mode only. For details see the application gateway ingress controller document [here](README-ingress-controllers.md)
 
@@ -274,6 +358,42 @@ ingress.extensions/colors-fanout-ingress         <none>   akscolors.penguintrail
 ingress.extensions/colors-virtual-host-ingress   <none>   aksred.penguintrails.com,aksgreen.penguintrails.com,aksblue.penguintrails.com + 1 more...   104.211.0.182   80      52s
 ```
 
-#### TODO
+# AKS Run command
 
-1. Test Preview features (AKS run command)
+Azure documentation
+https://docs.microsoft.com/en-us/azure/aks/private-clusters#use-aks-run-command
+
+Quick way to run kubectl commands using AKS run:
+
+```
+ k get pods -o wide
+ Unable to connect to the server: dial tcp: i/o timeout
+
+
+ az aks command invoke -g aks-private-cluster-rg -n nnaks-private -c "kubectl get nodes -o wide"
+command started at 2021-09-21 13:08:40+00:00, finished at 2021-09-21 13:08:41+00:00 with exitcode=0
+NAME                                STATUS   ROLES   AGE   VERSION    INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
+aks-nodepool1-40840556-vmss000000   Ready    agent   64d   v1.19.11   172.16.238.5    <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
+aks-nodepool1-40840556-vmss000001   Ready    agent   64d   v1.19.11   172.16.238.36   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
+aks-nodepool1-40840556-vmss000002   Ready    agent   64d   v1.19.11   172.16.238.67   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
+
+```
+
+Sample deployment using AKS Run:
+
+```
+az aks command invoke -g aks-private-cluster-rg -n nnaks-private -c "kubectl create ns demo-ns"
+command started at 2021-09-21 13:18:27+00:00, finished at 2021-09-21 13:18:28+00:00 with exitcode=0
+namespace/demo-ns created
+
+az aks command invoke -g aks-private-cluster-rg -n nnaks-private -c "kubectl apply -f deployment.yaml" -f deployment.yaml
+command started at 2021-09-21 13:19:06+00:00, finished at 2021-09-21 13:19:07+00:00 with exitcode=0
+deployment.apps/nginx-deployment created
+
+az aks command invoke -g aks-private-cluster-rg -n nnaks-private -c "kubectl get pods -o wide -n demo-ns"
+command started at 2021-09-21 13:19:32+00:00, finished at 2021-09-21 13:19:33+00:00 with exitcode=0
+NAME                                READY   STATUS    RESTARTS   AGE   IP              NODE                                NOMINATED NODE   READINESS GATES
+nginx-deployment-6c46465cc6-2nhqq   1/1     Running   0          26s   172.16.238.33   aks-nodepool1-40840556-vmss000000   <none>           <none>
+nginx-deployment-6c46465cc6-kk284   1/1     Running   0          26s   172.16.238.97   aks-nodepool1-40840556-vmss000002   <none>           <none>
+nginx-deployment-6c46465cc6-txs5j   1/1     Running   0          26s   172.16.238.45   aks-nodepool1-40840556-vmss000001   <none>           <none>
+```
