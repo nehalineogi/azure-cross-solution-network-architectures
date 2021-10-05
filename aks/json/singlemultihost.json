@@ -29,7 +29,7 @@
     },
     "ResourceGroupName": {
       "type": "string",
-      "defaultValue": "singlehost",
+      "defaultValue": "dockerhosts",
       "maxLength": 10,
       "minLength": 3,
       "metadata": {
