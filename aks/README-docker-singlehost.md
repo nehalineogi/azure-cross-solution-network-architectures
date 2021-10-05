@@ -34,7 +34,7 @@ There are two options available to set up the prerequisites for this scenario.
 
 Option 1 - Click the link below to automatically create the necessary VMs with a vanilla build of docker. 
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fshcrouch%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fsinglemultihost.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fshcrouch%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fdockerhost.json)
 
 
 Option 2 - Manually Create Ubuntu linux VMs (docker-host-1 and docker-host-2) in Azure subnet and install docker.
