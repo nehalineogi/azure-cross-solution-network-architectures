@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "12028284579150990040"
+      "templateHash": "6556817742032746960"
     }
   },
   "parameters": {
@@ -91,26 +91,9 @@
         "description": "Set the subnet range for subnet1"
       }
     },
-    "NetworkSecurityGroupName": {
-      "type": "string",
-      "defaultValue": "dockernsg",
-      "minLength": 3,
-      "metadata": {
-        "description": "Set the NSG name"
-      }
-    },
-    "publicIPAddressNameSuffix": {
-      "type": "string",
-      "defaultValue": "dhostip",
-      "maxLength": 7,
-      "minLength": 3,
-      "metadata": {
-        "description": "Set the Public IP Address suffix to append to the FQDN for the hosts"
-      }
-    },
     "githubPath": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/nehalineogi/azure-cross-solution-network-architectures/main/aks/scripts/",
+      "defaultValue": "https://raw.githubusercontent.com/shcrouch/addbastion/azure-cross-solution/addbastion/scripts/",
       "minLength": 10,
       "metadata": {
         "description": "Set the path to the github directory that has the custom script extension scripts"
@@ -127,6 +110,10 @@
     }
   },
   "functions": [],
+  "variables": {
+    "bastionNetworkName": "AzureBastionSubnet",
+    "bastionSubnet": "172.16.1.0/24"
+  },
   "resources": [
     {
       "type": "Microsoft.Resources/resourceGroups",
@@ -289,9 +276,6 @@
           },
           "githubPath": {
             "value": "[parameters('githubPath')]"
-          },
-          "publicIPAddressNameSuffix": {
-            "value": "[format('{0}{1}', parameters('publicIPAddressNameSuffix'), range(1, parameters('numberOfHosts'))[copyIndex()])]"
           }
         },
         "template": {
@@ -301,7 +285,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.3.255.40792",
-              "templateHash": "2238136852973348401"
+              "templateHash": "8137733279706470109"
             }
           },
           "parameters": {
@@ -336,30 +320,14 @@
               "metadata": {
                 "description": "location for all resources"
               }
-            },
-            "publicIPAddressNameSuffix": {
-              "type": "string"
             }
           },
           "functions": [],
           "variables": {
             "storageAccountName": "[format('{0}{1}sa', uniqueString(resourceGroup().id), parameters('vmname'))]",
-            "nicName": "[format('{0}myVMNic', parameters('vmname'))]",
-            "dnsLabelPrefix": "[format('dns-{0}-{1}', uniqueString(resourceGroup().id), parameters('publicIPAddressNameSuffix'))]"
+            "nicName": "[format('{0}myVMNic', parameters('vmname'))]"
           },
           "resources": [
-            {
-              "type": "Microsoft.Network/publicIPAddresses",
-              "apiVersion": "2020-06-01",
-              "name": "[parameters('publicIPAddressNameSuffix')]",
-              "location": "[parameters('location')]",
-              "properties": {
-                "publicIPAllocationMethod": "Dynamic",
-                "dnsSettings": {
-                  "domainNameLabel": "[variables('dnsLabelPrefix')]"
-                }
-              }
-            },
             {
               "type": "Microsoft.Storage/storageAccounts",
               "apiVersion": "2019-06-01",
@@ -381,19 +349,13 @@
                     "name": "ipconfig1",
                     "properties": {
                       "privateIPAllocationMethod": "Dynamic",
-                      "publicIPAddress": {
-                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressNameSuffix'))]"
-                      },
                       "subnet": {
                         "id": "[parameters('subnet1ref')]"
                       }
                     }
                   }
                 ]
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressNameSuffix'))]"
-              ]
+              }
             },
             {
               "type": "Microsoft.Compute/virtualMachines",
@@ -473,13 +435,7 @@
                 "[resourceId('Microsoft.Compute/virtualMachines', parameters('vmname'))]"
               ]
             }
-          ],
-          "outputs": {
-            "dockerhostfqdn": {
-              "type": "string",
-              "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIPAddressNameSuffix'))).dnsSettings.fqdn]"
-            }
-          }
+          ]
         }
       },
       "dependsOn": [
@@ -505,14 +461,17 @@
           "location": {
             "value": "[parameters('Location')]"
           },
-          "networkSecurityGroupName": {
-            "value": "[parameters('NetworkSecurityGroupName')]"
-          },
           "subnet1Name": {
             "value": "[parameters('Subnet1Name')]"
           },
           "subnet1Prefix": {
             "value": "[parameters('Subnet1Prefix')]"
+          },
+          "bastionNetworkName": {
+            "value": "[variables('bastionNetworkName')]"
+          },
+          "bastionSubnet": {
+            "value": "[variables('bastionSubnet')]"
           },
           "virtualNetworkName": {
             "value": "[parameters('VnetName')]"
@@ -525,7 +484,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.3.255.40792",
-              "templateHash": "3017317663608224279"
+              "templateHash": "17886237105965997439"
             }
           },
           "parameters": {
@@ -538,10 +497,13 @@
             "subnet1Prefix": {
               "type": "string"
             },
-            "virtualNetworkName": {
+            "bastionNetworkName": {
               "type": "string"
             },
-            "networkSecurityGroupName": {
+            "bastionSubnet": {
+              "type": "string"
+            },
+            "virtualNetworkName": {
               "type": "string"
             },
             "location": {
@@ -550,29 +512,6 @@
           },
           "functions": [],
           "resources": [
-            {
-              "type": "Microsoft.Network/networkSecurityGroups",
-              "apiVersion": "2020-06-01",
-              "name": "[parameters('networkSecurityGroupName')]",
-              "location": "[parameters('location')]",
-              "properties": {
-                "securityRules": [
-                  {
-                    "name": "default-allow-ssh",
-                    "properties": {
-                      "priority": 1000,
-                      "access": "Allow",
-                      "direction": "Inbound",
-                      "destinationPortRange": "22",
-                      "protocol": "Tcp",
-                      "sourcePortRange": "*",
-                      "sourceAddressPrefix": "*",
-                      "destinationAddressPrefix": "*"
-                    }
-                  }
-                ]
-              }
-            },
             {
               "type": "Microsoft.Network/virtualNetworks",
               "apiVersion": "2020-06-01",
@@ -588,23 +527,27 @@
                   {
                     "name": "[parameters('subnet1Name')]",
                     "properties": {
-                      "addressPrefix": "[parameters('subnet1Prefix')]",
-                      "networkSecurityGroup": {
-                        "id": "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
-                      }
+                      "addressPrefix": "[parameters('subnet1Prefix')]"
+                    }
+                  },
+                  {
+                    "name": "[parameters('bastionNetworkName')]",
+                    "properties": {
+                      "addressPrefix": "[parameters('bastionSubnet')]"
                     }
                   }
                 ]
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', parameters('networkSecurityGroupName'))]"
-              ]
+              }
             }
           ],
           "outputs": {
             "subnet1name": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))).subnets[0].name]"
+            },
+            "bastionSubnetName": {
+              "type": "string",
+              "value": "[reference(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))).subnets[1].name]"
             },
             "vnid": {
               "type": "string",
@@ -616,15 +559,94 @@
       "dependsOn": [
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]"
       ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
+      "name": "bastion",
+      "resourceGroup": "[parameters('ResourceGroupName')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "bastionHostName": {
+            "value": "bastion"
+          },
+          "location": {
+            "value": "[parameters('Location')]"
+          },
+          "subnetRef": {
+            "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'dockernetwork'), '2019-10-01').outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'dockernetwork'), '2019-10-01').outputs.bastionSubnetName.value)]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.3.255.40792",
+              "templateHash": "2412912973001245325"
+            }
+          },
+          "parameters": {
+            "subnetRef": {
+              "type": "string"
+            },
+            "bastionHostName": {
+              "type": "string"
+            },
+            "location": {
+              "type": "string"
+            }
+          },
+          "functions": [],
+          "resources": [
+            {
+              "type": "Microsoft.Network/publicIPAddresses",
+              "apiVersion": "2020-06-01",
+              "name": "[format('{0}-pip', parameters('bastionHostName'))]",
+              "location": "[parameters('location')]",
+              "sku": {
+                "name": "Standard"
+              },
+              "properties": {
+                "publicIPAllocationMethod": "Static"
+              }
+            },
+            {
+              "type": "Microsoft.Network/bastionHosts",
+              "apiVersion": "2020-06-01",
+              "name": "[parameters('bastionHostName')]",
+              "location": "[parameters('location')]",
+              "properties": {
+                "ipConfigurations": [
+                  {
+                    "name": "IpConf",
+                    "properties": {
+                      "subnet": {
+                        "id": "[parameters('subnetRef')]"
+                      },
+                      "publicIPAddress": {
+                        "id": "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-pip', parameters('bastionHostName')))]"
+                      }
+                    }
+                  }
+                ]
+              },
+              "dependsOn": [
+                "[resourceId('Microsoft.Network/publicIPAddresses', format('{0}-pip', parameters('bastionHostName')))]"
+              ]
+            }
+          ]
+        }
+      },
+      "dependsOn": [
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'dockernetwork')]",
+        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]"
+      ]
     }
-  ],
-  "outputs": {
-    "HostFQDNs": {
-      "type": "array",
-      "copy": {
-        "count": "[length(range(1, parameters('numberOfHosts')))]",
-        "input": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}{1}', parameters('VmHostname'), range(1, parameters('numberOfHosts'))[sub(range(1, parameters('numberOfHosts'))[copyIndex()], 1)])), '2019-10-01').outputs.dockerhostfqdn.value]"
-      }
-    }
-  }
+  ]
 }
