@@ -95,7 +95,7 @@ Check app gw health, probe test, http/https settings on the APIM
 
 ```
 
-# Firewall blocking outboud API traffic
+# Firewall blocking outbound API traffic
 
 Review firewall rules
 
@@ -145,7 +145,7 @@ Accept-Encoding: gzip, deflate, br
 
 ```
 
-# NSG On APIM or Backed subnet
+# NSG On APIM or Backend subnet
 
 Potential Issue: NSG on the APIM or Backend API subnet
 
@@ -201,7 +201,8 @@ Verify backend API is routable
    Review CORS polciy setting.
 
 ```
-Since the browser initiates the request, it requires Cross-Origin Resource Sharing (CORS) enabled on the server. Learn more
+Since the browser initiates the request, it requires Cross-Origin Resource Sharing (CORS) enabled on the server. Learn more.
+
 ```
 ![CORS policy](images/common/cors.png)
 

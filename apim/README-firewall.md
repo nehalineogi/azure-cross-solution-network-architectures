@@ -16,7 +16,7 @@ This architecture demonstrates the connectivity architecture and traffic flows t
 
 
 ![APIM Architecture](images/external/external-apim-with-firewall.png)
-
+Download [Multi-tab Visio](APIM-all-reference-architectures-visio.vsdx) and [PDF](APIM-all-reference-architectures-PDF.pdf)
 # Prerequisites
 Using Azure documentation link [here](https://docs.microsoft.com/en-us/azure/api-management/import-and-publish) ensure that you've deployed APIM in External Mode.
 

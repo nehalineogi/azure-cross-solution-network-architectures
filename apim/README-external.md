@@ -10,7 +10,7 @@ This architecture demonstrates the connectivity architecture and traffic flows t
 # Reference Architecture
 
 ![APIM Architecture](images/external/apim-external.png)
-
+Download [Multi-tab Visio](APIM-all-reference-architectures-visio.vsdx) and [PDF](APIM-all-reference-architectures-PDF.pdf)
 
 
 

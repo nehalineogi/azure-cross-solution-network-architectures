@@ -5,7 +5,7 @@ This architecture shows how to enable access to the developer portal using both 
 
 # Reference Architecture
 ![AAD Identity Provider](images/identity/apim-identity-architecture.png)
-
+Download [Multi-tab Visio](APIM-all-reference-architectures-visio.vsdx) and [PDF](APIM-all-reference-architectures-PDF.pdf)
 
 # Azure Documentation
 

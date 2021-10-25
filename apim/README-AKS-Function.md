@@ -1,15 +1,15 @@
 
 # Overview
-This architecture provides details of APIM connectivity to AKS backend. This architecture shows AKS cluster deployed in Basic/Kubnet mode, however the internal load balancer placement and APIM backend connection stays the same for both Kubenet and Azure CNI deployments. More details on the AKS Reference architectures [here](../aks/README.md).
+This architecture provides details of APIM connectivity to AKS backend. This architecture shows AKS cluster deployed in Basic/Kubenet mode, however the internal load balancer placement and APIM backend connection stays the same for both Kubenet and Azure CNI deployments. More details on the AKS Reference architectures [here](../aks/README.md).
 
 
 # Architecture Diagram
 ![Backend API in AKS](images/AKS-function-app/apim-aks.png)
-
+Download [Multi-tab Visio](APIM-all-reference-architectures-visio.vsdx) and [PDF](APIM-all-reference-architectures-PDF.pdf)
 # Desgin Components
 1. APIM Deployed in Internal Mode with Application Gateway
 2. Custom domain is configured for APIM endpoints.
-3. AKS Cluster deployed with Kubenet networking in the above diagram. Note: The load balancer placement stays the same with Azure CNI. With Azure CNI, APIM can directly access the POD as well since the NODE and PODS are on the same subnet. Review AKS architectures[here](../aks/README.md). for more details on kubenet vs CNI..
+3. AKS Cluster deployed with Kubenet networking in the above diagram. Note: The load balancer placement stays the same with Azure CNI. With Azure CNI, APIM can directly access the POD as well since the NODE and PODS are on the same subnet. Review AKS architectures [here](../aks/README.md). for more details on kubenet vs CNI..
 4. AKS Subnet (172.16.239.0/24) routable from APIM Subnet (172.16.6.0/24). Note: Backend APIs can be in peered subnet.
 5. AKS hosted API exposed on the Internal Load balancer (172.16.239.7)
    

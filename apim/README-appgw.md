@@ -5,7 +5,7 @@
 ## Reference Architecture
 
 ![APIM Architecture](images/appgw/apim-with-appgw.png)
-
+Download [Multi-tab Visio](APIM-all-reference-architectures-visio.vsdx) and [PDF](APIM-all-reference-architectures-PDF.pdf)
 
 
 

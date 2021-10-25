@@ -5,7 +5,7 @@ This architecture shows the big picture view of Azure API Management (APIM) and 
 # Reference Architecture
 
 ![APIM Architecture](images/common/all-modes.png)
-
+Download [Multi-tab Visio](APIM-all-reference-architectures-visio.vsdx) and [PDF](APIM-all-reference-architectures-PDF.pdf)
 
 # Azure Documentation links
 
@@ -77,84 +77,12 @@ Azure portal is used by the administrator to configure and manage an APIM PaaS s
 
  ![APIM Architecture](images/common/azure-portal.png)
 
-# LetsEncrypt Certificates and Custom Domain
-
-APIM endpoints by default have Azure managed DNS using azure-api.net subdomain. In this example we expose these endpoints using a custom domain - penguintrails.com. The example below shows how to create a valid letencrypt certificate and use Azure Key Vault to store the certificates. 
-
-1. Install Certbot utility link [here](https://github.com/certbot/certbot/releases/tag/v1.19.0)
-2. Create a wildcard certificate. (Note: For individual certificates add more domains after -d)
-In Powershell:
-
-certbot certonly --manual --preferred-challenges dns -d *.penguintrails.com
-
-Navigate to c:\certbot and validate.
-
-
-
-3. Create DNS Record
-   
-   ![APIM Architecture](images/common/txt-record.png)
-
-4. Convert the certificate to .pfx format
-   
-Example in WSL environment:
-From :  /mnt/c/Certbot/live/penguintrails.com/
-
-```
-     openssl pkcs12 -export -inkey privkey.pem -in cert.pem -certfile chain.pem -out penguintrails-letsencrypt.pfx
-
-```     
-    ** Note: These certificates are valid for 90 days**
-
-```
-     penguintrails-letsencrypt.pfx -nokeys | openssl x509 -noout -startdate -enddate
-     
-     Enter Import Password:
-     
-     notBefore=Jul 23 20:23:54 2021 GMT
-     notAfter=Oct 21 20:23:52 2021 GMT
-
-
-```
-
-5. Enable Managed Identity
-    ![APIM Architecture](images/common/managed-identity.png)
-
-6. Import the Certificate to Azure keyvault
-   
-    ![APIM Architecture](images/common/keyvault.png)
-     ![APIM Architecture](images/common/access-policy.png)
-
-7. Add a custom domain for each of the APIM endpoints (developer portal, management, gateway, scm and legacy portal(if needed))
-       ![APIM Architecture](images/common/custom-domain.png)
-
-# Custom Domain and DNS Considerations
-APIM in Internal Mode DNS is managed by the user. APIM in External Mode Default DNS resolution is provided by Azure DNS. For Custom Domain, the user needs to do the manage DNS configuration.
-Azure Private and public DNS zone can be leveraged.
-
-```
-#APIM default domain
-#
-172.16.6.9 nnapi.azure-api.net
-172.16.6.9 nnapi.portal.azure-api.net
-172.16.6.9 nnapi.developer.azure-api.net
-172.16.6.9 nnapi.management.azure-api.net
-172.16.6.9 nnapi.scm.azure-api.net
-##
-#APIM custom domain
-#
-172.16.6.9 nnapi.penguintrails.com
-172.16.6.9 developer.penguintrails.com
-172.16.6.9 portal.penguintrails.com
-172.16.6.9 management.penguintrails.com
-172.16.6.9 scm.penguintrails.com
-
-```
 
 # Other Design Components
 Please refer to specific article in this series for more details on other design components
 
-1. Identity Components (AAD and B2C)
+1. LetsEncrypt Certificates and Custom Domain 
+2. Identity Components (AAD and B2C)
 2. APIM Internal Mode with Application Gateway
 3. APIM with Azure Firewall
 4. APIM Multi-region

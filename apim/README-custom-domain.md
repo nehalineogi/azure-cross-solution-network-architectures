@@ -1,8 +1,17 @@
 # Overview
-This article shows an example of generating a valid Let's Encrypt certificate and leveraging Azure Private and Public DNS zone with APIM depoloyment.
+This article shows an example of generating a valid Let's Encrypt certificate and leveraging Azure Private and Public DNS zone with APIM depoloyment. This process to common to Internal,External and Default APIM Modes. APIM endpoints by default have Azure managed DNS using azure-api.net subdomain. In this example we expose the APIM endpoints using a custom domain - penguintrails.com. The example below shows how to create a valid letencrypt certificate and use Azure Key Vault to store the certificates. 
 
 Note: Lets Encrypt certificates are **valid for 90 days**. FAQ link [here](https://letsencrypt.org/docs/faq/#what-is-the-lifetime-for-let-s-encrypt-certificates-for-how-long-are-they-valid)
 
+# Reference Architecture
+![APIM Architecture](images/internal/internal-mode.png)
+Download [Multi-tab Visio](APIM-all-reference-architectures-visio.vsdx) and [PDF](APIM-all-reference-architectures-PDF.pdf)
+
+# Design Components
+1. This diagram shows the Internal IPIM. The sample process applies to External and Default Modes.
+2. Let's Encrypt Certificates are used
+3. Public DNS Zone are used for External resulution are mapped to API default domains. Note: When used with application gateway the CNAME record points to the application gateway.
+4. Private DNS are used for internal resolution and mapped to internal IP.
 # Documentation links
 
 [Lets Encrypt](https://letsencrypt.org/)

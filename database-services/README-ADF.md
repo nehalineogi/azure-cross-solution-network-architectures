@@ -1,63 +1,37 @@
-## Azure Data Factory Architecture
+## Azure Default Integration Runtime(IR)
 
-This architecture demonstrates the connectivity architecture and traffic flows for migrating data using Azure Data Factory, Self Hosted IR and Managed Virtual Network
+This architecture demonstrates the connectivity architecture and traffic flows for migrating data using Azure Data Factory (ADF) default Azure Integration Runtime (IR). Location of this IR is autoresolve. Azure IR is the compute infrastructed used by ADF to provide data integration capabilities across network environments.
 
 ## Reference Architecture
 
-![Networking](images/azure-adf-architecture.png)
+![Networking](images/azure-IR.png)
 
-Download Visio link here.
-
-## Azure Documentation links
-
-1. [Azure Data Factory terminology](hhttps://docs.microsoft.com/en-us/azure/data-factory/introduction)
-2. [Support Data Stores and Formats](https://docs.microsoft.com/en-us/azure/data-factory/copy-activity-overview#supported-data-stores-and-formats)
-3. [Integration Runtime Concepts](https://docs.microsoft.com/en-us/azure/data-factory/concepts-integration-runtime)
-4. [Self Hosted Integration Runtime](https://docs.microsoft.com/en-us/azure/data-factory/create-self-hosted-integration-runtimes)
-5. [Managed Virtual Network- **Preview Feature**](https://docs.microsoft.com/en-us/azure/data-factory/managed-virtual-network-private-endpoint)
-6. [Linked Services](https://docs.microsoft.com/en-us/azure/data-factory/concepts-linked-services)
+Download [Multi-tab Visio](db-services-all-reference-architectures-visio.vsdx) and [PDF](db-services-all-reference-architectures-PDF.pdf)
 
 ## Design Components
 
-Going from left to right, source(on-premises) to a sink(Azure PaaS), the service that runs the Copy activity performs these steps:
+1. Public Endpoints (Source: Azure sqlserver and sink: Azure Blob storage)
+2. Integration Runtime: Default fully managed Azure IR.
+3. IP Routing between source and sink using public network.
+4. Source and sink protected using firewall rules.
 
-- Reads data from a source data store.
-- Performs operations based on the configuration of the input dataset, output dataset, and Copy activity.
-- Writes data to the sink/destination data store
-- IP Routing in place between ADF and source/sink
-- ADF Self hosted Integration Runtime can be place in Azure VNET or On-Premises
+## Azure Documentation links
 
-1. Simple architecuture from Azure Documentation: [Data Copy Overview](https://docs.microsoft.com/en-us/azure/data-factory/copy-activity-overview)
+1. [Azure Integration Runtime](https://docs.microsoft.com/en-us/azure/data-factory/concepts-integration-runtime#azure-integration-runtime)
+2. [Azure Data Factory terminology](hhttps://docs.microsoft.com/en-us/azure/data-factory/introduction)
+3. [Support Data Stores and Formats](https://docs.microsoft.com/en-us/azure/data-factory/copy-activity-overview#supported-data-stores-and-formats)
+4. [Integration Runtime Concepts](https://docs.microsoft.com/en-us/azure/data-factory/concepts-integration-runtime)
+5. [Linked Services](https://docs.microsoft.com/en-us/azure/data-factory/concepts-linked-services)
 
-   ![High Level Architecture](images/copy-activity-overview.png)
+## Design Considerations and Use cases
 
-2. [Support Data Stores and Formats](https://docs.microsoft.com/en-us/azure/data-factory/copy-activity-overview#supported-data-stores-and-formats)
-3. Integration Runtime
-4. Private DNS Zones and Hybrid DNS setup for ADF private endpoint DNS resolution.
-5. Private Endpoints for ADF and Private Endpoint for Sink(Azure PaaS services)
-6. Managed Virtual Network
-7. Azure IR vs AzureAutoResolve
+1. Fullly Managed Compute to natively perform data movement
+2. Supports connecting to targets or resources with publicly accessible endpoints.
+3. Note: Enabling Managed Virtual Network, Azure Integration Runtime supports connecting to data stores using private link service in private network environment.
+4. Security Considerations:
+   Source and sink protected using first line of defence by IP address (firewall IP address for Azure SQL or allow Azure services). These IPs could change. Allow Azure services should be used with caution.
+   ![Networking](images/sqlserver-ADF-IP.png)![Networking](images/sqlserver-firewall.png)
 
-## Design Considerations and Planning
+5. Requires operational overhead of whitelisting IPs for publicly accessible endpoints.
 
-1. [Managed Virtual Network - **Preview Feature**](https://docs.microsoft.com/en-us/azure/data-factory/managed-virtual-network-private-endpoint)
-
-   Benefits of using Managed Virtual Network:
-
-- No need to manually create a subnet for for Private Endpoints and upfront infrastructure planning
-- Suited for Brownfield deployments
-- Protects against data exfiltration.
-
-2. [Self Hosted Integration Runtime](https://docs.microsoft.com/en-us/azure/data-factory/create-self-hosted-integration-runtimes)
-
-   Use Cases:
-
-- Use Self hosted IR to support data integration with On-premises data sources over VPN/Express route
-- Use Self hosted IR to support data integration within Azure VNET
-- Use Self hosted IR to support data integration with sources in another Cloud with IR running on IaaS VM.
-- Self-hosted IR can service two data factories and same data source
-
-## Tools and Traffic Flows
-
-1. Integration Runtime
-2. Azure Data factory
+## TODO

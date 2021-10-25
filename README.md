@@ -9,6 +9,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - [VXLAN with two linux hosts (As good as it gets!)](advanced-linux-networking/linux-vxlan.md)
 - BIRD Internet Routing Daemon (BGP Routing on linux) (Coming Soon...)
 - Openswan VPN (IPsec Tunnels)
+- Linux VTI Interfaces
 - The perfect NVA with linux
 - IPtables and eBPF
 - Cluster Networking - [IPVLAN, MACVLAN, TUN/TAP drivers](https://kubernetes.io/docs/concepts/cluster-administration/networking/)
@@ -16,8 +17,8 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 ### [Azure Kubernetes Services (AKS) Networking Series](aks/README-advanced.md)
 
 - [Docker Networking](aks/README-docker-multihost.md)
-  - [Single Host](aks/README-docker-singlehost.md) 
-  - [Multi Host](aks/README-docker-multihost.md) 
+  - [Single Host](aks/README-docker-singlehost.md)
+  - [Multi Host](aks/README-docker-multihost.md)
   - Bicep automated deployment (Coming soon...)
   - kind Cluster (Kubernetes In Docker)
 - [Basic/Kubenet Networking](aks/README-kubenet.md)
@@ -33,16 +34,19 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - Kubernetes Network Model - Multus, Flannel,Weave, Calico, Cilium
 - Kubernets Serivce Mesh (Istio, Linkerd and Consul)
 
-### [Azure Database Services](database-services/README.md)
+### Azure Database Services
 
+- Download [Multi-tab Visio](database-services/db-services-all-reference-architectures-visio.vsdx) and [PDF](database-services/db-services-all-reference-architectures-PDF.pdf)
+- Azure Data Factory (ADF)
+  - [AutoResolve Azure Default Integration Runtime](database-services/README-ADF.md)
+  - [Auzre Managed VNET Integration Runtime and Private Endpoints](database-services/README-Managed.md)
+  - [Self hosted Integration Runtime (IR) In Azure](database-services/README-SH-Azure.md)
+  - [Self hosted Integration Runtime (IR) On Premises](database-services/README-SH-On-Premises.md)
+  - [The big picture with different type of IR](database-services/README-ADF-Big-Picture.md)
 - [SQL Managed Instance](database-services/README.md)
-  - Single Region (database-services/README.md)
-  - Multi region with Replication - DR Scenario (Coming Soon...)
+  - [Single Region](database-services/README-SQLMI.md)
+  - Multi region with Replication - DR Scenario
   - Database failover with Application connectivity
-- [Azure Data Factory(ADF)](database-services/README-ADF.md)
-  - Managed VNET and Private Endpoints
-  - Self hosted Integration Runtime (IR) In Azure
-  - Self hosted Integration Runtime (IR) On Premises
 - Azure SQL Database (PaaS Service)
 - Azure Synapse
 - OSS databases - mysql and postgres
@@ -65,16 +69,17 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - [Download Postman Collection](apim/README-postman.md)
 - Download [Multi-tab Visio](apim/APIM-all-reference-architectures-visio.vsdx) and [PDF](apim/APIM-all-reference-architectures-PDF.pdf) of all APIM Networking Architectures
 
-### [Azure App-service Networking ](app-service/README.md)
+### [Azure App-service Networking ](app-service/README.md) (Work in Progress!)
 
 - [Private Endpoint Integration](app-service/README.md)
 - [Service Endpoint](app-service/README.md)
 - [VNET Integration](app-service/README.md)
 - [NAT Gateway Integration](app-service/README.md)
 - [Azure Private DNS Zone Planning](app-service/README.md)
+- APP Services with Custom Domain and Private Endpoints (Coming Soon!)
 - Azure App-Service with firewall for outbound traffic filtering (coming soon!)
 
-### DevOps and Automation
+### DevOps and Automation (Not Started!)
 
 - Bicep Automated deployments (Coming Soon...)
 - Azure DevOps
@@ -115,7 +120,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
 ## Contributors
 
-Special thank you to my collegues
+Special thank you to my colleagues
 
 - [David O'Keefe](https://www.linkedin.com/in/david-o-keefe/)
 - [Shaun Croucher](https://github.com/shcrouch)

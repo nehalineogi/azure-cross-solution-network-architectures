@@ -13,7 +13,7 @@ This architecture demonstrates the connectivity architecture and traffic flows t
 ## Reference Architecture
 
 ![APIM Architecture](images/internal/internal-mode.png)
-
+Download [Multi-tab Visio](APIM-all-reference-architectures-visio.vsdx) and [PDF](APIM-all-reference-architectures-PDF.pdf)
 
 
 
