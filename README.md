@@ -42,7 +42,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
   - [Azure Managed VNET Integration Runtime and Private Endpoints](database-services/README-Managed.md)
   - [Self hosted Integration Runtime (IR) In Azure](database-services/README-SH-Azure.md)
   - [Self hosted Integration Runtime (IR) On Premises](database-services/README-SH-On-Premises.md)
-  - [The big picture with different type of IR](database-services/README-ADF-Big-Picture.md)
+  - [The big picture with different types of IR](database-services/README-ADF-Big-Picture.md)
 - [SQL Managed Instance](database-services/README.md)
   - [Single Region](database-services/README-SQLMI.md)
   - Multi region with Replication - DR Scenario
