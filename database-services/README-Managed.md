@@ -4,7 +4,7 @@ This architecture demonstrates the connectivity architecture and traffic flows f
 
 ## Reference Architecture
 
-![Networking](images/managed-VNET-IR.png)
+![Networking](images/managed-vnet-IR.png)
 
 Download [Multi-tab Visio](db-services-all-reference-architectures-visio.vsdx) and [PDF](db-services-all-reference-architectures-PDF.pdf)
 

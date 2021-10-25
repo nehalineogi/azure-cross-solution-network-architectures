@@ -39,7 +39,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - Download [Multi-tab Visio](database-services/db-services-all-reference-architectures-visio.vsdx) and [PDF](database-services/db-services-all-reference-architectures-PDF.pdf)
 - Azure Data Factory (ADF)
   - [AutoResolve Azure Default Integration Runtime](database-services/README-ADF.md)
-  - [Auzre Managed VNET Integration Runtime and Private Endpoints](database-services/README-Managed.md)
+  - [Azure Managed VNET Integration Runtime and Private Endpoints](database-services/README-Managed.md)
   - [Self hosted Integration Runtime (IR) In Azure](database-services/README-SH-Azure.md)
   - [Self hosted Integration Runtime (IR) On Premises](database-services/README-SH-On-Premises.md)
   - [The big picture with different type of IR](database-services/README-ADF-Big-Picture.md)
