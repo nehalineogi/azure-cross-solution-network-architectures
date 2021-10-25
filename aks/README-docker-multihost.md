@@ -34,6 +34,8 @@ There are two options available to set up the prerequisites for this scenario.
 
 Option 1 - Click the link below to automatically create the necessary VMs with a vanilla build of docker. 
 
+    Note that this automated deployment will also deploy Azure Bastion, so you can connect to the VMs via the portal using Bastion. 
+
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fdockerhost.json)
 
 
