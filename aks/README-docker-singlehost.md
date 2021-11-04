@@ -34,9 +34,9 @@ There are two options available to set up the prerequisites for this scenario.
 
 Option 1 - Click the link below to automatically create the necessary VMs with a vanilla build of docker. 
 
-  > Note: This automated deployment will also deploy Azure Bastion, so you can connect to the VMs via the portal using Bastion.
+> Note: This automated deployment will also deploy Azure Bastion, so you can connect to the VMs via the portal using Bastion.
 
-  > Note: The passwords that are generated and stored in keyvault are deterministic and therefore should be changed to maximise security. They are auto generated in this way for convenience and are intended to support this environment as a Proof of Concept only and not for production use.
+> Note: The passwords for the VMs are stored in a keyvault. They are generated deterministically and therefore should be changed post deployment on the VMs to maximise security. They are auto generated in this way for convenience and are intended to support this environment as a 'Proof of Concept' only and not for production use.
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fdockerhost.json)
 
