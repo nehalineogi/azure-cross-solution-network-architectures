@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "6556817742032746960"
+      "templateHash": "11239803038205840081"
     }
   },
   "parameters": {
@@ -285,7 +285,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.3.255.40792",
-              "templateHash": "8137733279706470109"
+              "templateHash": "15811957911396920799"
             }
           },
           "parameters": {
@@ -306,7 +306,7 @@
             },
             "adminPassword": {
               "type": "secureString",
-              "defaultValue": "[format('{0}aA1!', uniqueString(resourceGroup().id))]"
+              "defaultValue": "[format('{0}aA1!', uniqueString(resourceGroup().id, parameters('vmname')))]"
             },
             "vmSize": {
               "type": "string",
