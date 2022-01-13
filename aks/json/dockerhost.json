@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "11239803038205840081"
+      "templateHash": "5534480427331774639"
     }
   },
   "parameters": {
@@ -17,15 +17,6 @@
       },
       "maxLength": 36,
       "minLength": 36
-    },
-    "Location": {
-      "type": "string",
-      "defaultValue": "UK South",
-      "maxLength": 20,
-      "minLength": 3,
-      "metadata": {
-        "description": "Set the location for the resource group and all resources"
-      }
     },
     "ResourceGroupName": {
       "type": "string",
@@ -69,13 +60,6 @@
         "description": "Name of the vnet"
       }
     },
-    "VnetAddressPrefix": {
-      "type": "string",
-      "defaultValue": "172.16.0.0/16",
-      "metadata": {
-        "description": "Set the address space for the VNet"
-      }
-    },
     "Subnet1Name": {
       "type": "string",
       "defaultValue": "dockersubnet",
@@ -83,17 +67,9 @@
         "description": "Set the name for the docker subnet"
       }
     },
-    "Subnet1Prefix": {
-      "type": "string",
-      "defaultValue": "172.16.24.0/24",
-      "minLength": 9,
-      "metadata": {
-        "description": "Set the subnet range for subnet1"
-      }
-    },
     "githubPath": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/nehalineogi/azure-cross-solution-network-architectures/main/aks/scripts/",
+      "defaultValue": "https://raw.githubusercontent.com/sdcscripts/azure-cross-solution-network-architectures/main/aks/scripts/",
       "minLength": 10,
       "metadata": {
         "description": "Set the path to the github directory that has the custom script extension scripts"
@@ -111,15 +87,18 @@
   },
   "functions": [],
   "variables": {
-    "bastionNetworkName": "AzureBastionSubnet",
-    "bastionSubnet": "172.16.1.0/24"
+    "location": "[deployment().location]",
+    "VnetAddressPrefix": "172.16.0.0/16",
+    "Subnet1Prefix": "172.16.24.0/24",
+    "bastionSubnet": "172.16.1.0/24",
+    "bastionNetworkName": "AzureBastionSubnet"
   },
   "resources": [
     {
       "type": "Microsoft.Resources/resourceGroups",
       "apiVersion": "2020-10-01",
       "name": "[parameters('ResourceGroupName')]",
-      "location": "[parameters('Location')]"
+      "location": "[variables('location')]"
     },
     {
       "type": "Microsoft.Resources/deployments",
@@ -456,16 +435,16 @@
         "mode": "Incremental",
         "parameters": {
           "addressPrefix": {
-            "value": "[parameters('VnetAddressPrefix')]"
+            "value": "[variables('VnetAddressPrefix')]"
           },
           "location": {
-            "value": "[parameters('Location')]"
+            "value": "[variables('location')]"
           },
           "subnet1Name": {
             "value": "[parameters('Subnet1Name')]"
           },
           "subnet1Prefix": {
-            "value": "[parameters('Subnet1Prefix')]"
+            "value": "[variables('Subnet1Prefix')]"
           },
           "bastionNetworkName": {
             "value": "[variables('bastionNetworkName')]"
@@ -575,7 +554,7 @@
             "value": "bastion"
           },
           "location": {
-            "value": "[parameters('Location')]"
+            "value": "[variables('location')]"
           },
           "subnetRef": {
             "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'dockernetwork'), '2019-10-01').outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'dockernetwork'), '2019-10-01').outputs.bastionSubnetName.value)]"
