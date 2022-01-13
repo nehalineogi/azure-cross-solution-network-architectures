@@ -69,7 +69,7 @@
     },
     "githubPath": {
       "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/sdcscripts/azure-cross-solution-network-architectures/main/aks/scripts/",
+      "defaultValue": "https://raw.githubusercontent.com/shcrouch/azure-cross-solution-network-architectures/main/aks/scripts/",
       "minLength": 10,
       "metadata": {
         "description": "Set the path to the github directory that has the custom script extension scripts"
