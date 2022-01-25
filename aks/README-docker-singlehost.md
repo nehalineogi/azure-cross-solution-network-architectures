@@ -56,6 +56,7 @@ Azure Powershell
 ```
 (Get-AzContext).Account.ExtendedProperties.HomeAccountId.Split('.')[0]
 ```
+> Note: If you are using the Azure Cloud Shell, it is not possible to use this powershell command because the cloud shell uses a Managed Identity for authentication. You can still run the az cli command in a cloud shell using bash. Alternatively, use an interactive login from your own device to run the powershell command above.
 
 ### Option 2 - Manual Deployment
 <br />
