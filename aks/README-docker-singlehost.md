@@ -24,7 +24,7 @@ Download Visio link here.
 
 The above architecture diagram contains a few key components
 
-- Two Ubuntu Linux VM acting as docker hosts. In this design VM reside on the same azure subnet but it can be deployed in enviornments where they have layer3 connectivity.
+- Two Ubuntu Linux VM acting as docker hosts. In this design VM reside on the same azure subnet but it can be deployed in environments where they have layer 3 connectivity.
 - Default docker bridge (docker0)
 - Custom docker bridge red-bridge and green-bridge
 - Two docker hosts are connected to the same subnet. Containers connected to the bridge network on one docker host cannot talk to the container on the other host. Note: Bridge network are scoped locally and don't span multiple hosts.
