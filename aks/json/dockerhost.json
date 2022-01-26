@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "6319430558605405580"
+      "templateHash": "1835159784852805705"
     }
   },
   "parameters": {
@@ -25,15 +25,6 @@
       "minLength": 3,
       "metadata": {
         "description": "Set the resource group name, this will be created automatically"
-      }
-    },
-    "VmHostname": {
-      "type": "string",
-      "defaultValue": "dkrhost",
-      "maxLength": 8,
-      "minLength": 3,
-      "metadata": {
-        "description": "Set the prefix of the docker hosts"
       }
     },
     "HostVmSize": {
@@ -91,7 +82,8 @@
     "VnetAddressPrefix": "172.16.0.0/16",
     "Subnet1Prefix": "172.16.24.0/24",
     "bastionSubnet": "172.16.1.0/24",
-    "bastionNetworkName": "AzureBastionSubnet"
+    "bastionNetworkName": "AzureBastionSubnet",
+    "VmHostnamePrefix": "docker-host-"
   },
   "resources": [
     {
@@ -230,7 +222,7 @@
       },
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
-      "name": "[format('{0}{1}', parameters('VmHostname'), range(1, parameters('numberOfHosts'))[copyIndex()])]",
+      "name": "[format('{0}{1}', variables('VmHostnamePrefix'), range(1, parameters('numberOfHosts'))[copyIndex()])]",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
         "expressionEvaluationOptions": {
@@ -245,7 +237,7 @@
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'kv'), '2019-10-01').outputs.keyvaultname.value]"
           },
           "vmname": {
-            "value": "[format('{0}{1}', parameters('VmHostname'), range(1, parameters('numberOfHosts'))[copyIndex()])]"
+            "value": "[format('{0}{1}', variables('VmHostnamePrefix'), range(1, parameters('numberOfHosts'))[copyIndex()])]"
           },
           "subnet1ref": {
             "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'dockernetwork'), '2019-10-01').outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'dockernetwork'), '2019-10-01').outputs.subnet1name.value)]"
@@ -264,7 +256,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.3.255.40792",
-              "templateHash": "15511934471688168387"
+              "templateHash": "11450749042311645846"
             }
           },
           "parameters": {
@@ -308,8 +300,8 @@
           "functions": [],
           "variables": {
             "dnsLabelPrefix": "[format('dns-{0}-{1}', uniqueString(resourceGroup().id, parameters('vmname')), parameters('publicIPAddressNameSuffix'))]",
-            "storageAccountName": "[format('{0}{1}sa', uniqueString(resourceGroup().id), parameters('vmname'))]",
-            "nicName": "[format('{0}myVMNic', parameters('vmname'))]"
+            "storageAccountName": "[uniqueString(resourceGroup().id, parameters('vmname'))]",
+            "nicName": "[format('{0}-nic', parameters('vmname'))]"
           },
           "resources": [
             {
@@ -429,7 +421,7 @@
             },
             {
               "type": "Microsoft.Compute/virtualMachines/extensions",
-              "apiVersion": "2021-03-01",
+              "apiVersion": "2020-12-01",
               "name": "[format('{0}/cse', parameters('vmname'))]",
               "location": "[parameters('location')]",
               "properties": {
