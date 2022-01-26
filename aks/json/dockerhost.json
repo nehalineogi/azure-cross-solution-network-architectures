@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "1835159784852805705"
+      "templateHash": "698239958971196287"
     }
   },
   "parameters": {
@@ -247,6 +247,9 @@
           },
           "githubPath": {
             "value": "[parameters('githubPath')]"
+          },
+          "adUserId": {
+            "value": "[parameters('adUserId')]"
           }
         },
         "template": {
@@ -256,7 +259,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.3.255.40792",
-              "templateHash": "11450749042311645846"
+              "templateHash": "14540018129418783596"
             }
           },
           "parameters": {
@@ -275,9 +278,12 @@
             "githubPath": {
               "type": "string"
             },
+            "adUserId": {
+              "type": "string"
+            },
             "adminPassword": {
               "type": "secureString",
-              "defaultValue": "[format('{0}aA1!', uniqueString(resourceGroup().id, parameters('vmname')))]"
+              "defaultValue": "[format('{0}aA1!{1}', uniqueString(resourceGroup().id, parameters('vmname')), uniqueString(parameters('adUserId')))]"
             },
             "vmSize": {
               "type": "string",
