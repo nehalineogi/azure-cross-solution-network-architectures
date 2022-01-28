@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "698239958971196287"
+      "templateHash": "9122102437582297120"
     }
   },
   "parameters": {
@@ -43,21 +43,6 @@
         "description": "Set a username to log in to the hosts"
       }
     },
-    "VnetName": {
-      "type": "string",
-      "defaultValue": "dockervnet",
-      "minLength": 3,
-      "metadata": {
-        "description": "Name of the vnet"
-      }
-    },
-    "Subnet1Name": {
-      "type": "string",
-      "defaultValue": "dockersubnet",
-      "metadata": {
-        "description": "Set the name for the docker subnet"
-      }
-    },
     "githubPath": {
       "type": "string",
       "defaultValue": "https://raw.githubusercontent.com/nehalineogi/azure-cross-solution-network-architectures/main/aks/scripts/",
@@ -78,6 +63,8 @@
   },
   "functions": [],
   "variables": {
+    "VnetName": "dockervnet",
+    "Subnet1Name": "dockersubnet",
     "location": "[deployment().location]",
     "VnetAddressPrefix": "172.16.0.0/16",
     "Subnet1Prefix": "172.16.24.0/24",
@@ -474,7 +461,7 @@
             "value": "[variables('location')]"
           },
           "subnet1Name": {
-            "value": "[parameters('Subnet1Name')]"
+            "value": "[variables('Subnet1Name')]"
           },
           "subnet1Prefix": {
             "value": "[variables('Subnet1Prefix')]"
@@ -486,7 +473,7 @@
             "value": "[variables('bastionSubnet')]"
           },
           "virtualNetworkName": {
-            "value": "[parameters('VnetName')]"
+            "value": "[variables('VnetName')]"
           }
         },
         "template": {
