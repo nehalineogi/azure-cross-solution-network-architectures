@@ -10,10 +10,15 @@ This architecture demonstrates single docker host and networking with the docker
 
 Download Visio link here.
 
-The deployment will provision two Azure VMs with an out-the-box installation of docker. 
-Azure bastion is also deployed and enabled for the VMs and you can connect to the docker hosts using this method immediately. For direct SSH connection, please see below.
+## Deployment Description
 
-The username for the deployed hosts is ```localadmin```
+The deployment will provision two Azure VMs which will act as docker hosts, each VM has an out-the-box installation of docker. 
+
+Azure bastion is also deployed and enabled for the VMs and you can connect to the docker VMs using this method immediately. 
+
+For direct SSH connection, please see below.
+
+The username for the deployed VMs is ```localadmin```
 
 The passwords are stored in a keyvault deployed to the same resource group.
 
@@ -32,15 +37,15 @@ az ad signed-in-user show --query objectId -o tsv
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fdockerhost.json)
 
-### Task 2 (optional) - SSH to the docker hosts.
+### Task 2 (optional) - SSH to the docker VMs.
 
 1. Find NSG called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
 
-2. Retrieve the public IP address (or DNS label) for each host VM 
+2. Retrieve the public IP address (or DNS label) for each VM 
 
 3. Retrieve the VM passwords from the keyvault.
 
-4. SSH to your hosts 
+4. SSH to your VMs 
 
 ```
 ssh localadmin@[VM Public IP or DNS]
