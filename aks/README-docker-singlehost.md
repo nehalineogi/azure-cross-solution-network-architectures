@@ -573,12 +573,16 @@ root@docker-host-1:~# docker ps -aq
 ```
 ## Docker Installation - Troubleshooting
 
-### I am unable to SSH to hosts? 
+### I am unable to SSH to hosts, what do I need to do?
 
 The automated deployment deploys Azure Bastion so you can connect to the VMs via the portal using Bastion. Alternatively the subnet hosting the VMs has a Network Security Group (NSG) attached called "Allow-tunnel-traffic" with a rule called 'allow-ssh-inbound' which is set to Deny by default. If you wish to allow SSH direct to the hosts, you can edit this rule and change the Source from 127.0.0.1 to your current public IP address. Afterwards, Remember to set the rule from Deny to Allow.  
-### I don't know the logins for the VMs? 
+### What are the logins for the VMs? 
 
-The credentials for the VMs are stored in an Azure keyvault. The passwords are generated deterministically and therefore should be changed on the VMs post deployment, to maximise security. They are auto generated in this way for convenience and are intended to support this environment as a 'Proof of Concept' only and are not for production use. 
+The credentials for the VMs are stored in an Azure keyvault. 
+
+### Are the passwords used cyptographically secure? 
+
+No. The passwords are generated deterministically and therefore should be changed on the VMs post deployment, to maximise security. They are auto generated in this way for convenience and are intended to support this environment as a 'Proof of Concept' or learning experience only and are not intended for production use. 
 
 ### I cannot run the deployment - what is the ADuserID?
 
