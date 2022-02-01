@@ -4,10 +4,6 @@ This architecture demonstrates single docker host and networking with the docker
 
 The quickstart deployment will provision two Azure VMs acting as docker hosts, each has an out-the-box installation of docker. Azure bastion is also deployed and enabled for the VMs and you can connect to the docker VMs using this method immediately. For direct SSH connection, please see below.
 
-The username for the deployed VMs is ```localadmin```
-
-The passwords are stored in a keyvault deployed to the same resource group.
-
 ## Reference Architecture
 
 #### Single Host Docker networking
@@ -16,6 +12,10 @@ The passwords are stored in a keyvault deployed to the same resource group.
 
 Download Visio link here.
 ## Quickstart deployment
+
+The username for the deployed VMs is ```localadmin```
+
+The passwords are stored in a keyvault deployed to the same resource group.
 ### Task 1 - Start Deployment
 
 1. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
