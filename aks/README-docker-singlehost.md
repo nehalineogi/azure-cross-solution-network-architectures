@@ -22,8 +22,6 @@ The username for the deployed VMs is ```localadmin```
 
 The passwords are stored in a keyvault deployed to the same resource group.
 
-<br />
-
 ## Quickstart deployment
 ### Task 1 - Start Deployment
 
