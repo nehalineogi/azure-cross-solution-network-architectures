@@ -10,15 +10,47 @@ This architecture demonstrates single docker host and networking with the docker
 
 Download Visio link here.
 
+The deployment will provision two Azure VMs with an out-the-box installation of docker. 
+Azure bastion is also deployed and enabled for the VMs and you can connect to the docker hosts using this method immediately. For direct SSH connection, please see below.
+
+The username for the deployed hosts is ```localadmin```
+
+The passwords are stored in a keyvault deployed to the same resource group.
+
+<br />
+
+## Quickstart deployment
+### Task 1 - Start Deployment
+
+1. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
+
+``` 
+az ad signed-in-user show --query objectId -o tsv
+```
+
+2. Click deploy to Azure and supply the signed-in user ID.
+
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fdockerhost.json)
 
-> Please see notes from Docker Installation Option 1 for 'Deploy to Azure' usage.
+### Task 2 (optional) - SSH to the docker hosts.
+
+1. Find NSG called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
+
+2. Retrieve the public IP address (or DNS label) for each host VM 
+
+3. Retrieve the VM passwords from the keyvault.
+
+4. SSH to your hosts 
+
+```
+ssh localadmin@[VM Public IP or DNS]
+```
+
 ## Documentation links
 
-1. [Install Docker on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
-2. [Docker Network Tutorial](https://docs.docker.com/network/network-tutorial-standalone/)
-3. [Docker Network Bridge](https://docs.docker.com/network/bridge/)
-4. [Container networking](https://docs.docker.com/config/containers/container-networking/)
+1. [Docker Network Tutorial](https://docs.docker.com/network/network-tutorial-standalone/)
+2. [Docker Network Bridge](https://docs.docker.com/network/bridge/)
+3. [Container networking](https://docs.docker.com/config/containers/container-networking/)
 
 ## Design Components
 
@@ -30,43 +62,6 @@ The above architecture diagram contains a few key components
 - Two docker hosts are connected to the same subnet. Containers connected to the bridge network on one docker host cannot talk to the container on the other host. Note: Bridge network are scoped locally and don't span multiple hosts.
 - Bridge networks are like two isolated layer two switches.
 - Inbound and oubound connectivity to and from container via host port (eth0)
-
-## Docker Installation
-
-There are two options available to set up the prerequisites for this scenario.
-
-### Option 1 - Automated Deployment
-
-Click the 'Deploy to Azure' link above to automatically create the necessary Azure VMs with a vanilla build of docker on each host.
-
-<br /> 
-
-> Note: This automated deployment deploys Azure Bastion so you can connect to the VMs via the portal using Bastion. Alternatively the subnet hosting the VMs has an Network Security Group attached called "Allow-tunnel-traffic" with a rule called 'allow-ssh-inbound' which is set to Deny by default. If you need to temporarily allow SSH direct to the hosts, you can edit this rule and change the Source from 127.0.0.1 to your current public IP address (type "what is my ip address" into your favorite search engine to obtain this). Afterwards, set the rule from Deny to Allow and save.  
-
-<br /> 
-
-> Note: The credentials for the VMs are stored in an Azure keyvault. The passwords are generated deterministically and therefore should be changed on the VMs post deployment, to maximise security. They are auto generated in this way for convenience and are intended to support this environment as a 'Proof of Concept' only and are not for production use. In order for the deployment to provision your signed-in user account access to the keyvault, you will need to provide your Azure Active Directory (AAD) signed-in user ObjectID. In order to retrieve this there are serveral methods. The Azure CLI and Azure Powershell methods are provided below
-
-Azure CLI
-``` 
-az ad signed-in-user show --query objectId -o tsv
-```
-
-Azure Powershell 
-```
-(Get-AzContext).Account.ExtendedProperties.HomeAccountId.Split('.')[0]
-```
-> Note: If you are using the Azure Cloud Shell, it is not possible to use this powershell command because the cloud shell uses a Managed Identity for authentication. You can still run the az cli command in a cloud shell using bash. Alternatively, use an interactive login from your own device to run the powershell command above.
-
-### Option 2 - Manual Deployment
-<br />
-Manually Create Ubuntu linux VMs (docker-host-1 and docker-host-2) in Azure subnet and install docker.
-
-```
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io
-apt install bridge-utils
-```
 
 ### Docker Host Default Networks
 
@@ -577,4 +572,40 @@ ee42f6051ff4
 2535fc3f3ec0
 460eb69b0fbd
 root@docker-host-1:~# docker ps -aq
+```
+## Docker Installation - Troubleshooting
+
+<br />
+
+### I am unable to SSH to hosts? 
+
+<br />
+
+The automated deployment deploys Azure Bastion so you can connect to the VMs via the portal using Bastion. Alternatively the subnet hosting the VMs has a Network Security Group (NSG) attached called "Allow-tunnel-traffic" with a rule called 'allow-ssh-inbound' which is set to Deny by default. If you wish to allow SSH direct to the hosts, you can edit this rule and change the Source from 127.0.0.1 to your current public IP address. Afterwards, Remember to set the rule from Deny to Allow.  
+
+<br />
+
+### I don't know the logins for the VMs? 
+
+<br />
+
+The credentials for the VMs are stored in an Azure keyvault. The passwords are generated deterministically and therefore should be changed on the VMs post deployment, to maximise security. They are auto generated in this way for convenience and are intended to support this environment as a 'Proof of Concept' only and are not for production use. 
+
+<br />
+
+### I cannot run the deployment - what is the ADuserID?
+
+<br />
+In order for the deployment to provision your signed-in user account access to the keyvault, you will need to provide your Azure Active Directory (AAD) signed-in user ObjectID. In order to retrieve this there are serveral methods. The Azure CLI and Azure Powershell methods are provided below. You can use the cloud shell to run the Azure CLI method, but for powershell you must run this from your own device using Azure Powershell module. 
+
+<br />
+
+Azure CLI or Cloud Shell
+``` 
+az ad signed-in-user show --query objectId -o tsv
+```
+
+Azure Powershell 
+```
+(Get-AzContext).Account.ExtendedProperties.HomeAccountId.Split('.')[0]
 ```
