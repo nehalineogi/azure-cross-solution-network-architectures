@@ -2,6 +2,12 @@
 
 This architecture demonstrates single docker host and networking with the docker host, custom bridge networks, dual homing containers. Note: Containers connected to the bridge network on one docker host cannot talk to the container on the other host. Bridge networks are scoped locally and don't span multiple hosts.
 
+The quickstart deployment will provision two Azure VMs acting as docker hosts, each has an out-the-box installation of docker. Azure bastion is also deployed and enabled for the VMs and you can connect to the docker VMs using this method immediately. For direct SSH connection, please see below.
+
+The username for the deployed VMs is ```localadmin```
+
+The passwords are stored in a keyvault deployed to the same resource group.
+
 ## Reference Architecture
 
 #### Single Host Docker networking
@@ -9,19 +15,6 @@ This architecture demonstrates single docker host and networking with the docker
 ![Docker Swarm Cluster](images/docker-single-host.png)
 
 Download Visio link here.
-
-## Deployment Description
-
-The deployment will provision two Azure VMs which will act as docker hosts, each VM has an out-the-box installation of docker. 
-
-Azure bastion is also deployed and enabled for the VMs and you can connect to the docker VMs using this method immediately. 
-
-For direct SSH connection, please see below.
-
-The username for the deployed VMs is ```localadmin```
-
-The passwords are stored in a keyvault deployed to the same resource group.
-
 ## Quickstart deployment
 ### Task 1 - Start Deployment
 
