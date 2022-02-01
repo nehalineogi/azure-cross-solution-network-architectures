@@ -24,9 +24,11 @@ Download Visio link here.
 az ad signed-in-user show --query objectId -o tsv
 ```
 
-2. Click deploy to Azure and supply the signed-in user ID.
+2. Click Deploy to Azure and supply the signed-in user ID.
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fdockerhost.json)
+
+3. Using Azure Bastion, log in to the VMs using the username ```localadmin``` and passwords from keyvault.
 
 ### Task 2 (optional) - SSH to the docker VMs.
 
