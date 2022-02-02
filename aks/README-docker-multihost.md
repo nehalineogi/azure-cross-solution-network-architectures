@@ -2,6 +2,7 @@
 
 This architecture demonstrates VXLAN network overlay with multi-host docker swarm cluster. Overlay networks span multiple nodes. Overlay networks extend the layer-2 broadcast domain to multiple nodes
 
+The quickstart deployment will provision two Azure VMs acting as docker hosts, each has an out-the-box installation of docker. Azure bastion is also deployed and enabled for the VMs and you can connect to the docker VMs using this method immediately. For direct SSH connection, please see below.
 ## Reference Architecture
 
 #### Multi-Host (Docker Swarm Cluster)
@@ -9,20 +10,47 @@ This architecture demonstrates VXLAN network overlay with multi-host docker swar
 ![Docker Swarm Cluster](images/docker-multihost.png)
 
 Download Visio link here.
+## Quickstart deployment
+
+The username for the deployed VMs is ```localadmin```
+
+The passwords are stored in a keyvault deployed to the same resource group.
+### Task 1 - Start Deployment
+
+1. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
+
+``` 
+az ad signed-in-user show --query objectId -o tsv
+```
+
+2. Click Deploy to Azure and supply the signed-in user ID.
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fdockerhost.json)
 
-> Please see notes from Docker Installation Option 1 for 'Deploy to Azure' usage.
+3. Using Azure Bastion, log in to the VMs using the username ```localadmin``` and passwords from keyvault.
+
+### Task 2 (optional) - SSH to the docker VMs.
+
+1. Locate the Network Security Group (NSG) called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
+
+2. Retrieve the public IP address (or DNS label) for each VM 
+
+3. Retrieve the VM passwords from the keyvault.
+
+4. SSH to your VMs 
+
+```
+ssh localadmin@[VM Public IP or DNS]
+```
 ## Documentation links
 
-1. [Install Docker on Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
-2. [Docker Swarm Mode](https://docs.docker.com/engine/swarm/swarm-mode/)
-3. [VXLAN Overlay Networks](https://docs.docker.com/network/overlay/)
-4. [Encrypt traffic on an overlay network](https://docs.docker.com/network/overlay/#encrypt-traffic-on-an-overlay-network)
+1. [Docker Swarm Mode](https://docs.docker.com/engine/swarm/swarm-mode/)
+2. [VXLAN Overlay Networks](https://docs.docker.com/network/overlay/)
+3. [Encrypt traffic on an overlay network](https://docs.docker.com/network/overlay/#encrypt-traffic-on-an-overlay-network)
 
 ## Design Components
 
-- Two Ubuntu Linux VM acting as docker hosts. In this design VM reside on the same azure subnet but it can be deployed in enviornments where they have layer3 connectivity.
+- Two Ubuntu Linux VM acting as docker hosts. In this design VM reside on the same azure subnet but it can be deployed in environments where they have layer 3 connectivity.
 - Enable Swarm Mode to create a multihost cluster
 - Custom Overlay Networks (red-overlay and green-overlay)
 - docker_gwbridge is the default bridge for swarm cluster
@@ -31,41 +59,6 @@ Download Visio link here.
 - ![Overlay packets](images/vxlan-packets.png)
 - Encryption can be enabled on overlay networks
 
-## Docker Installation
-
-There are two options available to set up the prerequisites for this scenario.
-
-### Option 1 - Automated Deployment
-
-Click the 'Deploy to Azure' link above to automatically create the necessary Azure VMs with a vanilla build of docker on each host.
-
-<br /> 
-
-> Note: This automated deployment deploys Azure Bastion so you can connect to the VMs via the portal using Bastion. Alternatively the subnet hosting the VMs has an Network Security Group attached called "Allow-tunnel-traffic" with a rule called 'allow-ssh-inbound' which is set to Deny by default. If you need to temporarily allow SSH direct to the hosts, you can edit this rule and change the Source from 127.0.0.1 to your current public IP address (type "what is my ip address" into your favorite search engine to obtain this). Afterwards, set the rule from Deny to Allow and save.  
-
-<br /> 
-
-> Note: The credentials for the VMs are stored in an Azure keyvault. The passwords are generated deterministically and therefore should be changed on the VMs post deployment, to maximise security. They are auto generated in this way for convenience and are intended to support this environment as a 'Proof of Concept' only and are not for production use. In order for the deployment to provision your signed-in user account access to the keyvault, you will need to provide your Azure Active Directory (AAD) signed-in user ObjectID. In order to retrieve this there are serveral methods. The Azure CLI and Azure Powershell methods are provided below
-
-Azure CLI
-``` 
-az ad signed-in-user show --query objectId -o tsv
-```
-
-Azure Powershell 
-```
-(Get-AzContext).Account.ExtendedProperties.HomeAccountId.Split('.')[0]
-```
-
-### Option 2 - Manual Deployment
-<br />
-Manually Create Ubuntu linux VMs (docker-host-1 and docker-host-2) in Azure subnet and install docker.
-
-```
-sudo apt-get update
-sudo apt-get install docker-ce docker-ce-cli containerd.io
-apt install bridge-utils
-```
 ## Create a Docker Swarm Cluster
 
 List the default networks and initialize docker swarm cluster
@@ -511,3 +504,36 @@ root@docker-host-2:~#
 
 1. Enable encryption on overlay and capture packets
 2. Use Bicep automation to deploy docker hosts and create a docker swarm cluster
+
+## Docker Installation - Troubleshooting
+
+### I am unable to SSH to hosts, what do I need to do?
+
+The automated deployment deploys Azure Bastion so you can connect to the VMs via the portal using Bastion. Alternatively the subnet hosting the VMs has a Network Security Group (NSG) attached called "Allow-tunnel-traffic" with a rule called 'allow-ssh-inbound' which is set to Deny by default. If you wish to allow SSH direct to the hosts, you can edit this rule and change the Source from 127.0.0.1 to your current public IP address. Afterwards, Remember to set the rule from Deny to Allow.  
+### What are the logins for the VMs? 
+
+The credentials for the VMs are stored in an Azure keyvault. 
+
+### Are the passwords used cyptographically secure? 
+
+No. The passwords are generated deterministically and therefore should be changed on the VMs post deployment, to maximise security. They are auto generated in this way for convenience and are intended to support this environment as a 'Proof of Concept' or learning experience only and are not intended for production use. 
+
+### I cannot run the deployment - what is the ADuserID?
+
+In order for the deployment to provision your signed-in user account access to the keyvault, you will need to provide your Azure Active Directory (AAD) signed-in user ObjectID. In order to retrieve this there are serveral methods. The Azure CLI and Azure Powershell methods are provided below. You can use the cloud shell to run the Azure CLI method, but for powershell you must run this from your own device using Azure Powershell module. 
+
+Azure CLI or Cloud Shell
+``` 
+az ad signed-in-user show --query objectId -o tsv
+```
+
+Azure Powershell 
+```
+(Get-AzContext).Account.ExtendedProperties.HomeAccountId.Split('.')[0]
+```
+
+### How is docker installed on the host? 
+
+Docker is installed via a VM custom script extension, for reference the commands used are found in the following script - [cse.sh](scripts/cse.sh)
+
+This script is called automatically by the [dockerhost.json](json/dockerhost.json) ARM template on deployment. 

@@ -1,10 +1,10 @@
-## Docker Single host Networking
+# Docker Single host Networking
 
 This architecture demonstrates single docker host and networking with the docker host, custom bridge networks, dual homing containers. Note: Containers connected to the bridge network on one docker host cannot talk to the container on the other host. Bridge networks are scoped locally and don't span multiple hosts.
 
 The quickstart deployment will provision two Azure VMs acting as docker hosts, each has an out-the-box installation of docker. Azure bastion is also deployed and enabled for the VMs and you can connect to the docker VMs using this method immediately. For direct SSH connection, please see below.
 
-## Reference Architecture
+# Reference Architecture
 
 #### Single Host Docker networking
 
@@ -12,7 +12,7 @@ The quickstart deployment will provision two Azure VMs acting as docker hosts, e
 
 Download Visio link here.
 
-## Quickstart deployment
+# Quickstart deployment
 
 The username for the deployed VMs is `localadmin`
 
@@ -34,7 +34,7 @@ az ad signed-in-user show --query objectId -o tsv
 
 ### Task 2 (optional) - SSH to the docker VMs.
 
-1. Find NSG called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
+1. Locate the Network Security Group (NSG) called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
 
 2. Retrieve the public IP address (or DNS label) for each VM
 
@@ -52,7 +52,7 @@ ssh localadmin@[VM Public IP or DNS]
 2. [Docker Network Bridge](https://docs.docker.com/network/bridge/)
 3. [Container networking](https://docs.docker.com/config/containers/container-networking/)
 
-## Design Components
+# Design Components
 
 The above architecture diagram contains a few key components
 
@@ -543,7 +543,7 @@ docker0         8000.02423a2c88bf       no              veth210b56a
                                                         vethfbf007b
 ```
 
-## Cleanup
+# Cleanup
 
 List all running containers and cleanup
 
@@ -577,7 +577,7 @@ ee42f6051ff4
 root@docker-host-1:~# docker ps -aq
 ```
 
-## Docker Installation - Troubleshooting
+# Docker Installation - Troubleshooting
 
 ### I am unable to SSH to hosts, what do I need to do?
 
@@ -606,3 +606,9 @@ Azure Powershell
 ```
 (Get-AzContext).Account.ExtendedProperties.HomeAccountId.Split('.')[0]
 ```
+
+### How is docker installed on the host?
+
+Docker is installed via a VM custom script extension, for reference the commands used are found in the following script - [cse.sh](scripts/cse.sh)
+
+This script is called automatically by the [dockerhost.json](json/dockerhost.json) ARM template on deployment.
