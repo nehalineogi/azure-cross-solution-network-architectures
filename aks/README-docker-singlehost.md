@@ -63,7 +63,7 @@ The above architecture diagram contains a few key components
 - Bridge networks are like two isolated layer two switches.
 - Inbound and oubound connectivity to and from container via host port (eth0)
 
-# Challange #1 Start a simple linux container on default docker0 bridge
+# Challenge #1 Start a simple linux container on default docker0 bridge
 
 ## Task#1: Validations
 
@@ -238,7 +238,7 @@ root@docker-host-1:~# docker network inspect bridge
 root@docker-host-1:~#
 ```
 
-# Challange #2 Create two custom bridges (red-bridge and green-bridge)
+# Challenge #2 Create two custom bridges (red-bridge and green-bridge)
 
 ```
 #
@@ -299,7 +299,7 @@ root@docker-host-1:/home/localadmin# docker run -dit --name red-c2 --network
 
 ```
 
-# Challange #3 DNS Resolution and Outbound IPs
+# Challenge #3 DNS Resolution and Outbound IPs
 
 ```
  Default Docker0 Bridge
@@ -361,7 +361,7 @@ round-trip min/avg/max = 0.091/0.093/0.095 ms
 
 ```
 
-# Challenage #4 Dual Home a Container
+# Challenge #4 Dual Home a Container
 
 ```
 
@@ -403,7 +403,7 @@ Cache-Control: no-cache
 
 ```
 
-# Challange #6 Observe docker host networking
+# Challenge #6 Observe docker host networking
 
 Note Docker0 interface and veth pairs, iptables and port forwarding.
 
