@@ -602,4 +602,4 @@ Azure Powershell
 
 Docker is installed via a VM custom script extension, for reference the commands used are found in the following script - [cse.sh](scripts/cse.sh)
 
-This script is called automatically by the [deployhost.json](json/deployhost.json) ARM template on deployment. 
+This script is called automatically by the [dockerhost.json](json/dockerhost.json) ARM template on deployment. 
