@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "9122102437582297120"
+      "templateHash": "6694932562849502373"
     }
   },
   "parameters": {
@@ -34,43 +34,21 @@
       "metadata": {
         "description": "Set the size for the VM"
       }
-    },
-    "VmAdminUsername": {
-      "type": "string",
-      "defaultValue": "localadmin",
-      "minLength": 3,
-      "metadata": {
-        "description": "Set a username to log in to the hosts"
-      }
-    },
-    "githubPath": {
-      "type": "string",
-      "defaultValue": "https://raw.githubusercontent.com/nehalineogi/azure-cross-solution-network-architectures/main/aks/scripts/",
-      "minLength": 10,
-      "metadata": {
-        "description": "Set the path to the github directory that has the custom script extension scripts"
-      }
-    },
-    "numberOfHosts": {
-      "type": "int",
-      "defaultValue": 2,
-      "maxValue": 9,
-      "minValue": 2,
-      "metadata": {
-        "description": "Set the number of hosts to create"
-      }
     }
   },
   "functions": [],
   "variables": {
+    "location": "[deployment().location]",
     "VnetName": "dockervnet",
     "Subnet1Name": "dockersubnet",
-    "location": "[deployment().location]",
     "VnetAddressPrefix": "172.16.0.0/16",
     "Subnet1Prefix": "172.16.24.0/24",
     "bastionSubnet": "172.16.1.0/24",
     "bastionNetworkName": "AzureBastionSubnet",
-    "VmHostnamePrefix": "docker-host-"
+    "VmHostnamePrefix": "docker-host-",
+    "VmAdminUsername": "localadmin",
+    "numberOfHosts": 2,
+    "githubPath": "https://raw.githubusercontent.com/nehalineogi/azure-cross-solution-network-architectures/main/aks/scripts/"
   },
   "resources": [
     {
@@ -205,11 +183,11 @@
     {
       "copy": {
         "name": "dockerhost",
-        "count": "[length(range(1, parameters('numberOfHosts')))]"
+        "count": "[length(range(1, variables('numberOfHosts')))]"
       },
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2019-10-01",
-      "name": "[format('{0}{1}', variables('VmHostnamePrefix'), range(1, parameters('numberOfHosts'))[copyIndex()])]",
+      "name": "[format('{0}{1}', variables('VmHostnamePrefix'), range(1, variables('numberOfHosts'))[copyIndex()])]",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
         "expressionEvaluationOptions": {
@@ -218,13 +196,13 @@
         "mode": "Incremental",
         "parameters": {
           "adminusername": {
-            "value": "[parameters('VmAdminUsername')]"
+            "value": "[variables('VmAdminUsername')]"
           },
           "keyvault_name": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'kv'), '2019-10-01').outputs.keyvaultname.value]"
           },
           "vmname": {
-            "value": "[format('{0}{1}', variables('VmHostnamePrefix'), range(1, parameters('numberOfHosts'))[copyIndex()])]"
+            "value": "[format('{0}{1}', variables('VmHostnamePrefix'), range(1, variables('numberOfHosts'))[copyIndex()])]"
           },
           "subnet1ref": {
             "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'dockernetwork'), '2019-10-01').outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'dockernetwork'), '2019-10-01').outputs.subnet1name.value)]"
@@ -233,7 +211,7 @@
             "value": "[parameters('HostVmSize')]"
           },
           "githubPath": {
-            "value": "[parameters('githubPath')]"
+            "value": "[variables('githubPath')]"
           },
           "adUserId": {
             "value": "[parameters('adUserId')]"
