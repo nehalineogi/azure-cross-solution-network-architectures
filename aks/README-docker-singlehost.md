@@ -46,12 +46,6 @@ az ad signed-in-user show --query objectId -o tsv
 ssh localadmin@[VM Public IP or DNS]
 ```
 
-## Documentation links
-
-1. [Docker Network Tutorial](https://docs.docker.com/network/network-tutorial-standalone/)
-2. [Docker Network Bridge](https://docs.docker.com/network/bridge/)
-3. [Container networking](https://docs.docker.com/config/containers/container-networking/)
-
 # Design Components
 
 The above architecture diagram contains a few key components
@@ -62,6 +56,12 @@ The above architecture diagram contains a few key components
 - Two docker hosts are connected to the same subnet. Containers connected to the bridge network on one docker host cannot talk to the container on the other host. Note: Bridge network are scoped locally and don't span multiple hosts.
 - Bridge networks are like two isolated layer two switches.
 - Inbound and oubound connectivity to and from container via host port (eth0)
+
+## Documentation links
+
+1. [Docker Network Tutorial](https://docs.docker.com/network/network-tutorial-standalone/)
+2. [Docker Network Bridge](https://docs.docker.com/network/bridge/)
+3. [Container networking](https://docs.docker.com/config/containers/container-networking/)
 
 # Challenge #1 Start a simple linux container on default docker0 bridge
 
