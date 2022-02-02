@@ -7,6 +7,9 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 ### Advanced Linux Networking
 
 - [VXLAN with two linux hosts (As good as it gets!)](advanced-linux-networking/linux-vxlan.md)
+- [Linux bridge with two linux hosts ](advanced-linux-networking/linux-bridge.md)
+- [Linux namespaces](advanced-linux-networking/linux-namespaces.md)
+- [Linux firewall with iptables](advanced-linux-networking/linux-firewall.md)
 - BIRD Internet Routing Daemon (BGP Routing on linux) (Coming Soon...)
 - Openswan VPN (IPsec Tunnels)
 - Linux VTI Interfaces
