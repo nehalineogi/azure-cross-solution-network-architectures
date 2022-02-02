@@ -597,3 +597,9 @@ Azure Powershell
 ```
 (Get-AzContext).Account.ExtendedProperties.HomeAccountId.Split('.')[0]
 ```
+
+### How is docker installed on the host? 
+
+Docker is installed via a VM custom script extension, for reference the commands used are found in the following script - [cse.sh](scripts/cse.sh)
+
+This script is called automatically by the [deployhost.json](json/deployhost.json) ARM template on deployment. 
