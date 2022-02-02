@@ -13,6 +13,7 @@
   - [AKS Application Gateway Ingress Controller (AGIC)](README-ingress-appgw.md)
   - [Nginx Ingress controller](README-ingress-nginx.md)
 - [AKS Egress with Azure firewall/NVA](README-aks-egress.md)
+- [AKS Egress via NAT Gateway](README-aks-egress.md)
 - [AKS Multiple Nodepool Design](README-multinode.md)
 - Core DNS and Azure DNS Integrations (Coming soon...)
 - Kubernetes Network Model - Multus, Flannel,Weave, Calico, Cilium

@@ -17,10 +17,12 @@ Download Visio link here.
 3. [AKS Basic Networking](https://docs.microsoft.com/en-us/azure/aks/concepts-network#kubenet-basic-networking)
 4. [AKS CNI Design Considerations](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#limitations--considerations-for-kubenet)
 5. [AKS Services](https://docs.microsoft.com/en-us/azure/aks/concepts-network#services)
+6. [Core DNS with AKS](https://docs.microsoft.com/en-us/azure/aks/coredns-custom)
+7. [DNS with Private DNS Zone](https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-dns)
 
 ## Design Components and Planning
 
-#### [Design Considerations](https://docs.microsoft.com/en-us/azure/aks/concepts-network#kubenet-basic-networking)
+### [Design Considerations](https://docs.microsoft.com/en-us/azure/aks/concepts-network#kubenet-basic-networking)
 
 The kubenet networking option is the default configuration for AKS cluster creation.Some design considerations for Kubenet
 
@@ -33,13 +35,13 @@ The kubenet networking option is the default configuration for AKS cluster creat
 - Most of the pod communication is within the cluster.
 - Azure Network Policy is not supported but calico policies are supported
 
-#### [IP Address Calculations](https://docs.microsoft.com/en-us/azure/aks/)
+### [IP Address Calculations](https://docs.microsoft.com/en-us/azure/aks/)
 
 kubenet - a simple /24 IP address range can support up to 251 nodes in the cluster (each Azure virtual network subnet reserves the first three IP addresses for management operations). Each Node can have a maximum of 110 pods/node. This node count could support up to 27,610 pods (251x110)
 
 With kubenet, you can use a much smaller IP address range and be able to support large clusters and application demands. For example, even with a /27 IP address range on your subnet, you could run a 20-25 node cluster with enough room to scale or upgrade. This cluster size would support up to 2,200-2,750 pods (with a default maximum of 110 pods per node). The maximum number of pods per node that you can configure with kubenet in AKS is 110.
 
-#### Routing to and from onpremises
+### Routing to and from onpremises
 
 ```
 Outbound from AKS to On-Premises
@@ -57,26 +59,27 @@ red
 
 ```
 
-#### DNS Design
+### DNS Design
 
 Azure Subnet can use custom DNS or Azure Default DNS. Core DNS can be used along with Azure DNS.
 
-#### Inbound Services
+### Inbound Services
 
 AKS Uses [services](https://docs.microsoft.com/en-us/azure/aks/concepts-network#services) to provide inbound connectivity to pods insides the AKS cluster. The three service types are (Cluster IP, NodePort and LoadBalancer). In the archictecture above, the service type is LoadBalancer. AKS Creates an Azure load balancer resource, configures an external IP address, and connects the requested pods to the load balancer backend pool. To allow customers' traffic to reach the application, load balancing rules are created on the desired ports.
 
 Diagram showing Load Balancer traffic flow in an AKS cluster
+
 ![AKS Basic Networking](images/aks-loadbalancer.png)
 
-#### Outbound to Internet Flows
+### Outbound to Internet
 
 Outbound traffic from the pods to the Internet flows via Azure External load Balancer (Separate article showing the outbound via Azure firwall/NVA/NAT)
 
-## Design Validations
+## Deployment and Validations
 
-**1. IP Address Assignment**
+**1. Deploy Cluster**
 
-The cluster was created using this command line. Note the Node CIDR is 172.16.240.0/24 (AKS-Subnet)
+The cluster was created using this command line. Note the Node CIDR is 172.16.239.0/24 (AKS-kubenet-Subnet) and POD CIDR is 10.244.0.0/16
 
 ```
 az aks create \
@@ -97,30 +100,101 @@ az aks create \
     --max-pods 30 \
     --verbose
 
+Deploy single test pod
+k apply -f dnsutils.yaml
 ```
 
-```
-NAME                                     STATUS   ROLES   AGE    VERSION    INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
-node/aks-nodepool1-62766439-vmss000000   Ready    agent   7h8m   v1.19.11   172.16.239.4   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
-node/aks-nodepool1-62766439-vmss000001   Ready    agent   7h8m   v1.19.11   172.16.239.5   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
-node/aks-nodepool1-62766439-vmss000002   Ready    agent   7h8m   v1.19.11   172.16.239.6   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
-
-NAME                                  READY   STATUS    RESTARTS   AGE     IP           NODE                                NOMINATED NODE   READINESS GATES
-pod/red-deployment-5f589f64c6-75t5f   1/1     Running   0          2m31s   10.244.1.6   aks-nodepool1-62766439-vmss000002   <none>           <none>
-pod/red-deployment-5f589f64c6-lvqvs   1/1     Running   0          2m31s   10.244.0.5   aks-nodepool1-62766439-vmss000001   <none>           <none>
-pod/red-deployment-5f589f64c6-wlqmp   1/1     Running   0          2m31s   10.244.2.7   aks-nodepool1-62766439-vmss000000   <none>           <none>
-
-NAME                  TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)          AGE     SELECTOR
-service/red-service   LoadBalancer   10.101.198.78   20.72.185.240   8080:31876/TCP   2m31s   app=red
+**Verify nodes**
 
 ```
 
-**2. Route table**
+k get nodes -o wide
+NAME STATUS ROLES AGE VERSION INTERNAL-IP EXTERNAL-IP OS-IMAGE KERNEL-VERSION CONTAINER-RUNTIME
+node/aks-nodepool1-62766439-vmss000000 Ready agent 7h8m v1.19.11 172.16.239.4 <none> Ubuntu 18.04.5 LTS 5.4.0-1049-azure containerd://1.4.4+azure
+node/aks-nodepool1-62766439-vmss000001 Ready agent 7h8m v1.19.11 172.16.239.5 <none> Ubuntu 18.04.5 LTS 5.4.0-1049-azure containerd://1.4.4+azure
+node/aks-nodepool1-62766439-vmss000002 Ready agent 7h8m v1.19.11 172.16.239.6 <none> Ubuntu 18.04.5 LTS 5.4.0-1049-azure containerd://1.4.4+azure
+
+k get pods -o wide
+```
+
+**2. Deploy Pods and Internal Service**
+
+```
+k create ns colors-ns
+cd yaml/colors-ns
+k apply -f red-internal-service.yaml
+k get pods,services -o wide -n colors-ns
+k describe service red-service-internal -n colors-ns
+
+k get pods,services -o wide -n colors-ns
+NAME                                  READY   STATUS    RESTARTS   AGE   IP            NODE                                NOMINATED NODE   READINESS GATES
+pod/red-deployment-5f589f64c6-fslc8   1/1     Running   0          28s   10.244.2.21   aks-nodepool1-62766439-vmss000000   <none>           <none>
+pod/red-deployment-5f589f64c6-jbrzp   1/1     Running   0          28s   10.244.1.19   aks-nodepool1-62766439-vmss000002   <none>           <none>
+pod/red-deployment-5f589f64c6-pzwzs   1/1     Running   0          28s   10.244.0.19   aks-nodepool1-62766439-vmss000001   <none>           <none>
+
+NAME                           TYPE           CLUSTER-IP       EXTERNAL-IP    PORT(S)          AGE     SELECTOR
+service/red-service-internal   LoadBalancer   10.101.202.203   172.16.239.7   8080:32164/TCP   8m20s   app=red
+ k describe service red-service-internal -n colors-ns
+Name:                     red-service-internal
+Namespace:                colors-ns
+Labels:                   <none>
+Annotations:              service.beta.kubernetes.io/azure-load-balancer-internal: true
+Selector:                 app=red
+Type:                     LoadBalancer
+IP Families:              <none>
+IP:                       10.101.202.203
+IPs:                      <none>
+LoadBalancer Ingress:     172.16.239.7
+Port:                     <unset>  8080/TCP
+TargetPort:               8080/TCP
+NodePort:                 <unset>  32164/TCP
+Endpoints:                10.244.0.19:8080,10.244.1.19:8080,10.244.2.21:8080
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:
+  Type    Reason                Age   From                Message
+  ----    ------                ----  ----                -------
+  Normal  EnsuringLoadBalancer  29m   service-controller  Ensuring load balancer
+  Normal  EnsuredLoadBalancer   29m   service-controller  Ensured load balancer
+
+
+**Verify from on-premises**
+curl http://172.16.239.7:8080/
+red
+
+```
+
+**2. Deploy Pods and External Service**
+
+```
+k create ns colors-ns
+k apply -f red-external-lb.yaml
+k get pods,services -o wide -n colors-ns
+k describe service red-service-external -n colors-ns
+
+k get pods,services -o wide -n colors-ns
+NAME                                  READY   STATUS    RESTARTS   AGE   IP            NODE                                NOMINATED NODE   READINESS GATES
+pod/red-deployment-5f589f64c6-fslc8   1/1     Running   0          22m   10.244.2.21   aks-nodepool1-62766439-vmss000000   <none>           <none>
+pod/red-deployment-5f589f64c6-jbrzp   1/1     Running   0          22m   10.244.1.19   aks-nodepool1-62766439-vmss000002   <none>           <none>
+pod/red-deployment-5f589f64c6-pzwzs   1/1     Running   0          22m   10.244.0.19   aks-nodepool1-62766439-vmss000001   <none>           <none>
+
+NAME                           TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)          AGE   SELECTOR
+service/red-service-external   LoadBalancer   10.101.219.137   20.120.58.166   8080:30947/TCP   12m   app=red
+service/red-service-internal   LoadBalancer   10.101.202.203   172.16.239.7    8080:32164/TCP   29m   app=red
+
+validate (review NSG and route table if needed)
+curl 20.120.58.166:8080
+red
+
+
+```
+
+**4. Route table Validations**
 
 Note the POD CIDR is : --pod-cidr 10.244.0.0/16.
 ![Route table](images/basic-route-table.png)
 
-**3. Node view**
+**5. Node view**
 
 Node inherits the DNS from the Azure DNS.
 
@@ -241,7 +315,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 
 **7. On Premises view**
 
-Initiate Outbound traffic from AKS to On-Premises. Note that On-Premise sees the Node IP
+Initiate Outbound traffic from AKS to On-Premises. Note that On-Premise sees the Node IP where the pod is hosted
 
 ```
 
@@ -275,6 +349,77 @@ nehali@nehali-laptop:~$ curl  172.16.239.7:8080
 red
 
 ```
+
+### DNS and Custom domain
+
+Validate before configuration
+
+```
+kubectl get configmaps --namespace=kube-system coredns-custom -o yaml
+```
+
+DNS resolution for custom domain nnlab.local via 10.10.1.4. Ensure that you have routing to the 10.10.1.4 network. Create a file called coredns-custom-domain.yaml
+
+```
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system
+data:
+  nnlab.server: |
+    nnlab.local:53 {
+        errors
+        cache 30
+        forward . 10.10.1.4  # this is my test/dev DNS server
+    }
+
+```
+
+Apply the configuration
+
+```
+k apply -f coredns-custom-domain.yaml
+restart core-dns pod
+kubectl delete pod --namespace kube-system --selector k8s-app=kube-dns
+
+
+validate nnlab.local resolution from dnsutils pod
+k exec -it dnsutils sh
+
+
+/ # nslookup store1.nnlab.local
+Server:         10.101.0.10
+Address:        10.101.0.10#53
+
+Name:   store1.nnlab.local
+Address: 172.27.225.10
+
+/ # nslookup www.google.com
+Server:         10.101.0.10
+Address:        10.101.0.10#53
+
+```
+
+### DNS with Private DNS Zone
+
+Make sure there is a VNET link from the AKS-VNET to the private DNS Zone in question.
+
+```
+k exec -it dnsutils sh
+ # nslookup nnnetworklogs.blob.core.windows.net
+Server:         10.101.0.10
+Address:        10.101.0.10#53
+
+Non-authoritative answer:
+nnnetworklogs.blob.core.windows.net     canonical name = nnnetworklogs.privatelink.blob.core.windows.net.
+Name:   nnnetworklogs.privatelink.blob.core.windows.net
+Address: 172.16.1.7
+```
+
+## Cleanup
+
+k delete ns colors-ns
 
 ## TODO
 

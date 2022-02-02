@@ -11,16 +11,18 @@ The quickstart deployment will provision two Azure VMs acting as docker hosts, e
 ![Docker Swarm Cluster](images/docker-single-host.png)
 
 Download Visio link here.
+
 ## Quickstart deployment
 
-The username for the deployed VMs is ```localadmin```
+The username for the deployed VMs is `localadmin`
 
 The passwords are stored in a keyvault deployed to the same resource group.
+
 ### Task 1 - Start Deployment
 
 1. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
 
-``` 
+```
 az ad signed-in-user show --query objectId -o tsv
 ```
 
@@ -28,17 +30,17 @@ az ad signed-in-user show --query objectId -o tsv
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fdockerhost.json)
 
-3. Using Azure Bastion, log in to the VMs using the username ```localadmin``` and passwords from keyvault.
+3. Using Azure Bastion, log in to the VMs using the username `localadmin` and passwords from keyvault.
 
 ### Task 2 (optional) - SSH to the docker VMs.
 
 1. Find NSG called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
 
-2. Retrieve the public IP address (or DNS label) for each VM 
+2. Retrieve the public IP address (or DNS label) for each VM
 
 3. Retrieve the VM passwords from the keyvault.
 
-4. SSH to your VMs 
+4. SSH to your VMs
 
 ```
 ssh localadmin@[VM Public IP or DNS]
@@ -61,38 +63,49 @@ The above architecture diagram contains a few key components
 - Bridge networks are like two isolated layer two switches.
 - Inbound and oubound connectivity to and from container via host port (eth0)
 
-### Docker Host Default Networks
+# Challange #1 Start a simple linux container on default docker0 bridge
 
-List the default networks
+## Task#1: Validations
 
-```
-root@docker-host-1:~# docker network ls
-NETWORK ID NAME DRIVER SCOPE
-617215cfa2bf bridge bridge local
-e40cd249ca0f host host local
-bbc4a629e148 none null local
+Docker Host default Networks.
+
+List the default networks. Bridge Network: Layer2 broadcast domain. All containers connected to the bridge can talk to each other. All docker installations come with the default docker bridge - docker0
 
 ```
+root@docker-host-1:/home/localadmin# docker ps
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+root@docker-host-1:/home/localadmin# docker network ls
+NETWORK ID     NAME      DRIVER    SCOPE
+64f9bf153cf1   bridge    bridge    local
+e38488db9a75   host      host      local
+271976158bff   none      null      local
+root@docker-host-1:/home/localadmin# brctl show
+bridge name     bridge id               STP enabled     interfaces
+docker0         8000.0242e4c4c389       no
+root@docker-host-1:/home/localadmin#
+```
 
-Bridge Network: Layer2 broadcast domain. All containers connected to the bridge can talk to each other.
-
-### Create containers on the default bridge network (docker0)
+## Task#2 Create a container on the default bridge network (docker0)
 
 ```
-# Clean any existing containers
 #
-root@docker-host-1:~# docker rm $(docker ps -aq)
-1c6ea3bd9a20
-
 # Run nginx container
+#
 root@docker-host-1:~# docker run -dit --name blue-c1 nginxdemos/hello
 460eb69b0fbdc3ecff703364b45b0b7fcdf9f11be0ad45a79a4b89fe6c73690c
 
-# List the container and exec/login to the container and observe networking components
+
+#
+# list the container
 #
 root@docker-host-1:~# docker ps
 CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES
 460eb69b0fbd nginxdemos/hello "/docker-entrypoint.…" 2 seconds ago Up 1 second 80/tcp blue-c1
+
+#
+# login to the container (Observier networking components)
+#
+
 root@docker-host-1:~# docker exec -it blue-c1 sh
 / # ifconfig
 eth0 Link encap:Ethernet HWaddr 02:42:AC:11:00:02
@@ -111,14 +124,19 @@ TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
 collisions:0 txqueuelen:1000
 RX bytes:0 (0.0 B) TX bytes:0 (0.0 B)
 
-# Observe outbout IP of the container is the PIP of the docker hosts
-/ # curl ifconfig.me
-/ # curl ifconfig.io
-40.114.86.154
-/ # exit
-root@docker-host-1:~#
+# Observe outbound IP of the container is the PIP of the docker hosts
 
-# Create another container in the default bridge network and ping the first container
+/ # curl ifconfig.me
+20.127.137.145/ # exit
+root@docker-host-1:/home/localadmin# curl ifconfig.io
+20.127.137.145
+```
+
+## Task#3 Create another container in the default bridge network =and ping the first container
+
+```
+#
+# Create a second container on the default docker0 bridge
 #
 root@docker-host-1:~# docker run -dit --name blue-c2 nginxdemos/hello
 2535fc3f3ec0df7f516f1ebc978d297425351069a0bc3d246783678073ad8116
@@ -220,11 +238,74 @@ root@docker-host-1:~# docker network inspect bridge
 root@docker-host-1:~#
 ```
 
-### DNS Resolution
-
-Inherits the DNS configuration from the Docker host
+# Challange #2 Create two custom bridges (red-bridge and green-bridge)
 
 ```
+#
+# Create a red-bridge
+#
+root@docker-host-1:~# docker network create --driver bridge red-bridge
+ac20cf5095d295a868da2728b9ebf933a632c495b6d766b46c929008816ba0c5
+
+#
+# create a green bridge
+#
+root@docker-host-1:~# docker network create --driver bridge green-bridge
+6555ae5cadacc199e8d30177997711690f18a44a71aaa59323e9ae6b42a92a66
+#
+# list bridge
+#
+root@docker-host-1:~# docker network ls
+NETWORK ID     NAME           DRIVER    SCOPE
+617215cfa2bf   bridge         bridge    local
+6555ae5cadac   green-bridge   bridge    local
+e40cd249ca0f   host           host      local
+bbc4a629e148   none           null      local
+ac20cf5095d2   red-bridge     bridge    local
+root@docker-host-1:~#
+
+
+#
+# Attach container to the green bridge
+#
+
+
+root@docker-host-1:~# docker run -dit --name green-c1 --network green-bridge nginxdemos/hello
+86a13eb35477e3a89eb5377bb96492d0bdafe88b3337a1363a6cf39c9020f63f
+root@docker-host-1:~# docker run -dit --name green-c2 --network green-bridge nginxdemos/hello
+33f4ef617df4c7e4b16dd341e25971b27017d4d8d2ebfa79fb93132a2673c3e9
+
+
+root@docker-host-1:~# docker exec -it green-c1 sh
+/ # ip add
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+50: eth0@if51: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP
+    link/ether 02:42:ac:15:00:02 brd ff:ff:ff:ff:ff:ff
+    inet 172.21.0.2/16 brd 172.21.255.255 scope global eth0
+       valid_lft forever preferred_lft forever
+
+#
+# Attach containers to red-bridge
+#
+root@docker-host-1:/home/localadmin# docker run -dit --name red-c1 --network
+ green-bridge nginxdemos/hello
+9d414b16fe3fee91a669c0568286e4dc74bb796efba441158ccfee542c06de01
+root@docker-host-1:/home/localadmin# docker run -dit --name red-c2 --network
+ green-bridge nginxdemos/hello
+886a0faba009ec9626244d8a1fbf74ff10cc7b857e00ad7becb295ce2c496a11
+
+```
+
+# Challange #3 DNS Resolution and Outbound IPs
+
+```
+ Default Docker0 Bridge
+Docker container inherits the DNS configuration from the Docker host. Containers cannot reference each other by names.
+
+
 
 root@docker-host-1:~# docker exec -it blue-c1 sh
 / #
@@ -248,87 +329,10 @@ round-trip min/avg/max = 1.654/1.823/1.993 ms
 / # ping blue-c2
 ping: bad address 'blue-c2'
 / #
-```
 
-### Create custom bridge (red-bridge and green-bridge)
+ In Custom bridge you can ping one green-c2 using the name.
 
-```
-root@docker-host-1:~# docker network create --driver bridge red-bridge
-ac20cf5095d295a868da2728b9ebf933a632c495b6d766b46c929008816ba0c5
 
-root@docker-host-1:~# docker network inspect red-bridge
-[
-    {
-        "Name": "red-bridge",
-        "Id": "ac20cf5095d295a868da2728b9ebf933a632c495b6d766b46c929008816ba0c5",
-        "Created": "2021-07-28T13:04:09.277786582Z",
-        "Scope": "local",
-        "Driver": "bridge",
-        "EnableIPv6": false,
-        "IPAM": {
-            "Driver": "default",
-            "Options": {},
-            "Config": [
-                {
-                    "Subnet": "172.20.0.0/16",
-                    "Gateway": "172.20.0.1"
-                }
-            ]
-        },
-        "Internal": false,
-        "Attachable": false,
-        "Ingress": false,
-        "ConfigFrom": {
-            "Network": ""
-        },
-        "ConfigOnly": false,
-        "Containers": {},
-        "Options": {},
-        "Labels": {}
-    }
-]
-root@docker-host-1:~#
-
-root@docker-host-1:~# docker network create --driver bridge green-bridge
-6555ae5cadacc199e8d30177997711690f18a44a71aaa59323e9ae6b42a92a66
-root@docker-host-1:~# docker network ls
-NETWORK ID     NAME           DRIVER    SCOPE
-617215cfa2bf   bridge         bridge    local
-6555ae5cadac   green-bridge   bridge    local
-e40cd249ca0f   host           host      local
-bbc4a629e148   none           null      local
-ac20cf5095d2   red-bridge     bridge    local
-root@docker-host-1:~#
-```
-
-### Attach container to a bridge
-
-```
-root@docker-host-1:~# docker run -dit --name green-c1 --network green-bridge nginxdemos/hello
-ce124fc1a83c9aa7b6ccc6f95464a7026c4de573e02db7a51474704fd0d0593b
-
-root@docker-host-1:~# docker exec -it green-c1 sh
-/ # ip add
-1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-    inet 127.0.0.1/8 scope host lo
-       valid_lft forever preferred_lft forever
-50: eth0@if51: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP
-    link/ether 02:42:ac:15:00:02 brd ff:ff:ff:ff:ff:ff
-    inet 172.21.0.2/16 brd 172.21.255.255 scope global eth0
-       valid_lft forever preferred_lft forever
-
-```
-
-### DNS Resolution for Custom Bridge
-
-```
-#Note: In Custom bridge you can ping one green-c2 using the name.
-#
-root@docker-host-1:~# docker run -dit --name green-c1 --network green-bridge nginxdemos/hello
-86a13eb35477e3a89eb5377bb96492d0bdafe88b3337a1363a6cf39c9020f63f
-root@docker-host-1:~# docker run -dit --name green-c2 --network green-bridge nginxdemos/hello
-33f4ef617df4c7e4b16dd341e25971b27017d4d8d2ebfa79fb93132a2673c3e9
 root@docker-host-1:~# docker exec -it green-c1 sh
 / # ip add
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
@@ -355,10 +359,9 @@ PING green-c2 (172.21.0.3): 56 data bytes
 round-trip min/avg/max = 0.091/0.093/0.095 ms
 / #
 
-
 ```
 
-### Dual Home a Container
+# Challenage #4 Dual Home a Container
 
 ```
 
@@ -380,7 +383,7 @@ root@docker-host-1:~# docker exec -it red-c1 sh
 / #
 ```
 
-### Expose the Container to the outside world
+# Challenge #5 Expose the Container to the outside world
 
 ```
 root@docker-host-1:~# docker run -dit -p 8080:80 --name web nginxdemos/hello
@@ -400,7 +403,7 @@ Cache-Control: no-cache
 
 ```
 
-### Final Docker Host view
+# Challange #6 Observe docker host networking
 
 Note Docker0 interface and veth pairs, iptables and port forwarding.
 
@@ -540,7 +543,9 @@ docker0         8000.02423a2c88bf       no              veth210b56a
                                                         vethfbf007b
 ```
 
-### Cleanup
+## Cleanup
+
+List all running containers and cleanup
 
 ```
 root@docker-host-1:~# docker ps
@@ -571,29 +576,33 @@ ee42f6051ff4
 460eb69b0fbd
 root@docker-host-1:~# docker ps -aq
 ```
+
 ## Docker Installation - Troubleshooting
 
 ### I am unable to SSH to hosts, what do I need to do?
 
-The automated deployment deploys Azure Bastion so you can connect to the VMs via the portal using Bastion. Alternatively the subnet hosting the VMs has a Network Security Group (NSG) attached called "Allow-tunnel-traffic" with a rule called 'allow-ssh-inbound' which is set to Deny by default. If you wish to allow SSH direct to the hosts, you can edit this rule and change the Source from 127.0.0.1 to your current public IP address. Afterwards, Remember to set the rule from Deny to Allow.  
-### What are the logins for the VMs? 
+The automated deployment deploys Azure Bastion so you can connect to the VMs via the portal using Bastion. Alternatively the subnet hosting the VMs has a Network Security Group (NSG) attached called "Allow-tunnel-traffic" with a rule called 'allow-ssh-inbound' which is set to Deny by default. If you wish to allow SSH direct to the hosts, you can edit this rule and change the Source from 127.0.0.1 to your current public IP address. Afterwards, Remember to set the rule from Deny to Allow.
 
-The credentials for the VMs are stored in an Azure keyvault. 
+### What are the logins for the VMs?
 
-### Are the passwords used cyptographically secure? 
+The credentials for the VMs are stored in an Azure keyvault.
 
-No. The passwords are generated deterministically and therefore should be changed on the VMs post deployment, to maximise security. They are auto generated in this way for convenience and are intended to support this environment as a 'Proof of Concept' or learning experience only and are not intended for production use. 
+### Are the passwords used cyptographically secure?
+
+No. The passwords are generated deterministically and therefore should be changed on the VMs post deployment, to maximise security. They are auto generated in this way for convenience and are intended to support this environment as a 'Proof of Concept' or learning experience only and are not intended for production use.
 
 ### I cannot run the deployment - what is the ADuserID?
 
-In order for the deployment to provision your signed-in user account access to the keyvault, you will need to provide your Azure Active Directory (AAD) signed-in user ObjectID. In order to retrieve this there are serveral methods. The Azure CLI and Azure Powershell methods are provided below. You can use the cloud shell to run the Azure CLI method, but for powershell you must run this from your own device using Azure Powershell module. 
+In order for the deployment to provision your signed-in user account access to the keyvault, you will need to provide your Azure Active Directory (AAD) signed-in user ObjectID. In order to retrieve this there are serveral methods. The Azure CLI and Azure Powershell methods are provided below. You can use the cloud shell to run the Azure CLI method, but for powershell you must run this from your own device using Azure Powershell module.
 
 Azure CLI or Cloud Shell
-``` 
+
+```
 az ad signed-in-user show --query objectId -o tsv
 ```
 
-Azure Powershell 
+Azure Powershell
+
 ```
 (Get-AzContext).Account.ExtendedProperties.HomeAccountId.Split('.')[0]
 ```
