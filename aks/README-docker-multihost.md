@@ -31,7 +31,7 @@ az ad signed-in-user show --query objectId -o tsv
 
 ### Task 2 (optional) - SSH to the docker VMs.
 
-1. Find NSG called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
+1. Locate the Network Security Group (NSG) called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
 
 2. Retrieve the public IP address (or DNS label) for each VM 
 
