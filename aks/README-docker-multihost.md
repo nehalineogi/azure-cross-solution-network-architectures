@@ -10,6 +10,11 @@ The quickstart deployment will provision two Azure VMs acting as docker hosts, e
 ![Docker Swarm Cluster](images/docker-multihost.png)
 
 Download Visio link here.
+
+<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fdockerhost.json" target="_blank">
+    <img src="https://aka.ms/deploytoazurebutton"/>
+</a>
+
 ## Quickstart deployment
 
 The username for the deployed VMs is ```localadmin```
@@ -17,15 +22,13 @@ The username for the deployed VMs is ```localadmin```
 The passwords are stored in a keyvault deployed to the same resource group.
 ### Task 1 - Start Deployment
 
-1. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
+1. Click Deploy to Azure button above and supply the signed-in user ID from step 2.
+
+2. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
 
 ``` 
 az ad signed-in-user show --query objectId -o tsv
 ```
-
-2. Click Deploy to Azure and supply the signed-in user ID.
-
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fdockerhost.json)
 
 3. Using Azure Bastion, log in to the VMs using the username ```localadmin``` and passwords from keyvault.
 
