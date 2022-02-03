@@ -1,8 +1,8 @@
 # Automation Process
 
-This series includes architectures which can be deployed automatically via "Deploy to Azure" buttons which can be found within each section next to the architectural design diagrams. 
+This series includes architectures which can be deployed automatically via "Deploy to Azure" buttons found within each design below the architectural diagrams. 
 
-This section discusses the method used to build the environments using Bicep, exporting to ARM and then references ARM templates to start a custom deployment in Azure. 
+This section discusses the method used to build the environments using Bicep, exporting to ARM template and then referencing the ARM template to start a custom deployment in Azure. 
 
 ## Reference Architecture
 
