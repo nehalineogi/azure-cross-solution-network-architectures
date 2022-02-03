@@ -276,6 +276,9 @@ root@docker-host-1:~#
 
 #
 # Inspect the network space for each bridge
+# Note: You can specify the IP address range, subnet,
+# gateway, and other options. See docker network
+# create --help for details
 #
 root@docker-host-1:/home/localadmin# docker network inspect bridge | grep -A 2 -i "Subnet"
                     "Subnet": "172.17.0.0/16"
@@ -658,6 +661,10 @@ a59d31002b2d   nginxdemos/hello   "/docker-entrypoint.…"   45 minutes ago   Up
 ef113a5fca62   nginxdemos/hello   "/docker-entrypoint.…"   49 minutes ago   Up 49 minutes   80/tcp                                  green-c1
 8dc5a6354f1e   nginxdemos/hello   "/docker-entrypoint.…"   56 minutes ago   Up 56 minutes   80/tcp                                  blue-c2
 1c12c826586f   nginxdemos/hello   "/docker-entrypoint.…"   59 minutes ago   Up 59 minutes   80/tcp                                  blue-c1
+
+#
+# list all running container IDs
+#
 root@docker-host-1:/home/localadmin# docker ps -aq
 064c04a43c01
 373441c37f82
@@ -667,14 +674,10 @@ ef113a5fca62
 8dc5a6354f1e
 1c12c826586f
 
+#
+# delete all running containers
+#
 root@docker-host-1:~# docker rm $(docker ps -aq) -f
-33e1f6c6a271
-33f4ef617df4
-86a13eb35477
-6df6d545e317
-ee42f6051ff4
-2535fc3f3ec0
-460eb69b0fbd
 root@docker-host-1:~# docker ps -aq
 
 #
