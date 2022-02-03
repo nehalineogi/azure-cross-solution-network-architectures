@@ -82,7 +82,7 @@ az aks create \
 Pre-assigned IP addresses for PODs based on --max-pods=30 setting setting
 Screen capture of the Azure VNET and AKS subnet:
 
-![Route table](images/aks-advanced-pod-IP-assignment.png)
+![IP Assigment](images/aks-advanced-pod-IP-assignment.png)
 
 Note that AKS nodes and pods get IPs from the same AKS subnet
 
