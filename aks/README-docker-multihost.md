@@ -12,9 +12,8 @@ The quickstart deployment will provision two Azure VMs acting as docker hosts, e
 
 Download Visio link here.
 
-<a href="https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fdockerhost.json" target="_blank">
-    <img src="https://aka.ms/deploytoazurebutton"/>
-</a>
+<a href="#" onclick='window.open(https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fdockerhost.json);return false;'>
+<img src="https://aka.ms/deploytoazurebutton"/></a>
 
 ## Quickstart deployment
 
