@@ -1,4 +1,4 @@
-# Docker Single host Networking
+# Docker Single Host Networking
 
 This architecture demonstrates _single_ docker host and networking within the docker host, custom bridge networks and dual homing containers. Containers connected to the bridge network on one docker host cannot talk to the container on the other host. **Bridge networks are scoped locally and don't span multiple hosts**.
 
