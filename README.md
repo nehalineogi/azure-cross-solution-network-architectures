@@ -43,7 +43,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - [AKS Multiple Nodepool Design](aks/README-multinode.md)
 - Core DNS and Azure DNS Integrations
 - Kubernetes Network Model - Multus, Flannel,Weave, Calico, Cilium
-- Kubernetes Serivce Mesh (Istio, Linkerd and Consul)
+- Kubernetes Service Mesh (Istio, Linkerd and Consul)
 
 ### Azure Database Services
 
