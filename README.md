@@ -7,12 +7,12 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 ### Advanced Linux Networking
 
 - [VXLAN with two linux hosts (As good as it gets!)](advanced-linux-networking/linux-vxlan.md)
-- [Linux bridge with two linux hosts ](advanced-linux-networking/linux-bridge.md)
+- [Linux bridge ](advanced-linux-networking/linux-bridge.md)
 - [Linux namespaces](advanced-linux-networking/linux-namespaces.md)
 - [Linux firewall with iptables](advanced-linux-networking/linux-firewall.md)
-- BIRD Internet Routing Daemon (BGP Routing on linux) (Coming Soon...)
+- Dynamic Routing (Zebra,Quagga,BIRD - BGP Routing on linux) (Coming Soon...)
 - Openswan VPN (IPsec Tunnels)
-- Linux VTI Interfaces
+- Macsec Encryption on Linux
 - The perfect NVA with linux
 - IPtables and eBPF
 - Cluster Networking - [IPVLAN, MACVLAN, TUN/TAP drivers](https://kubernetes.io/docs/concepts/cluster-administration/networking/)
@@ -22,7 +22,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - [Docker Networking](aks/README-docker-multihost.md)
   - [Single Host](aks/README-docker-singlehost.md)
   - [Multi Host](aks/README-docker-multihost.md)
-  - Bicep automated deployment (Coming soon...)
+  - Bicep automated deployment
   - kind Cluster (Kubernetes In Docker)
 - [Basic/Kubenet Networking](aks/README-kubenet.md)
 - [Advanced/Azure CNI Networking](aks/README-advanced.md)

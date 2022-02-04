@@ -61,6 +61,8 @@ The above architecture diagram contains a few key components
 
 # Challenge #1 Run a simple nginx container and connect to default docker0 bridge
 
+Docker0 is already created by docker installation. Docker0 bridge has a layer3 IP.
+
 ## Task#1: Validations
 
 Docker Host default configuration.
