@@ -10,7 +10,7 @@ The quickstart deployment will provision two Azure VMs acting as docker hosts, e
 
 ![Docker Swarm Cluster](images/docker-single-host.png)
 
-Download Visio link here.
+Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF](aks-all-reference-architectures-pdf.pdf)
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fdockerhost.json)
 
@@ -26,7 +26,7 @@ Download Visio link here.
 az ad signed-in-user show --query objectId -o tsv
 ```
 
-3. Using Azure Bastion, log in to the VMs using the username ```localadmin``` and passwords from keyvault.
+3. Using Azure Bastion, log in to the VMs using the username `localadmin` and passwords from keyvault.
 
 ### Task 2 (optional): SSH to the docker VMs.
 

@@ -4,6 +4,10 @@
 
 A linux bridge behaves like a network switch. It forwards packets based on mac address table and hence it is a layer 2 device.
 
+# Reference Architecture (Coming Soon)
+
+# Documentation Links
+
 # Challenge#1 (Create a basic layer 2 bridge or switch)
 
 ```
