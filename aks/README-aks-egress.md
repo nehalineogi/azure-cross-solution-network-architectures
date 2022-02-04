@@ -8,7 +8,7 @@ This architecture demonstrates how to secure oubound traffic from AKS via Azure 
 
 ![AKS Advanced Networking](images/aks-egress.png)
 
-Download Visio link here.
+Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF](aks-all-reference-architectures-PDF.pdf)
 
 ## Azure Documentation links
 

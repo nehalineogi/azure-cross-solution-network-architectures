@@ -8,7 +8,7 @@ In AKS, **system nodes pool** is created when you create an AKS cluster. System 
 
 ![AKS Advanced Networking](images/aks-multinode.png)
 
-Download Visio link here.
+Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF](aks-all-reference-architectures-PDF.pdf)
 
 ## Azure Documentation links
 

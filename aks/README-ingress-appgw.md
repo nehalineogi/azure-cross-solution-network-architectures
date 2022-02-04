@@ -8,7 +8,7 @@ This architecture demonstrates the connectivity architecture and traffic flows f
 
 ![AKS Advanced Networking](images/aks-app-gw-ingress.png)
 
-Download Visio link here.
+Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF](aks-all-reference-architectures-PDF.pdf)
 
 ## Azure Documentation links
 

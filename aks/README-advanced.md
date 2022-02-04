@@ -8,7 +8,7 @@ This architecture uses the for AKS Advanced/CNI Network Model. Observe that the 
 
 ![AKS Advanced Networking](images/aks-advanced.png)
 
-Download Visio link here.
+Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF](aks-all-reference-architectures-PDF.pdf)
 
 ## Azure Documentation links
 

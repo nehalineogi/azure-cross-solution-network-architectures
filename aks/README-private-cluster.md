@@ -8,7 +8,7 @@ This architecture demonstrates the connectivity architecture and traffic flows f
 
 ![AKS Advanced Networking](images/aks-private-cluster.png)
 
-Download Visio link here.
+Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF](aks-all-reference-architectures-PDF.pdf)
 
 ## Azure Documentation links
 
@@ -29,10 +29,11 @@ Download Visio link here.
 5. **Ingress Considerations:** While, both Internal and External load balancers can be used to expose Ingress services however, in a truely private cluster only Internal load balancer is used for Ingress. External Load balancer is used for egress.
 6. **Egress Considerations**: Egress Path options via Azure External Load balancer or using Azure Firewall/NVA
 7. Options for connecting to Private cluster. Azure documentation link [here](https://docs.microsoft.com/en-us/azure/aks/private-clusters#options-for-connecting-to-the-private-cluster). This this architecture we have On-Premises connectivity and also example of AKS run command
-* Create a VM in the same Azure Virtual Network (VNet) as the AKS cluster.
-* Use a VM in a separate network and set up Virtual network peering. See the section below for more information on this option.
-* Use an Express Route or VPN connection.
-* Use the AKS Run Command feature.
+
+- Create a VM in the same Azure Virtual Network (VNet) as the AKS cluster.
+- Use a VM in a separate network and set up Virtual network peering. See the section below for more information on this option.
+- Use an Express Route or VPN connection.
+- Use the AKS Run Command feature.
 
 8. Common errors without DNS and Routing in place.
 
@@ -41,25 +42,26 @@ kubectl get pods -o wide
 Unable to connect to the server: dial tcp: i/o timeout
 
 ```
+
 From Azure Portal. You need to be connected to Azure VNET or have VPN/Private connectivity in place.
 ![AKS Advanced Networking](images/aks-private-cluster-error.png)
 
 ## Quickstart
 
 ### Azure CNI (New VNET)
-az aks create --resource-group aks-private-rg --name aks-private-cluster  --load-balancer-sku standard   --enable-private-cluster   --network-plugin azure --verbose
+
+az aks create --resource-group aks-private-rg --name aks-private-cluster --load-balancer-sku standard --enable-private-cluster --network-plugin azure --verbose
 
 ### Kubenet (New VNET)
-az aks create --resource-group aks-private-rg --name aks-private-cluster  --load-balancer-sku standard   --enable-private-cluster  --verbose
+
+az aks create --resource-group aks-private-rg --name aks-private-cluster --load-balancer-sku standard --enable-private-cluster --verbose
 
 ## Private Cluster ( Azure CNI in Existing VNET)
 
 1. Set the variables for existing resources
 
-
-
 ```
-# 
+#
 # Set variables (for existing resources)
 #
 MYACR=nnacr101
@@ -75,7 +77,7 @@ USERIDENTITY=aks-user-managed-identity
 2. Set the variable for new resources
 
 ```
-# 
+#
 # Variables for new resources
 #
 RG=aks-private-cluster-rg
@@ -87,7 +89,7 @@ PLUGIN=azure
 ```
 
 3. Create ACR and User Identity
-   
+
 ```
 #
 # create ACR and User Idenity
@@ -110,7 +112,7 @@ echo $SUBNET_ID
 
 ```
 az identity create --name $USERIDENTITY --resource-group $RG
-az identity list --query "[].{Name:name, Id:id, Location:location}" -o table 
+az identity list --query "[].{Name:name, Id:id, Location:location}" -o table
 USERIDENTITY_ID=$(az identity show --resource-group $RG --name $USERIDENTITY --query id -o tsv)
 echo $USERIDENTITY_ID
 
@@ -184,10 +186,10 @@ service/red-service            LoadBalancer   10.101.154.43    52.226.99.79    8
 service/red-service-internal   LoadBalancer   10.101.218.208   172.16.238.98   8080:31418/TCP   25m   app=red
 
 ```
+
 ## Portal Validation
 
-
-##  Node view
+## Node view
 
 Note the Node inherits the DNS from VNET DNS setting and egress for the node via Azure External load balancer (NVA/Firewall options available)
 
