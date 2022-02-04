@@ -26,6 +26,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
 ### [Azure Kubernetes Services (AKS) Networking Series](aks/README-advanced.md)
 
+- Download [Multi-tab Visio](aks/aks-all-reference-architectures-visio.vsdx) and [PDF](aks/aks-all-reference-architectures-PDF.pdf)
 - [Docker Networking](aks/README-docker-multihost.md)
   - [Single Host](aks/README-docker-singlehost.md)
   - [Multi Host](aks/README-docker-multihost.md)
