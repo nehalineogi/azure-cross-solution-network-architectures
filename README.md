@@ -7,9 +7,10 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 ### DevOps and Automation
 
 - [Automated deployments architecture](automated-deployment-architecture/automation-process.md)
-- Azure DevOps (coming soon..)
-- GitOps for Application deployment (coming soon..)
-- CI/CD pipelines using Github Actions (coming soon..)
+- Azure DevOps
+- GitOps for Application deployment
+- CI/CD pipelines using Github Actions
+
 ### Advanced Linux Networking
 
 - [VXLAN with two linux hosts (As good as it gets!)](advanced-linux-networking/linux-vxlan.md)
@@ -78,15 +79,15 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - [Download Postman Collection](apim/README-postman.md)
 - Download [Multi-tab Visio](apim/APIM-all-reference-architectures-visio.vsdx) and [PDF](apim/APIM-all-reference-architectures-PDF.pdf) of all APIM Networking Architectures
 
-### [Azure App-service Networking ](app-service/README.md) (Work in Progress!)
+### [Azure App-service Networking ](app-service/README.md)
 
 - [Private Endpoint Integration](app-service/README.md)
 - [Service Endpoint](app-service/README.md)
 - [VNET Integration](app-service/README.md)
 - [NAT Gateway Integration](app-service/README.md)
 - [Azure Private DNS Zone Planning](app-service/README.md)
-- APP Services with Custom Domain and Private Endpoints (Coming Soon!)
-- Azure App-Service with firewall for outbound traffic filtering (coming soon!)
+- APP Services with Custom Domain and Private Endpoints
+- Azure App-Service with firewall for outbound traffic filtering
 
 # Tools of Trade (Work in progress)
 
