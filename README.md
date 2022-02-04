@@ -4,6 +4,12 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
 # Design Areas
 
+### DevOps and Automation
+
+- [Automated deployments architecture](automated-deployment-architecture/automation-process.md)
+- Azure DevOps (coming soon..)
+- GitOps for Application deployment (coming soon..)
+- CI/CD pipelines using Github Actions (coming soon..)
 ### Advanced Linux Networking
 
 - [VXLAN with two linux hosts (As good as it gets!)](advanced-linux-networking/linux-vxlan.md)
@@ -81,13 +87,6 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - [Azure Private DNS Zone Planning](app-service/README.md)
 - APP Services with Custom Domain and Private Endpoints (Coming Soon!)
 - Azure App-Service with firewall for outbound traffic filtering (coming soon!)
-
-### DevOps and Automation (Not Started!)
-
-- Bicep Automated deployments (Coming Soon...)
-- Azure DevOps
-- GitOps for Application deployment
-- CI/CD pipelines using Github Actions
 
 # Tools of Trade (Work in progress)
 

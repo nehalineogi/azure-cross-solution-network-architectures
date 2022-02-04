@@ -12,21 +12,21 @@ The quickstart deployment will provision two Azure VMs acting as docker hosts, e
 
 Download Visio link here.
 
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fdockerhost.json)
+
 # Quickstart deployment
 
 ### Task 1 - Start Deployment
 
-1. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
+1. Click Deploy to Azure button above and supply the signed-in user ID from step 2.
+
+2. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
 
 ```
 az ad signed-in-user show --query objectId -o tsv
 ```
 
-2. Click Deploy to Azure and supply the signed-in user ID.
-
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fdockerhost.json)
-
-3. Using Azure Bastion, log in to the VMs using the username `localadmin` and passwords from keyvault.
+3. Using Azure Bastion, log in to the VMs using the username ```localadmin``` and passwords from keyvault.
 
 ### Task 2 (optional) - SSH to the docker VMs.
 
