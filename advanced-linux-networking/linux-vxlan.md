@@ -1,20 +1,20 @@
-## VXLAN overlay with two linux hosts
+# VXLAN overlay with two linux hosts
 
 This architecture demonstrates VXLAN network overlay between two linux host in it's simplest form. This is the fundamental prinicpal behind cluster networking.
 
-## Reference Architecture
+# Reference Architecture
 
 ![Docker Swarm Cluster](images/linux-vxlan.png)
 
-#Design Components
+# Design Components
 
 1. Two Ubuntu linux VMs deployed in a subnet with eth0 interface
 2. VXLAN-demo interface acting as the VTEP and creating the overlay(layer2 over layer3)
 3. Packet captures showing VXLAN encapsulated ICMP packets
 
-### VXLAN between two linux hosts (As good as it gets!)
+# VXLAN between two linux hosts (As good as it gets!)
 
-#### Linux host 1
+## Linux host 1
 
 Before: Notice no vxlan interface
 
@@ -86,7 +86,7 @@ root@docker-host-1:~# ip add
 
 ```
 
-#### Linux host 2
+## Linux host 2
 
 ```
 root@docker-host-2:~# ip link add vxlan-demo type vxlan id 5001 remote 172.16.24.4 local 172.16.24.5 de
@@ -124,9 +124,9 @@ root@docker-host-2:~#
 
 ```
 
-### Validations
+# Validations
 
-#####On host 1: Initiate the ping
+## On host 1: Initiate the ping
 
 ```
 
@@ -137,7 +137,7 @@ PING 192.168.100.2 (192.168.100.2) 56(84) bytes of data.
 
 ```
 
-#### On host 2: (Capture VXLAN encapsulated packets)
+## On host 2: (Capture VXLAN encapsulated packets)
 
 ###### Note: First the ARP packet, VNI ID of 5001 and then VXLAN encapsulated inside ICMP packet
 
@@ -169,7 +169,7 @@ IP 192.168.100.2 > 192.168.100.1: ICMP echo reply, id 18662, seq 4, length 64
 IP 192.168.100.1 > 192.168.100.2: ICMP echo request, id 18662, seq 5, length 64
 ```
 
-#### TODO:
+# TODO:
 
 1. Attach the vxlan-demo interface to custom docker bridge and create a manual cluster!
 
