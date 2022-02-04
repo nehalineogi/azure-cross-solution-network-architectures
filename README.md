@@ -1,6 +1,6 @@
 # Cross Solution Network Architectures
 
-This is a repo of cross solution network connectivity designs with Azure PaaS services, Azure Kubernetes Services(AKS) and on-premise connectivity. These designs are based on real world experiences working with partners,customers and cross solution CSAs in various ADS (Azure Design Sessions). This repo will contain downloadable artifacts like bicep automated deployments, architecture diagrams, postman collections and tools to test applications for various designs. Learn about tools of trades from various SME CSAs to validate designs,connectivity, view application and traffic flows.
+This is a repo of cross solution network connectivity designs with Azure PaaS services, Azure Kubernetes Services(AKS) and on-premise connectivity. These designs are based on real world experiences working with partners,customers and cross solution Cloud Solution Architects (CSAs) in various Azure Design Sessions (ADS). This repo will contain downloadable artifacts including bicep automated deployments, architecture diagrams, postman collections and tools to test applications for various designs. Learn about tools of trades from various Subject Matter Expert (SME) CSAs to validate designs,connectivity, view application and traffic flows.
 
 # Design Areas
 
@@ -17,9 +17,9 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - [Linux bridge ](advanced-linux-networking/linux-bridge.md)
 - [Linux namespaces](advanced-linux-networking/linux-namespaces.md)
 - [Linux firewall with iptables](advanced-linux-networking/linux-firewall.md)
-- Dynamic Routing (Zebra,Quagga,BIRD - BGP Routing on linux) (Coming Soon...)
+- Dynamic Routing (Zebra,Quagga,BIRD - BGP Routing on linux)
 - Openswan VPN (IPsec Tunnels)
-- Macsec Encryption on Linux
+- Macsec encryption on Linux
 - The perfect NVA with linux
 - IPtables and eBPF
 - Cluster Networking - [IPVLAN, MACVLAN, TUN/TAP drivers](https://kubernetes.io/docs/concepts/cluster-administration/networking/)
@@ -40,9 +40,9 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
   - [Nginx Ingress controller](aks/README-ingress-nginx.md)
 - [AKS Egress with Azure firewall/NVA](aks/README-aks-egress.md)
 - [AKS Multiple Nodepool Design](aks/README-multinode.md)
-- Core DNS and Azure DNS Integrations (Coming soon...)
+- Core DNS and Azure DNS Integrations
 - Kubernetes Network Model - Multus, Flannel,Weave, Calico, Cilium
-- Kubernets Serivce Mesh (Istio, Linkerd and Consul)
+- Kubernetes Serivce Mesh (Istio, Linkerd and Consul)
 
 ### Azure Database Services
 
@@ -56,7 +56,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - [SQL Managed Instance](database-services/README.md)
   - [Single Region](database-services/README-SQLMI.md)
   - Multi region with Replication - DR Scenario
-  - Database failover with Application connectivity
+  - Database failover with application connectivity
 - Azure SQL Database (PaaS Service)
 - Azure Synapse
 - OSS databases - mysql and postgres
@@ -113,6 +113,8 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
    - mysql
 4. DevOps
    - github
+   - Azure DevOps (ADO) project boards
+   - Visual Studio Code (vscode)
    - Postman
 
 # Build Sample Applications (Work in progress)
@@ -129,7 +131,7 @@ Special thank you to my colleagues
 - [Shaun Croucher](https://github.com/shcrouch)
 - [Xavier Elizondo](https://github.com/xelizondo)
 - [Heather Tze](https://github.com/hsze)
-- [Daniel Mueser](https://github.com/dmauser)
+- [Daniel Mauser](https://github.com/dmauser)
 - [Sowmyan Soman Chullikkattil](https://github.com/sowsan)
 - [Mike Richter](https://github.com/michaelsrichter)
 - [Sumit Sengupta](https://github.com/sumitsengupta)

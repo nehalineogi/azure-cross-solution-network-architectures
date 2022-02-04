@@ -8,7 +8,7 @@ The quickstart deployment will provision two Azure VMs acting as docker hosts, e
 
 #### Multi-Host Networking (Docker Swarm Cluster)
 
-![Docker Swarm Cluster](images/docker-multihost.png)
+![Docker swarm cluster](images/docker-multihost.png)
 
 Download Visio link here.
 
@@ -20,7 +20,7 @@ The username for the deployed VMs is `localadmin`
 
 The passwords are stored in a keyvault deployed to the same resource group.
 
-### Task 1 - Start Deployment
+### Task 1: Start Deployment
 
 1. Click Deploy to Azure button above and supply the signed-in user ID from step 2.
 
@@ -32,7 +32,7 @@ az ad signed-in-user show --query objectId -o tsv
 
 3. Using Azure Bastion, log in to the VMs using the username ```localadmin``` and passwords from keyvault.
 
-### Task 2 (optional) - SSH to the docker VMs.
+### Task 2 (optional): SSH to the docker VMs.
 
 1. Locate the Network Security Group (NSG) called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
 
@@ -63,7 +63,7 @@ ssh localadmin@[VM Public IP or DNS]
 2. [VXLAN Overlay Networks](https://docs.docker.com/network/overlay/)
 3. [Encrypt traffic on an overlay network](https://docs.docker.com/network/overlay/#encrypt-traffic-on-an-overlay-network)
 
-# Challenge#1 Create a Docker Swarm Cluster
+# Challenge 1: Create a Docker Swarm Cluster
 
 List the default networks and initialize docker swarm cluster
 
@@ -238,7 +238,7 @@ root@docker-host-2:~# docker network inspect docker_gwbridge
 
 ```
 
-# Challenge#2 Create new custom overlay networks
+# Challenge 2: Create new custom overlay networks
 
 Note: These overlay networks are scoped as "swarm"
 
@@ -360,7 +360,7 @@ Observations:
 2. What is the ip address space of the overlay networks?
 3. Do the new overlay network appear on both hosts?
 
-# Challenge#3 Create docker service with 2 replicas on the red-overlay network
+# Challenge 3: Create docker service with 2 replicas on the red-overlay network
 
 ```
 #
@@ -509,7 +509,7 @@ root@docker-host-1:/home/localadmin# docker inspect service web-service
 
 ```
 
-# Challenge#4 Inspect the container networking and egress path
+# Challenge 4: Inspect the container networking and egress path
 
 ```
 #
@@ -611,7 +611,7 @@ Observations:
 
 1. Do the overlay networks appear on both hosts?
 
-# Challenge#5 Ingress overlay network and Service VIP Load balancing
+# Challenge 5: Ingress overlay network and Service VIP Load balancing
 
 ```
 root@docker-host-1:/home/localadmin# docker service inspect web-service | grep -A 9 -i VirtualIPs
@@ -637,7 +637,7 @@ root@docker-host-1:/home/localadmin# curl -s 172.16.24.4:8080 | grep -i address
 
 ```
 
-### Task1: Validate egress IP
+### Task 1: Validate egress IP
 
 ```
 root@docker-host-1:~# docker exec -it web-service.2.4nvjeoc4irny8vq5mbr2vxhkz sh
@@ -695,9 +695,9 @@ Destination Gateway Genmask Flags Metric Ref Use Iface
 
 ```
 
-# Challenge#6 VXLAN Overlay Packet capture
+# Challenge 6: VXLAN Overlay Packet capture
 
-####Initiate ping from container on docker-host-1 to container on docker-host-2
+### Initiate ping from container on docker-host-1 to container on docker-host-2
 
 ```
 
@@ -762,7 +762,7 @@ IP 10.0.1.3 > 10.0.1.4: ICMP echo reply, id 54, seq 3, length 64
 
 ```
 
-# Challenge#7 DNS Container and Service resolution
+# Challenge 7: DNS Container and Service resolution
 
 ```
 # docker-host-2 (grab the container name)

@@ -16,7 +16,7 @@ Download Visio link here.
 
 # Quickstart deployment
 
-### Task 1 - Start Deployment
+### Task 1: Start Deployment
 
 1. Click Deploy to Azure button above and supply the signed-in user ID from step 2.
 
@@ -28,7 +28,7 @@ az ad signed-in-user show --query objectId -o tsv
 
 3. Using Azure Bastion, log in to the VMs using the username ```localadmin``` and passwords from keyvault.
 
-### Task 2 (optional) - SSH to the docker VMs.
+### Task 2 (optional): SSH to the docker VMs.
 
 1. Locate the Network Security Group (NSG) called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
 
@@ -55,15 +55,15 @@ The above architecture diagram contains a few key components
 
 ## Documentation links
 
-1. [Docker Network Tutorial](https://docs.docker.com/network/network-tutorial-standalone/)
-2. [Docker Network Bridge](https://docs.docker.com/network/bridge/)
+1. [Docker network tutorial](https://docs.docker.com/network/network-tutorial-standalone/)
+2. [Docker network bridge](https://docs.docker.com/network/bridge/)
 3. [Container networking](https://docs.docker.com/config/containers/container-networking/)
 
-# Challenge #1 Run a simple nginx container and connect to default docker0 bridge
+# Challenge 1: Run a simple nginx container and connect to default docker0 bridge
 
 Docker0 is already created by docker installation. Docker0 bridge has a layer3 IP.
 
-## Task#1: Validations
+## Task 1: Validations
 
 Docker Host default configuration.
 
@@ -83,7 +83,7 @@ docker0         8000.0242e4c4c389       no
 root@docker-host-1:/home/localadmin#
 ```
 
-## Task#2 Create a container on the default bridge network (docker0)
+## Task 2: Create a container on the default bridge network (docker0)
 
 ```
 #
@@ -147,7 +147,7 @@ root@docker-host-1:/home/localadmin# curl ifconfig.me
 
 ```
 
-## Task#3 Create another container in the default bridge network and ping the first container
+## Task 3: Create another container in the default bridge network and ping the first container
 
 ```
 #
@@ -189,7 +189,7 @@ Cache-Control: no-cache
 
 ```
 
-## Task#4 (Optional) Inspect the Docker network bridge
+## Task 4: (Optional) Inspect the Docker network bridge
 
 Observe subnet, gateway and container IPs
 
@@ -249,7 +249,7 @@ root@docker-host-1:/home/localadmin# docker network inspect bridge
 root@docker-host-1:~#
 ```
 
-# Challenge #2 Create two custom bridges (red-bridge and green-bridge)
+# Challenge 2: Create two custom bridges (red-bridge and green-bridge)
 
 ```
 #
@@ -339,9 +339,9 @@ Observations:
 1. Can red-c1 ping red-c2 using hostname and IP. Does it work?
 2. Can red-c1 ping green-c1? Why or Why not?
 
-# Challenge #3 DNS Resolution and Outbound IPs
+# Challenge 3: DNS Resolution and Outbound IPs
 
-## Task#1 DNS Resolution within -Default Docker0 Bridge
+## Task 1: DNS Resolution within -Default Docker0 Bridge
 
 Docker container inherits the DNS configuration from the Docker host. Containers cannot reference each other by names.
 
@@ -369,7 +369,7 @@ ping: bad address 'blue-c2'
 
 ```
 
-## Task#2 In Custom bridge you can ping green-c2 using the hostname.
+## Task 2: In Custom bridge you can ping green-c2 using the hostname.
 
 ```
 root@docker-host-1:/home/localadmin# docker exec -it green-c1 sh
@@ -409,7 +409,7 @@ round-trip min/avg/max = 0.106/0.145/0.184 ms
 
 ```
 
-# Challenge #4 Dual Home a Container
+# Challenge 4: Dual Home a Container
 
 ```
 #
@@ -487,7 +487,7 @@ PING 172.21.0.3 (172.21.0.3): 56 data bytes
 / #
 ```
 
-# Challenge #5 Expose the Container to the outside world
+# Challenge 5: Expose the Container to the outside world
 
 ```
 #
@@ -524,7 +524,7 @@ Cache-Control: no-cache
 
 ```
 
-# Challenge #6 (optional) Observe docker host networking
+# Challenge 6: (optional) Observe docker host networking
 
 Note Docker0 interface and veth pairs, iptables and port forwarding.
 
