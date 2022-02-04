@@ -1,4 +1,4 @@
-#Multi Host Networking using Docker Swarm Cluster
+# Multi Host Networking using Docker Swarm Cluster
 
 This architecture demonstrates multi-host docker swarm cluster using VXLAN overlay networks. Overlay networks span multiple nodes. Overlay networks extend the layer-2 broadcast domain to multiple nodes
 
@@ -10,7 +10,7 @@ The quickstart deployment will provision two Azure VMs acting as docker hosts, e
 
 ![Docker swarm cluster](images/docker-multihost.png)
 
-Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF] (aks-all-reference-architectures-pdf.vsdx)
+Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF](aks-all-reference-architectures-pdf.pdf)
 
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fdockerhost.json)
 
