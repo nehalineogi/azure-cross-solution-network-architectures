@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "6694932562849502373"
+      "templateHash": "16877472179979563751"
     }
   },
   "parameters": {
@@ -224,7 +224,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.3.255.40792",
-              "templateHash": "14540018129418783596"
+              "templateHash": "9643446527700158314"
             }
           },
           "parameters": {
@@ -339,8 +339,8 @@
                 "storageProfile": {
                   "imageReference": {
                     "publisher": "canonical",
-                    "offer": "0001-com-ubuntu-server-hirsute",
-                    "sku": "21_04",
+                    "offer": "0001-com-ubuntu-server-focal",
+                    "sku": "20_04-lts",
                     "version": "latest"
                   },
                   "osDisk": {
