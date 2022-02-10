@@ -30,8 +30,8 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - [Docker Networking](aks/README-docker-multihost.md)
   - [Single Host](aks/README-docker-singlehost.md)
   - [Multi Host](aks/README-docker-multihost.md)
-  - Bicep automated deployment
   - kind Cluster (Kubernetes In Docker)
+  - [Bicep automated deployment](bicep/dockerhost/README.md)
 - [Basic/Kubenet Networking](aks/README-kubenet.md)
 - [Advanced/Azure CNI Networking](aks/README-advanced.md)
 - [AKS Private Cluster](aks/README-private-cluster.md)
