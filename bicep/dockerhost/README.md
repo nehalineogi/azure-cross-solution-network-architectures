@@ -1,10 +1,10 @@
-# Bicep Deployment for docker single host and multi host architectures
+# Bicep Deployment for docker single-host and multi-host architectures
 
-In this section you will find bicep code to deploy the single and multihost foundational platforms as described in the docker section of the AKS learning series. 
+In this section you will find bicep code to deploy the single and multihost foundational platforms as described in the AKS learning series.
 
-This code can be deployed in the usual way using `az cli` or `powershell` as detailed [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-cli)  
+This code can be deployed using `az cli` or `powershell` as detailed [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/bicep/deploy-cli)  
 
-For convenience you can follow the quickstart deployment below to get started. 
+For convenience you can also follow the quickstart deployment below to get started. 
 
 # Quickstart deployment
 
@@ -28,7 +28,7 @@ cd azure-cross-solution-network-architectures/bicep/dockerhost/
 az ad signed-in-user show --query objectId -o tsv
 ```
 
-3.  Run the following command to deploy using az cli
+4.  Run the following command to deploy using az cli
 
 ```
  az deployment sub create --name docker --template-file dockerhost.bicep --location [region] --parameters adUserId=[paste-asUserId-here] 
@@ -40,7 +40,7 @@ az ad signed-in-user show --query objectId -o tsv
  az deployment sub create --name docker --template-file dockerhost.bicep --location uksouth --parameters adUserId=11111111-2222-3333-4444-555555555555
  ```
 
-4. Once your deployment has finished you can log on to the docker VMs using Azure bastion. The username is `localadmin` and passwords can be found in the keyvault.
+5. Once your deployment has finished you can log on to the docker VMs using Azure bastion. The username is `localadmin` and passwords can be found in the keyvault.
 
 
 For further information on the deployment, setting up SSH to the hosts and advanced troubleshooting please refer to the docker series pages [here](../../aks/README-docker-singlehost.md)
