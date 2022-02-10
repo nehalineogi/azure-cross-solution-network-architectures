@@ -34,7 +34,7 @@ az ad signed-in-user show --query objectId -o tsv
  az deployment sub create --name docker --template-file dockerhost.bicep --location [region] --parameters adUserId=[paste-asUserId-here] 
  ```
 
- example deployment command: 
+ example : 
 
  ```
  az deployment sub create --name docker --template-file dockerhost.bicep --location uksouth --parameters adUserId=11111111-2222-3333-4444-555555555555
