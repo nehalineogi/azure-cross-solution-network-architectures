@@ -28,7 +28,7 @@ cd azure-cross-solution-network-architectures/bicep/dockerhost/
 az ad signed-in-user show --query objectId -o tsv
 ```
 
-4. (optional) If you wish to customise or change the deployhost.bicep or related module code, you can do this now and save your changes locally.  
+4. (optional) If you wish to customise or change the dockerhost.bicep or related module code, you can do this now and save your changes locally.  
 
 
 5.  Run the following command to deploy using az cli
