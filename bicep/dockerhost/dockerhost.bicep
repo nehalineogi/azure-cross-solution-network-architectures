@@ -14,7 +14,9 @@ param HostVmSize string = 'Standard_D2_v3'
 
 targetScope            = 'subscription'
 
-var location           = deployment().location
+var location = deployment().location // linting warning here, but for this deployment it is at subscription level and so if we have a separate parameter specified here, 
+                                     // there will be two "location" options on the "Deploy to Azure" custom deployment and this is confusing for the user.
+                                
 
 var VnetName           = 'dockervnet'
 var subnetname        = 'dockersubnet'
@@ -35,6 +37,7 @@ resource rg 'Microsoft.Resources/resourceGroups@2020-10-01' = {
 }
 module kv './modules/kv.bicep' = {
   params: {
+    location: location
     adUserId: adUserId
   }
   name: 'kv'
@@ -42,13 +45,14 @@ module kv './modules/kv.bicep' = {
 }
 module dockerhost './modules/vm.bicep' =[for i in range (1,numberOfHosts): {
   params: {
-    adminusername  : VmAdminUsername
-    keyvault_name  : kv.outputs.keyvaultname
-    vmname         : '${VmHostnamePrefix}${i}'
-    subnet1ref     : subnet1ref
-    vmSize         : HostVmSize
-    githubPath     : githubPath
-    adUserId       : adUserId
+    location     : location
+    adminusername: VmAdminUsername
+    keyvault_name: kv.outputs.keyvaultname
+    vmname       : '${VmHostnamePrefix}${i}'
+    subnet1ref   : subnet1ref
+    vmSize       : HostVmSize
+    githubPath   : githubPath
+    adUserId     : adUserId
   }
   name: '${VmHostnamePrefix}${i}'
   scope: rg
