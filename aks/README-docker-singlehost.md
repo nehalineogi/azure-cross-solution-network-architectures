@@ -16,6 +16,11 @@ Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF]
 
 # Quickstart deployment
 
+The username for the deployed VMs is `localadmin`
+
+The passwords are stored in a keyvault deployed to the same resource group.
+
+
 ### Task 1: Start Deployment
 
 1. Click Deploy to Azure button above and supply the signed-in user ID from step 2.
