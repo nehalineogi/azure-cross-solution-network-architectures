@@ -16,9 +16,23 @@ resource vn 'Microsoft.Network/virtualNetworks@2021-02-01' = {
       name: subnet.name
       properties: {
         addressPrefix: subnet.prefix
+        networkSecurityGroup: subnet.customNsg ? null : {
+          id        : defaultnsg.id
+          location  : defaultnsg.location
+          properties: {
+          }
+        }
+
       }
     }]
   }
+}
+
+resource defaultnsg 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
+  name: 'default-nsg'
+  location: location
+  properties: {
+}
 }
 
 output vnid string   = vn.id

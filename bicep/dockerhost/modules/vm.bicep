@@ -6,7 +6,7 @@ param githubPath string
 param adUserId string
 
 @secure()
-param adminPassword string = '${uniqueString(resourceGroup().id, vmname)}aA1!${uniqueString(adUserId)}'
+param adminPassword string = '${uniqueString(resourceGroup().id, vmname)}aA1!${uniqueString(adUserId)}' // Note passwords not cryptographically secure, deployment is not designed for production use
 
 @description('Size of the virtual machine.')
 param vmSize string 

@@ -4,7 +4,7 @@ param vmname string
 param subnet1ref string
 param adUserId string
 @secure()
-param adminPassword string = '${uniqueString(resourceGroup().id, vmname)}aA1!${uniqueString(adUserId)}'
+param adminPassword string = '${uniqueString(resourceGroup().id, vmname)}aA1!${uniqueString(adUserId)}'  // Note passwords not cryptographically secure, deployment is not designed for production use
 param windowsVM bool
 
 var dcdisk = [

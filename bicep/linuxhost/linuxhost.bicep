@@ -6,7 +6,7 @@ param adUserId string  = ''
 @description('Set the resource group name, this will be created automatically')
 @minLength(3)
 @maxLength(10)
-param ResourceGroupName string = 'linuxhost'
+param ResourceGroupName string = 'lin'
 
 @description('Set the size for the VM')
 @minLength(6)
@@ -35,12 +35,14 @@ var vnets = [
     vnetAddressPrefix: '172.16.0.0/16'
     subnets: [
       {
-        name: 'main'
-        prefix: '172.16.24.0/24'
+        name     : 'main'
+        prefix   : '172.16.24.0/24'
+        customNsg: false
       }
       {
-        name: 'AzureBastionSubnet'
-        prefix: '172.16.254.0/24'
+        name     : 'AzureBastionSubnet'
+        prefix   : '172.16.254.0/24'
+        customNsg: true
       }
     ]
   }
@@ -64,6 +66,7 @@ module virtualnetwork './modules/vnet.bicep' = [for vnet in vnets: {
   name: '${vnet.vnetName}'
   scope: rg
 } ]
+
  module kv './modules/kv.bicep' = {
   params: {
     location: location
