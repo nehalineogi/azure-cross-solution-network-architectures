@@ -6,7 +6,7 @@ param adUserId string  = ''
 @description('Set the resource group name, this will be created automatically')
 @minLength(3)
 @maxLength(10)
-param ResourceGroupName string = 'linuxhos'
+param ResourceGroupName string = 'linuxhost'
 
 @description('Set the size for the VM')
 @minLength(6)
@@ -19,11 +19,14 @@ var location         = deployment().location  // linting warning here, but for t
                                               // there will be two "location" options on the "Deploy to Azure" custom deployment and this is confusing for the user.
 
 // VNet and Subnet References (module outputs)
-var hubVnetId              = virtualnetwork[0].outputs.vnid
-var hubVnetName            = virtualnetwork[0].outputs.vnName
-var hubSubnetRef           = '${hubVnetId}/subnets/${virtualnetwork[0].outputs.subnets[0].name}'
-var hubBastionSubnetRef    = '${hubVnetId}/subnets/${virtualnetwork[0].outputs.subnets[1].name}'
-var hubAddressPrefix       = virtualnetwork[0].outputs.subnets[0].properties.addressPrefix
+var hubVnetId            = virtualnetwork[0].outputs.vnid
+var hubVnetName          = virtualnetwork[0].outputs.vnName
+var hubMainSubnetName    = virtualnetwork[0].outputs.subnets[0].name
+var hubBastionSubnetName = virtualnetwork[0].outputs.subnets[1].name
+var hubSubnetRef         = '${hubVnetId}/subnets/${virtualnetwork[0].outputs.subnets[0].name}'
+var hubBastionSubnetRef  = '${hubVnetId}/subnets/${virtualnetwork[0].outputs.subnets[1].name}'
+var hubMainSubnetPrefix  = virtualnetwork[0].outputs.subnets[0].properties.addressPrefix
+var hubBastionHostPrefix = virtualnetwork[0].outputs.subnets[1].properties.addressPrefix
 
 // VNet schema 
 var vnets = [
@@ -61,7 +64,6 @@ module virtualnetwork './modules/vnet.bicep' = [for vnet in vnets: {
   name: '${vnet.vnetName}'
   scope: rg
 } ]
-
  module kv './modules/kv.bicep' = {
   params: {
     location: location
@@ -90,26 +92,47 @@ module linuxhost './modules/vm.bicep' = [for i in range (1,numberOfHosts): {
 module hubBastion './modules/bastion.bicep' = {
 params:{
   bastionHostName: 'hubBastion'
-  location: location
-  subnetRef: hubBastionSubnetRef
+  location       : location
+  subnetRef      : hubBastionSubnetRef
 }
 scope:rg
 name: 'hubBastion'
 }
-module defaultNSG './modules/simplensg.bicep' = {
+
+//module tempsshNSG './modules/nsg_tempdenyssh.bicep' = {
+module tempsshNSG './modules/nsg_tempdenyssh.bicep' = {
   name: 'hubNSG'
   params:{
-    location: location
-    destinationAddressPrefix:hubAddressPrefix
+    location : location
+    destinationAddressPrefix: hubMainSubnetPrefix
   }
 scope:rg
 }
-module onpremNsgAttachment './modules/nsgAttachment.bicep' = {
-  name: 'onpremNsgAttachment'
+
+module bastionNSG './modules/nsg_bastion.bicep' = {
+  name: 'bastionNSG'
   params:{
-    nsgId              : defaultNSG.outputs.nsgId
-    subnetAddressPrefix: hubAddressPrefix                    
-    subnetName         : hubSubnetRef
+    location: location
+  }
+scope:rg
+}
+module mainNsgAttachment './modules/nsgAttachment.bicep' = {
+  name: 'mainNsgAttachment'
+  params:{
+    nsgId              : tempsshNSG.outputs.nsgId
+    subnetAddressPrefix: hubMainSubnetPrefix                    
+    subnetName         : hubMainSubnetName
+    vnetName           : hubVnetName
+  }
+  scope:rg
+}
+
+module bastionNSGAttachment './modules/nsgAttachment.bicep' = {
+  name: 'bastionNsgAttachment'
+  params:{
+    nsgId              : bastionNSG.outputs.nsgId
+    subnetAddressPrefix: hubBastionHostPrefix
+    subnetName         : hubBastionSubnetName
     vnetName           : hubVnetName
   }
   scope:rg
