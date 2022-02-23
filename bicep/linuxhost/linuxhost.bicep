@@ -61,6 +61,7 @@ module virtualnetwork './modules/vnet.bicep' = [for vnet in vnets: {
     vnetAddressPrefix: vnet.vnetAddressPrefix
     location         : location
     subnets          : vnet.subnets
+    nsgDefaultId     : defaultnsg.outputs.nsgId
   }
 
   name: '${vnet.vnetName}'
@@ -102,7 +103,6 @@ scope:rg
 name: 'hubBastion'
 }
 
-//module tempsshNSG './modules/nsg_tempdenyssh.bicep' = {
 module tempsshNSG './modules/nsg_tempdenyssh.bicep' = {
   name: 'hubNSG'
   params:{
@@ -118,6 +118,14 @@ module bastionNSG './modules/nsg_bastion.bicep' = {
     location: location
   }
 scope:rg
+}
+
+module defaultnsg './modules/nsg_default.bicep' = {
+  name : 'default-nsg'
+  params: {
+    location: location
+  }
+  scope: rg
 }
 module mainNsgAttachment './modules/nsgAttachment.bicep' = {
   name: 'mainNsgAttachment'

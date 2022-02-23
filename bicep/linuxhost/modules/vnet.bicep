@@ -2,6 +2,7 @@ param subnets array
 param vnetName string      
 param vnetAddressPrefix string
 param location string
+param nsgDefaultId string
 
 resource vn 'Microsoft.Network/virtualNetworks@2021-02-01' = {
   name: vnetName 
@@ -17,8 +18,8 @@ resource vn 'Microsoft.Network/virtualNetworks@2021-02-01' = {
       properties: {
         addressPrefix: subnet.prefix
         networkSecurityGroup: subnet.customNsg ? null : {
-          id        : defaultnsg.id
-          location  : defaultnsg.location
+          id        : nsgDefaultId
+          location  : location
           properties: {
           }
         }
@@ -26,13 +27,6 @@ resource vn 'Microsoft.Network/virtualNetworks@2021-02-01' = {
       }
     }]
   }
-}
-
-resource defaultnsg 'Microsoft.Network/networkSecurityGroups@2021-05-01' = {
-  name: 'default-nsg'
-  location: location
-  properties: {
-}
 }
 
 output vnid string   = vn.id

@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "15287109684724490410"
+      "templateHash": "12220523198012310328"
     }
   },
   "parameters": {
@@ -20,7 +20,7 @@
     },
     "ResourceGroupName": {
       "type": "string",
-      "defaultValue": "linuxhost",
+      "defaultValue": "lin",
       "maxLength": 10,
       "minLength": 3,
       "metadata": {
@@ -94,6 +94,9 @@
           },
           "subnets": {
             "value": "[variables('vnets')[copyIndex()].subnets]"
+          },
+          "nsgDefaultId": {
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'default-nsg'), '2019-10-01').outputs.nsgId.value]"
           }
         },
         "template": {
@@ -103,7 +106,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.3.255.40792",
-              "templateHash": "8778640883214453318"
+              "templateHash": "7876870634813934177"
             }
           },
           "parameters": {
@@ -117,6 +120,9 @@
               "type": "string"
             },
             "location": {
+              "type": "string"
+            },
+            "nsgDefaultId": {
               "type": "string"
             }
           },
@@ -136,7 +142,7 @@
                       "name": "[parameters('subnets')[copyIndex('subnets')].name]",
                       "properties": {
                         "addressPrefix": "[parameters('subnets')[copyIndex('subnets')].prefix]",
-                        "networkSecurityGroup": "[if(parameters('subnets')[copyIndex('subnets')].customNsg, null(), reference(resourceId('Microsoft.Network/networkSecurityGroups', 'default-nsg'), '2021-05-01', 'full'))]"
+                        "networkSecurityGroup": "[if(parameters('subnets')[copyIndex('subnets')].customNsg, null(), createObject('id', parameters('nsgDefaultId'), 'location', parameters('location'), 'properties', createObject()))]"
                       }
                     }
                   }
@@ -146,17 +152,7 @@
                     "[parameters('vnetAddressPrefix')]"
                   ]
                 }
-              },
-              "dependsOn": [
-                "[resourceId('Microsoft.Network/networkSecurityGroups', 'default-nsg')]"
-              ]
-            },
-            {
-              "type": "Microsoft.Network/networkSecurityGroups",
-              "apiVersion": "2021-05-01",
-              "name": "default-nsg",
-              "location": "[parameters('location')]",
-              "properties": {}
+              }
             }
           ],
           "outputs": {
@@ -176,6 +172,7 @@
         }
       },
       "dependsOn": [
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'default-nsg')]",
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]"
       ]
     },
@@ -917,6 +914,58 @@
             "nsgId": {
               "type": "string",
               "value": "[resourceId('Microsoft.Network/networkSecurityGroups', 'azure-bastion-nsg')]"
+            }
+          }
+        }
+      },
+      "dependsOn": [
+        "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]"
+      ]
+    },
+    {
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2019-10-01",
+      "name": "default-nsg",
+      "resourceGroup": "[parameters('ResourceGroupName')]",
+      "properties": {
+        "expressionEvaluationOptions": {
+          "scope": "inner"
+        },
+        "mode": "Incremental",
+        "parameters": {
+          "location": {
+            "value": "[variables('location')]"
+          }
+        },
+        "template": {
+          "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+          "contentVersion": "1.0.0.0",
+          "metadata": {
+            "_generator": {
+              "name": "bicep",
+              "version": "0.3.255.40792",
+              "templateHash": "13819023913916015331"
+            }
+          },
+          "parameters": {
+            "location": {
+              "type": "string"
+            }
+          },
+          "functions": [],
+          "resources": [
+            {
+              "type": "Microsoft.Network/networkSecurityGroups",
+              "apiVersion": "2020-06-01",
+              "name": "default-nsg",
+              "location": "[parameters('location')]",
+              "properties": {}
+            }
+          ],
+          "outputs": {
+            "nsgId": {
+              "type": "string",
+              "value": "[resourceId('Microsoft.Network/networkSecurityGroups', 'default-nsg')]"
             }
           }
         }
