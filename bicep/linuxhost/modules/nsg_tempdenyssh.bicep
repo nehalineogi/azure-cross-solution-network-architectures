@@ -1,4 +1,4 @@
-// Creates temporary SSH deny rule 
+// Creates temporary SSH deny rule to allow user to change to own public IP for inbound SSH 
 
   param location string
   param destinationAddressPrefix string 

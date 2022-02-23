@@ -1,4 +1,4 @@
-// Creates temporary SSH deny rule 
+// Rules necessary for bastion subnet
 
   param location string
    

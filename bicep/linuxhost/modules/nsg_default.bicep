@@ -1,4 +1,4 @@
-// Creates temporary SSH deny rule 
+// Creates default NSG, best practice is for each subnet to have an NSG attached.
   param location string
   param name string
   
