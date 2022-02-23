@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "16877472179979563751"
+      "templateHash": "10048935965024153494"
     }
   },
   "parameters": {
@@ -40,9 +40,9 @@
   "variables": {
     "location": "[deployment().location]",
     "VnetName": "dockervnet",
-    "Subnet1Name": "dockersubnet",
+    "subnetname": "dockersubnet",
     "VnetAddressPrefix": "172.16.0.0/16",
-    "Subnet1Prefix": "172.16.24.0/24",
+    "subnetprefix": "172.16.24.0/24",
     "bastionSubnet": "172.16.1.0/24",
     "bastionNetworkName": "AzureBastionSubnet",
     "VmHostnamePrefix": "docker-host-",
@@ -68,6 +68,9 @@
         },
         "mode": "Incremental",
         "parameters": {
+          "location": {
+            "value": "[variables('location')]"
+          },
           "adUserId": {
             "value": "[parameters('adUserId')]"
           }
@@ -195,6 +198,9 @@
         },
         "mode": "Incremental",
         "parameters": {
+          "location": {
+            "value": "[variables('location')]"
+          },
           "adminusername": {
             "value": "[variables('VmAdminUsername')]"
           },
@@ -205,7 +211,7 @@
             "value": "[format('{0}{1}', variables('VmHostnamePrefix'), range(1, variables('numberOfHosts'))[copyIndex()])]"
           },
           "subnet1ref": {
-            "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'dockernetwork'), '2019-10-01').outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'dockernetwork'), '2019-10-01').outputs.subnet1name.value)]"
+            "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'dockernetwork'), '2019-10-01').outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'dockernetwork'), '2019-10-01').outputs.subnetname.value)]"
           },
           "vmSize": {
             "value": "[parameters('HostVmSize')]"
@@ -438,11 +444,11 @@
           "location": {
             "value": "[variables('location')]"
           },
-          "subnet1Name": {
-            "value": "[variables('Subnet1Name')]"
+          "subnetname": {
+            "value": "[variables('subnetname')]"
           },
-          "subnet1Prefix": {
-            "value": "[variables('Subnet1Prefix')]"
+          "subnetprefix": {
+            "value": "[variables('subnetprefix')]"
           },
           "bastionNetworkName": {
             "value": "[variables('bastionNetworkName')]"
@@ -461,17 +467,17 @@
             "_generator": {
               "name": "bicep",
               "version": "0.3.255.40792",
-              "templateHash": "3077647611656484306"
+              "templateHash": "8462727700877219721"
             }
           },
           "parameters": {
             "addressPrefix": {
               "type": "string"
             },
-            "subnet1Name": {
+            "subnetname": {
               "type": "string"
             },
-            "subnet1Prefix": {
+            "subnetprefix": {
               "type": "string"
             },
             "bastionNetworkName": {
@@ -502,9 +508,9 @@
                 },
                 "subnets": [
                   {
-                    "name": "[parameters('subnet1Name')]",
+                    "name": "[parameters('subnetname')]",
                     "properties": {
-                      "addressPrefix": "[parameters('subnet1Prefix')]"
+                      "addressPrefix": "[parameters('subnetprefix')]"
                     }
                   },
                   {
@@ -518,7 +524,7 @@
             }
           ],
           "outputs": {
-            "subnet1name": {
+            "subnetname": {
               "type": "string",
               "value": "[reference(resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))).subnets[0].name]"
             },
@@ -638,7 +644,7 @@
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'dockernetwork'), '2019-10-01').outputs.subnet1addressPrefix.value]"
           },
           "subnetName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'dockernetwork'), '2019-10-01').outputs.subnet1name.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'dockernetwork'), '2019-10-01').outputs.subnetname.value]"
           },
           "vnetName": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'dockernetwork'), '2019-10-01').outputs.vnName.value]"
