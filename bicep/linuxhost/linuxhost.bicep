@@ -37,7 +37,7 @@ var vnets = [
       {
         name     : 'main'
         prefix   : '172.16.24.0/24'
-        customNsg: false
+        customNsg: true
       }
       {
         name     : 'AzureBastionSubnet'
