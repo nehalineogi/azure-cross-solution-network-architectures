@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "12220523198012310328"
+      "templateHash": "11638631632085695904"
     }
   },
   "parameters": {
@@ -20,7 +20,7 @@
     },
     "ResourceGroupName": {
       "type": "string",
-      "defaultValue": "lin",
+      "defaultValue": "linuxhost",
       "maxLength": 10,
       "minLength": 3,
       "metadata": {
