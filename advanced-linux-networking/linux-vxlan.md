@@ -6,6 +6,8 @@ This architecture demonstrates VXLAN network overlay between two linux host in i
 
 ![Docker Swarm Cluster](images/linux-vxlan.png)
 
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fadd-linux-hosts%2Fadvanced-linux-networking%2Fjson%2Flinuxhost.json)
+
 # Design Components
 
 1. Two Ubuntu linux VMs deployed in a subnet with eth0 interface
