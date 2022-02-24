@@ -751,6 +751,8 @@ If you wish to retieve passwords for a different hostname, simply change the nam
 
 ``` az keyvault secret show --name "docker-host-1-admin-password" --vault-name $(az keyvault list --query "[].name" -o tsv) --query "value" -o tsv ```
 
+If you receive an error on this command relating to a timeout and you are using Windows Subsystem for Linux and referencing the Windows based az, you should reference this github issue - https://github.com/Azure/azure-cli/issues/13573. Use powershell or cloud shell instead to mitigate this known bug.
+
 <b> Obtain DNS label for public IP of host (example for docker-host-1 in default resource group) </b>
 
 ``` az network public-ip show -g dockerhost -n docker-host-1-nic-pip --query "dnsSettings.fqdn" -o tsv ```
