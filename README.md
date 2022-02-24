@@ -23,6 +23,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - The perfect NVA with linux
 - IPtables and eBPF
 - Cluster Networking - [IPVLAN, MACVLAN, TUN/TAP drivers](https://kubernetes.io/docs/concepts/cluster-administration/networking/)
+- [Bicep automated deployment](bicep/linuxhost)
 
 ### [Azure Kubernetes Services (AKS) Networking Series](aks/README-advanced.md)
 

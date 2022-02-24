@@ -745,11 +745,11 @@ This script is called automatically by the [dockerhost.json](json/dockerhost.jso
 
 Yes, below are commands that can be used to more quickly retieve this information. 
 
-<b> Obtain password from keyvault (example for docker-host-1 host) </b>
+<b> Obtain password from keyvault (example for docker-host-1 host in default resource group) </b>
 
 If you wish to retieve passwords for a different hostname, simply change the name property to match.
 
-``` az keyvault secret show --name "docker-host-1-admin-password" --vault-name $(az keyvault list --query "[].name" -o tsv) --query "value" -o tsv ```
+``` az keyvault secret show --name "docker-host-1-admin-password" --vault-name $(az keyvault list -g dockerhost --query "[].name" -o tsv) --query "value" -o tsv ```
 
 If you receive an error on this command relating to a timeout and you are using Windows Subsystem for Linux and referencing the Windows based az, you should reference this github issue - https://github.com/Azure/azure-cli/issues/13573. Use powershell or cloud shell instead to mitigate this known bug.
 
