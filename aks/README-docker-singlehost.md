@@ -749,7 +749,7 @@ Yes, below are commands that can be used to more quickly retieve this informatio
 
 If you wish to retieve passwords for a different hostname, simply change the name property to match.
 
-``` az keyvault secret show --name "docker-host-1-admin-password" --vault-name (az keyvault list --query "[].name" -o tsv) --query "value" -o tsv ```
+``` az keyvault secret show --name "docker-host-1-admin-password" --vault-name $(az keyvault list --query "[].name" -o tsv) --query "value" -o tsv ```
 
 <b> Obtain DNS label for public IP of host (example for docker-host-1 in default resource group) </b>
 
