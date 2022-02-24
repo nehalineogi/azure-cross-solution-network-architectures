@@ -80,12 +80,32 @@ module defaultNSG './modules/nsg.bicep' = {
   }
 scope:rg
 }
+
+module bastionNSG './modules/nsg_bastion.bicep' = {
+  name: 'bastionNSG'
+  params:{
+    location: location
+  }
+scope:rg
+}
+
 module onpremNsgAttachment './modules/nsgAttachment.bicep' = {
   name: 'onpremNsgAttachment'
   params:{
     nsgId              : defaultNSG.outputs.nsgId
     subnetAddressPrefix: dockernetwork.outputs.subnet1addressPrefix                    
     subnetName         : dockernetwork.outputs.subnetname
+    vnetName           : dockernetwork.outputs.vnName
+  }
+  scope:rg
+}
+
+module bastionNsgAttachment './modules/nsgAttachment.bicep' = {
+  name: 'bastionNsgAttachment'
+  params:{
+    nsgId              : bastionNSG.outputs.nsgId
+    subnetAddressPrefix: dockernetwork.outputs.bastionsubnetprefix                   
+    subnetName         : dockernetwork.outputs.bastionSubnetName
     vnetName           : dockernetwork.outputs.vnName
   }
   scope:rg

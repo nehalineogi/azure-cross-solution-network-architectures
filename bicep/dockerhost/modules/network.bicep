@@ -35,5 +35,6 @@ resource vn 'Microsoft.Network/virtualNetworks@2020-06-01' = {
 output subnetname string = vn.properties.subnets[0].name
 output bastionSubnetName string = vn.properties.subnets[1].name
 output subnet1addressPrefix string = vn.properties.subnets[0].properties.addressPrefix 
+output bastionsubnetprefix string = vn.properties.subnets[1].properties.addressPrefix
 output vnid string = vn.id
 output vnName string = vn.name
