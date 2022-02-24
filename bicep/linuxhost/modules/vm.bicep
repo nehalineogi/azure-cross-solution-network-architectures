@@ -2,11 +2,18 @@ param adminusername string
 param keyvault_name string 
 param vmname string
 param subnet1ref string
-param githubPath string
 param adUserId string
-
 @secure()
-param adminPassword string = '${uniqueString(resourceGroup().id, vmname)}aA1!${uniqueString(adUserId)}' // Note passwords not cryptographically secure, deployment is not designed for production use
+param adminPassword string = '${uniqueString(resourceGroup().id, vmname)}aA1!${uniqueString(adUserId)}'  // Note passwords not cryptographically secure, deployment is not designed for production use
+param windowsVM bool
+
+var dcdisk = [
+  {
+  diskSizeGB: 20
+  lun: 0
+  createOption: 'Empty'
+}
+]
 
 @description('Size of the virtual machine.')
 param vmSize string 
@@ -14,13 +21,18 @@ param vmSize string
 @description('location for all resources')
 param location string = resourceGroup().location
 
+var storageAccountName = '${uniqueString(resourceGroup().id, vmname)}'
+var nicName = '${vmname}nic'
+
 param publicIPAddressNameSuffix string = 'pip'
+
+param deployPIP bool = false
+param deployVpn bool = false
+param deployDC bool  = false
+
 var dnsLabelPrefix = 'dns-${uniqueString(resourceGroup().id, vmname)}-${publicIPAddressNameSuffix}'
 
-var storageAccountName = '${uniqueString(resourceGroup().id, vmname)}'
-var nicName = '${vmname}-nic'
-
-resource pip 'Microsoft.Network/publicIPAddresses@2020-06-01' = {
+resource pip 'Microsoft.Network/publicIPAddresses@2020-06-01' = if (deployPIP) {
   name: '${nicName}-${publicIPAddressNameSuffix}'
   location: location
   properties: {
@@ -40,20 +52,41 @@ resource stg 'Microsoft.Storage/storageAccounts@2019-06-01' = {
   kind: 'Storage'
 }
 
-resource nInter 'Microsoft.Network/networkInterfaces@2020-06-01' = {
-  name: nicName
+resource nInter 'Microsoft.Network/networkInterfaces@2020-06-01' = if (deployPIP) {
+  name: '${nicName}pip'
   location: location
 
   properties: {
+    enableIPForwarding: deployVpn ? true : false
     ipConfigurations: [
       {
         name: 'ipconfig1'
         properties: {
-          
           privateIPAllocationMethod: 'Dynamic'
+
           publicIPAddress: {
             id: pip.id
           }
+          subnet: {
+            id: subnet1ref
+          }
+        }
+      }
+    ]
+  }
+}
+
+resource nInternoIP 'Microsoft.Network/networkInterfaces@2020-06-01' = if (!(deployPIP)) {
+  name: nicName
+  location: location
+  properties: {
+    enableIPForwarding: deployVpn ? true : false
+    ipConfigurations: [
+      {
+        name: 'ipconfig1'
+        properties: {
+
+          privateIPAllocationMethod: 'Dynamic'
           subnet: {
             id: subnet1ref
           }
@@ -77,21 +110,22 @@ resource VM 'Microsoft.Compute/virtualMachines@2020-06-01' = {
     }
     storageProfile: {
       imageReference: {
-
-        publisher: 'canonical'
-        offer: '0001-com-ubuntu-server-focal'
-        sku: '20_04-lts'
-        version: 'latest'
+        
+        publisher: windowsVM ? 'MicrosoftWindowsServer': 'canonical'
+        offer    : windowsVM ? 'WindowsServer' : '0001-com-ubuntu-server-focal'
+        sku      : windowsVM ? '2019-Datacenter' : '20_04-lts'
+        version  : windowsVM ? 'latest' : 'latest'
       }
       osDisk: {
         createOption: 'FromImage'
       }
+      dataDisks: deployDC ? dcdisk : null
     }
     networkProfile: {
       networkInterfaces: [
         {
-          id: nInter.id
-        }
+          id: deployPIP ? nInter.id : nInternoIP.id
+          }
       ]
     }
     diagnosticsProfile: {
@@ -125,24 +159,6 @@ resource keyvaultname_username 'Microsoft.keyvault/vaults/secrets@2019-09-01' = 
   }
 }
 
-resource cse 'Microsoft.Compute/virtualMachines/extensions@2020-12-01' = {
-  name: '${vmname}/cse'
-  location: location
-  dependsOn:[
-    VM
-  ]
-   properties: {
-    publisher: 'Microsoft.Azure.Extensions'
-    type: 'CustomScript'
-    typeHandlerVersion: '2.1' 
-    autoUpgradeMinorVersion: false
-    settings: {}
-    protectedSettings: {
-      fileUris: [
-        '${githubPath}cse.sh'
-      ]
-      commandToExecute: 'sh cse.sh'
-    }
-    
-   }
-}
+output vmPip string    = deployPIP ? pip.properties.dnsSettings.fqdn : ''
+output vmIp string     = deployPIP ? pip.properties.ipAddress : ''
+output vmPrivIp string = deployPIP ? nInter.properties.ipConfigurations[0].properties.privateIPAddress : ''

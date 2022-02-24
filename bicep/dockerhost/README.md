@@ -28,19 +28,19 @@ cd azure-cross-solution-network-architectures/bicep/dockerhost/
 az ad signed-in-user show --query objectId -o tsv
 ```
 
-4. (optional) If you wish to customise or change the dockerhost.bicep or related module code, you can do this now and save your changes locally.  
+4. (optional) If you wish to customise or change the main.bicep or related module code, you can do this now and save your changes locally.  
 
 
 5.  Run the following command to deploy using az cli
 
 ```
- az deployment sub create --name docker --template-file dockerhost.bicep --location [region] --parameters adUserId=[paste-asUserId-here] 
+ az deployment sub create --name docker --template-file main.bicep --location [region] --parameters adUserId=[paste-asUserId-here] 
  ```
 
  example : 
 
  ```
- az deployment sub create --name docker --template-file dockerhost.bicep --location uksouth --parameters adUserId=11111111-2222-3333-4444-555555555555
+ az deployment sub create --name docker --template-file main.bicep --location uksouth --parameters adUserId=11111111-2222-3333-4444-555555555555
  ```
 
 6. Once your deployment has finished you can log on to the docker VMs using Azure bastion. The username is `localadmin` and passwords can be found in the keyvault.

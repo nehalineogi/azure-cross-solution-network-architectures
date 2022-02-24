@@ -6,6 +6,40 @@ This architecture demonstrates VXLAN network overlay between two linux host in i
 
 ![Docker Swarm Cluster](images/linux-vxlan.png)
 
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Fadvanced-linux-networking%2Fjson%2Flinuxhost.json)
+
+# Quickstart deployment
+
+The username for the deployed VMs is `localadmin`
+
+The passwords are stored in a keyvault deployed to the same resource group.
+
+
+### Task 1: Start Deployment
+
+1. Click Deploy to Azure button above and supply the signed-in user ID from step 2.
+
+2. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
+
+```
+az ad signed-in-user show --query objectId -o tsv
+```
+
+3. Using Azure Bastion, log in to the VMs using the username `localadmin` and passwords from keyvault.
+
+### Task 2 (optional): SSH to the linux VMs.
+
+1. Locate the Network Security Group (NSG) called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
+
+2. Retrieve the public IP address (or DNS label) for each VM
+
+3. Retrieve the VM passwords from the keyvault.
+
+4. SSH to your VMs
+
+```
+ssh localadmin@[VM Public IP or DNS]
+```
 # Design Components
 
 1. Two Ubuntu linux VMs deployed in a subnet with eth0 interface
