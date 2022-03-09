@@ -29,7 +29,7 @@ var bastionNetworkref  = '${dockernetwork.outputs.vnid}/subnets/${dockernetwork.
 var VmHostnamePrefix   = 'docker-host-'
 var VmAdminUsername    = 'localadmin'
 var numberOfHosts      = 2
-var githubPath         = 'https://raw.githubusercontent.com/nehalineogi/azure-cross-solution-network-architectures/main/aks/scripts/'
+var githubPath         = 'https://raw.githubusercontent.com/nehalineogi/azure-cross-solution-network-architectures/main/bicep/dockerhost/scripts/'
   
 resource rg 'Microsoft.Resources/resourceGroups@2020-10-01' = {
   name: ResourceGroupName

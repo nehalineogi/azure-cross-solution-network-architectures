@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.3.255.40792",
-      "templateHash": "12362553387360248617"
+      "templateHash": "14876602505696195368"
     }
   },
   "parameters": {
@@ -48,7 +48,7 @@
     "VmHostnamePrefix": "docker-host-",
     "VmAdminUsername": "localadmin",
     "numberOfHosts": 2,
-    "githubPath": "https://raw.githubusercontent.com/nehalineogi/azure-cross-solution-network-architectures/main/aks/scripts/"
+    "githubPath": "https://raw.githubusercontent.com/nehalineogi/azure-cross-solution-network-architectures/main/bicep/dockerhost/scripts/"
   },
   "resources": [
     {
