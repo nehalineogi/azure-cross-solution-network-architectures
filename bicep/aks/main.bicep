@@ -102,22 +102,36 @@ var vnets = [
   }
 ]
 
-var vpnVars = {
+/* var vpnVars = {
     psk                : psk.outputs.psk
     gwip               : hubgw.outputs.gwpip
     gwaddressPrefix    : hubAddressPrefix
     onpremAddressPrefix: onpremAddressPrefix
     spokeAddressPrefix : spokeAddressPrefix
-  }
+  } */
 
 targetScope = 'subscription'
 
-resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
-  name    : ResourceGroupName
-  location: location
-}
+  resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' = {
+    name    : ResourceGroupName
+    location: location
+  }
 
- module kv './modules/kv.bicep' = {
+module virtualnetwork './modules/vnet.bicep' = [for vnet in vnets: {
+  params: {
+    vnetName         : vnet.vnetName
+    vnetAddressPrefix: vnet.vnetaddressprefix
+    location         : location
+    subnets          : vnet.subnets
+    nsgDefaultId     : defaultnsg.outputs.nsgId  // attached to every vnet. Overwritten if another NSG is defined in main.bicep
+
+  }
+
+  name: '${vnet.vnetName}'
+  scope: rg
+} ]
+
+ /* module kv './modules/kv.bicep' = {
   params: {
     location: location
     adUserId: adUserId
@@ -134,11 +148,11 @@ module psk 'modules/psk.bicep' = {
     onpremSubnetRef: onpremSubnetRef
     name           : 'azure-conn'
   }
-}
+} */
 
 // The VM passwords are generated at run time and automatically stored in Keyvault. 
 // It is not possible to create a loop through the vm var because the 'subnetref' which is an output only known at runtime is not calculated until after deployment. It is not possible therefore to use it in a loop.
-module hubJumpServer './modules/vm.bicep' = {
+/* module hubJumpServer './modules/vm.bicep' = {
   params: {
     location     : location
     windowsVM    : true
@@ -226,22 +240,10 @@ module hubDnsVM './modules/vm.bicep' = {
   name: 'hubDnsVM'
   scope: rg
 } 
+ */
 
-module virtualnetwork './modules/vnet.bicep' = [for vnet in vnets: {
-  params: {
-    vnetName         : vnet.vnetName
-    vnetAddressPrefix: vnet.vnetaddressprefix
-    location         : location
-    subnets          : vnet.subnets
-    nsgDefaultId     : defaultnsg.outputs.nsgId
 
-  }
-
-  name: '${vnet.vnetName}'
-  scope: rg
-} ]
-
-module hubgw './modules/vnetgw.bicep' = {
+/* module hubgw './modules/vnetgw.bicep' = {
   name: 'hubgw'
   scope: rg
   params:{
@@ -271,7 +273,7 @@ module vpnconn 'modules/vpnconn.bicep' = {
     
   }
 }
-
+ 
 module vnetPeering './modules/vnetpeering.bicep' = {
   params:{
     hubVnetId    : hubVnetId
@@ -282,7 +284,7 @@ module vnetPeering './modules/vnetpeering.bicep' = {
   scope: rg
   name: 'vNetpeering'
   dependsOn: [
-    hubgw
+  //  hubgw
   ]
 }
 
@@ -339,7 +341,6 @@ module routeTableAttachment 'modules/routetable.bicep' = {
   }
 }
 
-
 module bastionNSG './modules/nsg_bastion.bicep' = {
   name: 'bastionNSG'
   params:{
@@ -348,6 +349,7 @@ module bastionNSG './modules/nsg_bastion.bicep' = {
 scope:rg
 }
 
+*/
 module defaultnsg './modules/nsg_default.bicep' = {
   name : 'default-nsg'
   params: {
@@ -356,7 +358,7 @@ module defaultnsg './modules/nsg_default.bicep' = {
   scope: rg
 }
 
-
+/*
 
 module bastionHubNSGAttachment './modules/nsgAttachment.bicep' = {
   name: 'bastionHubNsgAttachment'
@@ -379,3 +381,4 @@ module bastionOnpremNSGAttachment './modules/nsgAttachment.bicep' = {
   }
   scope:rg
 }
+*/
