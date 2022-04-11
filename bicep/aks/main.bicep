@@ -16,9 +16,12 @@ param HostVmSize string = 'Standard_D2_v3'
 @minLength(3)
 param domainName string = 'contoso.local'
 
-var githubPath      = 'https://raw.githubusercontent.com/nehalineogi/azure-cross-solution-network-architectures/aks/bicep/aks/scripts/'
+var repoName        = 'nehalineogi'
+var branchName      = 'aks'
+var githubPath      = 'https://raw.githubusercontent.com/${repoName}/azure-cross-solution-network-architectures/${branchName}/bicep/aks/scripts/'
+
 var VmAdminUsername = 'localadmin'
-var location        = deployment().location                                                                                              // linting warning here, but for this deployment it is at subscription level and so if we have a separate parameter specified here, 
+var location        = deployment().location                                                                                                        // linting warning here, but for this deployment it is at subscription level and so if we have a separate parameter specified here, 
                                                       // there will be two "location" options on the "Deploy to Azure" custom deployment and this is confusing for the user.
 
 var onpremVPNVmName           = 'vpnvm'
