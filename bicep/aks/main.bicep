@@ -335,3 +335,28 @@ module bastionOnpremNSGAttachment './modules/nsgAttachment.bicep' = {
   scope:rg
 }
 */
+
+module aks_user_identity 'modules/identity.bicep' = {
+  name: 'aks_user_identity'
+  params: {
+    prefix: 'aks_user_'
+  }
+  scope: rg
+}
+
+module aks_cluster 'modules/aks.bicep' = {
+  name: 'aks_cluster' 
+  params: {
+    clusterName         : 'MyAKSCluster'
+    location            : location
+    networkPlugin       : 'kubenet'
+    networkPolicy       : 'calico'
+    vnetSubnetID        : SpokeSubnetRef
+    dockerBridgeCidr    : '172.20.0.1/16'
+    podCidr             : '10.244.0.0/16'
+    serviceCidr         : '10.101.0.0/16'
+    serviceIP           : '10.101.0.10'
+    enablePrivateCluster: false
+  }
+  scope: rg
+}

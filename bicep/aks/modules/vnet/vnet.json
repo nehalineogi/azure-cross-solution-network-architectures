@@ -22,12 +22,12 @@
       ]
     },
     {
-        "vnetName": "spokeVnet",
+        "vnetName": "spoke-virtual-network",
         "vnetAddressPrefix": "172.16.0.0/16",
           "subnets": [
           {
-            "name": "main",
-            "prefix": "172.16.1.0/24",
+            "name": "aks-node-subnet",
+            "prefix": "172.16.239.0/24",
             "customNsg": false
           }
         ]
