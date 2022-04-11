@@ -16,9 +16,9 @@ param HostVmSize string = 'Standard_D2_v3'
 @minLength(3)
 param domainName string = 'contoso.local'
 
-var githubPath         = 'https://raw.githubusercontent.com/nehalineogi/azure-cross-solution-network-architectures/aks/bicep/aks/scripts/'
-var VmAdminUsername           = 'localadmin'
-var location                  = deployment().location // linting warning here, but for this deployment it is at subscription level and so if we have a separate parameter specified here, 
+var githubPath      = 'https://raw.githubusercontent.com/nehalineogi/azure-cross-solution-network-architectures/aks/bicep/aks/scripts/'
+var VmAdminUsername = 'localadmin'
+var location        = deployment().location                                                                                              // linting warning here, but for this deployment it is at subscription level and so if we have a separate parameter specified here, 
                                                       // there will be two "location" options on the "Deploy to Azure" custom deployment and this is confusing for the user.
 
 var onpremVPNVmName           = 'vpnvm'
@@ -50,57 +50,7 @@ var hubBastionSubnetName   = virtualnetwork[0].outputs.subnets[1].name
 var hubBastionAddPrefix    = virtualnetwork[0].outputs.subnets[1].properties.addressPrefix
 var gwSubnetId             = virtualnetwork[0].outputs.subnets[2].id
 
-// VNet schema 
-var vnets = [
-  {
-    vnetName: 'hubVnet'
-    vnetAddressPrefix: '172.17.0.0/16'
-    subnets: [
-      {
-        name: 'main'
-        prefix: '172.17.1.0/24'
-        customNsg: false
-      }
-      {
-        name: 'AzureBastionSubnet'
-        prefix: '172.17.2.0/24'
-        customNsg: true
-      }
-      {
-        name: 'GatewaySubnet' 
-        prefix: '172.17.3.0/24'
-        customNsg: true // Advice is for GatewaySubnet to not be associated with NSG - therefore this is marked as custom, without a custom NSG defined.
-      }
-    ]
-  }
-  {
-    vnetName: 'spokeVnet'
-    vnetAddressPrefix: '172.16.0.0/16'
-    subnets: [
-      {
-        name: 'main'
-        prefix: '172.16.1.0/24'
-        customNsg: false
-      }
-    ]
-  }
-  {
-    vnetName: 'onpremises'
-    vnetAddressPrefix: '192.168.0.0/16'
-    subnets: [
-      {
-        name: 'main'
-        prefix: '192.168.199.0/24'
-        customNsg: true
-      }
-      {
-        name: 'AzureBastionSubnet'
-        prefix: '192.168.200.0/24'
-        customNsg: true
-      }
-    ]
-  }
-]
+var vnets = json(loadTextContent('./modules/vnet/vnet.json')).vnets
 
 /* var vpnVars = {
     psk                : psk.outputs.psk
@@ -120,7 +70,7 @@ targetScope = 'subscription'
 module virtualnetwork './modules/vnet.bicep' = [for vnet in vnets: {
   params: {
     vnetName         : vnet.vnetName
-    vnetAddressPrefix: vnet.vnetaddressprefix
+    vnetAddressPrefix: vnet.vnetAddressPrefix
     location         : location
     subnets          : vnet.subnets
     nsgDefaultId     : defaultnsg.outputs.nsgId  // attached to every vnet. Overwritten if another NSG is defined in main.bicep
