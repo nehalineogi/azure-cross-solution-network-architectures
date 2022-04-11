@@ -308,7 +308,7 @@ module onpremBastion './modules/bastion.bicep' = {
   name: 'onpremBastion'
   }
 
-module onpremNSG './modules/nsg.bicep' = {
+module onpremNSG './modules/nsg/nsg_onprem.bicep' = {
   name: 'hubNSG'
   params:{
     location: location
@@ -341,7 +341,7 @@ module routeTableAttachment 'modules/routetable.bicep' = {
   }
 }
 
-module bastionNSG './modules/nsg_bastion.bicep' = {
+module bastionNSG './modules/nsg/nsg_bastion.bicep' = {
   name: 'bastionNSG'
   params:{
     location: location
@@ -350,7 +350,7 @@ scope:rg
 }
 
 */
-module defaultnsg './modules/nsg_default.bicep' = {
+module defaultnsg './modules/nsg/nsg_default.bicep' = {
   name : 'default-nsg'
   params: {
     location: location
