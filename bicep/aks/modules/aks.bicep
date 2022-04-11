@@ -11,12 +11,17 @@ param serviceCidr string
 param vnetSubnetID string
 param serviceIP string
 param dockerBridgeCidr string
+param userAssignedId string
 
 resource aks 'Microsoft.ContainerService/managedClusters@2022-01-01' = {
   name: clusterName
   location: location
   identity: {
-    type: 'SystemAssigned'
+ //   type: 'SystemAssigned'
+ type:'UserAssigned'
+userAssignedIdentities: {
+  '${userAssignedId}' :{}
+}
   }
   properties: {
     kubernetesVersion: kubernetesVersion
@@ -32,7 +37,7 @@ resource aks 'Microsoft.ContainerService/managedClusters@2022-01-01' = {
         mode             : 'System'
         maxPods          : 30
         availabilityZones: []
-        vnetSubnetID: vnetSubnetID
+        vnetSubnetID     : vnetSubnetID
       }
     ]
     networkProfile: {

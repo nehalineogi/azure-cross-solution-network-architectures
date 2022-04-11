@@ -357,6 +357,7 @@ module aks_cluster 'modules/aks.bicep' = {
     serviceCidr         : '10.101.0.0/16'
     serviceIP           : '10.101.0.10'
     enablePrivateCluster: false
+    userAssignedId      : aks_user_identity.outputs.uId
   }
   scope: rg
 }
