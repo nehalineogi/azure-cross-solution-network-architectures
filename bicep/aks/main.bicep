@@ -39,6 +39,7 @@ var hubVnetName            = virtualnetwork[0].outputs.vnName
 var spokeVnetName          = virtualnetwork[1].outputs.vnName
 var onpremVnetName         = virtualnetwork[2].outputs.vnName
 var onpremSubnetName       = virtualnetwork[2].outputs.subnets[0].name
+var spokeSubnetName        = virtualnetwork[1].outputs.subnets[0].name
 var hubSubnetRef           = '${hubVnetId}/subnets/${virtualnetwork[0].outputs.subnets[0].name}'
 var hubBastionSubnetRef    = '${hubVnetId}/subnets/${virtualnetwork[0].outputs.subnets[1].name}'
 var SpokeSubnetRef         = '${spokeVnetId}/subnets/${virtualnetwork[1].outputs.subnets[0].name}'
@@ -84,6 +85,13 @@ module virtualnetwork './modules/vnet.bicep' = [for vnet in vnets: {
   scope: rg
 } ]
 
+module akssubnetNSG './modules/nsg/nsg_akssubnet.bicep' = {
+  name: 'akssubnetNSG'
+  params:{
+    location: location
+  }
+scope:rg
+}
  /* module kv './modules/kv.bicep' = {
   params: {
     location: location
@@ -280,6 +288,19 @@ module onpremNsgAttachment './modules/nsgAttachment.bicep' = {
   }
   scope:rg
 }
+
+*/ module aksNsgAttachment './modules/nsgAttachment.bicep' = {
+  name: 'aksNsgAttachment'
+  params:{
+    nsgId              : akssubnetNSG.outputs.NsgId
+    subnetAddressPrefix: spokeAddressPrefix                    
+    subnetName         : spokeSubnetName
+    vnetName           : spokeVnetName
+  }
+  scope:rg
+}
+
+/*
 module routeTableAttachment 'modules/routetable.bicep' = {
   scope: rg
   name: 'rt'

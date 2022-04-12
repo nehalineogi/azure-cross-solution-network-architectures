@@ -28,7 +28,7 @@
           {
             "name": "aks-node-subnet",
             "prefix": "172.16.239.0/24",
-            "customNsg": false
+            "customNsg": true
           }
         ]
       },   
