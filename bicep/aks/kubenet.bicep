@@ -21,8 +21,8 @@ var branchName      = 'aks'
 var githubPath      = 'https://raw.githubusercontent.com/${repoName}/azure-cross-solution-network-architectures/${branchName}/bicep/aks/scripts/'
 
 var VmAdminUsername = 'localadmin'
-var location        = deployment().location                                                                                                        // linting warning here, but for this deployment it is at subscription level and so if we have a separate parameter specified here, 
-                                                      // there will be two "location" options on the "Deploy to Azure" custom deployment and this is confusing for the user.
+var location        = deployment().location    // linting warning here, but for this deployment it is at subscription level and so if we have a separate parameter specified here, 
+                                               // there will be two "location" options on the "Deploy to Azure" custom deployment and this is confusing for the user.
 
 var onpremVPNVmName           = 'vpnvm'
 var publicIPAddressNameSuffix = 'vpnpip'
@@ -56,13 +56,13 @@ var gwSubnetId             = virtualnetwork[0].outputs.subnets[2].id
 
 var vnets = json(loadTextContent('./modules/vnet/vnet.json')).vnets
 
-/* var vpnVars = {
+var vpnVars = {
     psk                : psk.outputs.psk
     gwip               : hubgw.outputs.gwpip
     gwaddressPrefix    : hubAddressPrefix
     onpremAddressPrefix: onpremAddressPrefix
     spokeAddressPrefix : spokeAddressPrefix
-  } */
+  } 
 
 targetScope = 'subscription'
 
@@ -92,7 +92,7 @@ module akssubnetNSG './modules/nsg/nsg_akssubnet.bicep' = {
   }
 scope:rg
 }
- /* module kv './modules/kv.bicep' = {
+  module kv './modules/kv.bicep' = {
   params: {
     location: location
     adUserId: adUserId
@@ -109,11 +109,11 @@ module psk 'modules/psk.bicep' = {
     onpremSubnetRef: onpremSubnetRef
     name           : 'azure-conn'
   }
-} */
+} 
 
 // The VM passwords are generated at run time and automatically stored in Keyvault. 
 // It is not possible to create a loop through the vm var because the 'subnetref' which is an output only known at runtime is not calculated until after deployment. It is not possible therefore to use it in a loop.
-/* module hubJumpServer './modules/vm.bicep' = {
+module hubJumpServer './modules/vm.bicep' = {
   params: {
     location     : location
     windowsVM    : true
@@ -201,10 +201,10 @@ module hubDnsVM './modules/vm.bicep' = {
   name: 'hubDnsVM'
   scope: rg
 } 
- */
 
 
-/* module hubgw './modules/vnetgw.bicep' = {
+
+module hubgw './modules/vnetgw.bicep' = {
   name: 'hubgw'
   scope: rg
   params:{
@@ -245,7 +245,7 @@ module vnetPeering './modules/vnetpeering.bicep' = {
   scope: rg
   name: 'vNetpeering'
   dependsOn: [
-  //  hubgw
+    hubgw
   ]
 }
 
@@ -289,7 +289,7 @@ module onpremNsgAttachment './modules/nsgAttachment.bicep' = {
   scope:rg
 }
 
-*/ module aksNsgAttachment './modules/nsgAttachment.bicep' = {
+module aksNsgAttachment './modules/nsgAttachment.bicep' = {
   name: 'aksNsgAttachment'
   params:{
     nsgId              : akssubnetNSG.outputs.NsgId
@@ -300,7 +300,7 @@ module onpremNsgAttachment './modules/nsgAttachment.bicep' = {
   scope:rg
 }
 
-/*
+
 module routeTableAttachment 'modules/routetable.bicep' = {
   scope: rg
   name: 'rt'
@@ -323,7 +323,7 @@ module bastionNSG './modules/nsg/nsg_bastion.bicep' = {
 scope:rg
 }
 
-*/
+
 module defaultnsg './modules/nsg/nsg_default.bicep' = {
   name : 'default-nsg'
   params: {
@@ -332,7 +332,7 @@ module defaultnsg './modules/nsg/nsg_default.bicep' = {
   scope: rg
 }
 
-/*
+
 
 module bastionHubNSGAttachment './modules/nsgAttachment.bicep' = {
   name: 'bastionHubNsgAttachment'
@@ -355,7 +355,7 @@ module bastionOnpremNSGAttachment './modules/nsgAttachment.bicep' = {
   }
   scope:rg
 }
-*/
+
 
 module aks_user_identity 'modules/identity.bicep' = {
   name: 'aks_user_identity'
