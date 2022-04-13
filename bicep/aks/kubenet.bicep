@@ -77,7 +77,7 @@ module virtualnetwork './modules/vnet.bicep' = [for vnet in vnets: {
     vnetAddressPrefix: vnet.vnetAddressPrefix
     location         : location
     subnets          : vnet.subnets
-    nsgDefaultId     : defaultnsg.outputs.nsgId  // attached to every vnet. Overwritten if another NSG is defined in main.bicep
+    nsgDefaultId     : defaultnsg.outputs.nsgId  // attached to every vnet. Overwritten if another NSG is defined and attached
 
   }
 
