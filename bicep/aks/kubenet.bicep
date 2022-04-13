@@ -6,7 +6,7 @@ param adUserId string  = ''
 @description('Set the resource group name, this will be created automatically')
 @minLength(3)
 @maxLength(10)
-param ResourceGroupName string = 'bluelines'
+param ResourceGroupName string = 'aks'
 
 @description('Set the size for the VM')
 @minLength(6)
