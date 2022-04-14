@@ -6,7 +6,7 @@ param vmSize string = 'Standard_B4ms'
 param networkPlugin string
 param networkPolicy string
 param enablePrivateCluster bool = false // will form part of question when private cluster code written
-param podCidr string
+param podCidr string = '10.244.0.0/16'
 param serviceCidr string
 param vnetSubnetID string
 param serviceIP string
@@ -51,14 +51,15 @@ userAssignedIdentities: {
       }
       outboundType: 'loadBalancer'
 
-      podCidr         : podCidr
+      podCidr         : contains (networkPlugin, 'kubenet') ?  podCidr : null
       serviceCidr     : serviceCidr
       dnsServiceIP    : serviceIP
       dockerBridgeCidr: dockerBridgeCidr
 
-      podCidrs: [
+      podCidrs: contains (networkPlugin, 'kubenet') ? [
         podCidr
-      ]
+      ] : []
+
       serviceCidrs: [
         serviceCidr
       ]

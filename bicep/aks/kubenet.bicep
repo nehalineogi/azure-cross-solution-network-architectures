@@ -16,6 +16,14 @@ param HostVmSize string = 'Standard_D2_v3'
 @minLength(3)
 param domainName string = 'contoso.local'
 
+@description('kubenet or azure (azure deploys Azure CNI network plugin)')
+@minLength(3)
+@allowed([
+  'kubenet'
+  'azure'
+])
+param networkPlugin string = 'kubenet'
+
 var repoName        = 'nehalineogi'
 var branchName      = 'aks'
 var githubPath      = 'https://raw.githubusercontent.com/${repoName}/azure-cross-solution-network-architectures/${branchName}/bicep/aks/scripts/'
@@ -54,7 +62,7 @@ var hubBastionSubnetName   = virtualnetwork[0].outputs.subnets[1].name
 var hubBastionAddPrefix    = virtualnetwork[0].outputs.subnets[1].properties.addressPrefix
 var gwSubnetId             = virtualnetwork[0].outputs.subnets[2].id
 
-var vnets = json(loadTextContent('./modules/vnet/vnet.json')).vnets
+var vnets = json(loadTextContent('./modules/vnet/vnet_kubenet.json')).vnets
 
 var vpnVars = {
     psk                : psk.outputs.psk
@@ -356,7 +364,6 @@ module bastionOnpremNSGAttachment './modules/nsgAttachment.bicep' = {
   scope:rg
 }
 
-
 module aks_user_identity 'modules/identity.bicep' = {
   name: 'aks_user_identity'
   params: {
@@ -370,7 +377,7 @@ module aks_cluster 'modules/aks.bicep' = {
   params: {
     clusterName         : 'MyAKSCluster'
     location            : location
-    networkPlugin       : 'kubenet'
+    networkPlugin       : networkPlugin
     networkPolicy       : 'calico'
     vnetSubnetID        : SpokeSubnetRef
     dockerBridgeCidr    : '172.20.0.1/16'

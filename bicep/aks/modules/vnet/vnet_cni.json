@@ -1,0 +1,53 @@
+{
+    "vnets" : [
+    {
+      "vnetName": "hubVnet",
+      "vnetAddressPrefix": "172.17.0.0/16",
+        "subnets": [
+        {
+          "name": "main",
+          "prefix": "172.17.1.0/24",
+          "customNsg": false
+        },
+        {
+            "name": "AzureBastionSubnet",
+            "prefix": "172.17.2.0/24",
+            "customNsg": true
+        },
+        {
+            "name": "GatewaySubnet",
+            "prefix": "172.17.3.0/24",
+            "customNsg": true 
+        }
+      ]
+    },
+    {
+        "vnetName": "spoke-virtual-network",
+        "vnetAddressPrefix": "172.16.0.0/16",
+          "subnets": [
+          {
+            "name": "aks-node-subnet",
+            "prefix": "172.16.240.0/24",
+            "customNsg": true
+          }
+        ]
+      },   
+       {
+        "vnetName": "onpremises",
+        "vnetAddressPrefix": "192.168.0.0/16",
+          "subnets": [
+          {
+            "name": "main",
+            "prefix": "192.168.199.0/24",
+            "customNsg": true
+          },
+          {
+              "name": "AzureBastionSubnet",
+              "prefix": "192.168.200.0/24",
+              "customNsg": true
+          }
+        ]
+      }
+ ]
+}
+    
