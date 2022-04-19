@@ -8,7 +8,7 @@ param adUserId string  = ''
 @maxLength(10)
 param ResourceGroupName string = 'aks'
 
-@description('Set the size for the VM')
+@description('Set the size for the supporting VMs (jump servers, domain controller etc) ')
 @minLength(6)
 param HostVmSize string = 'Standard_D2_v3'
 
@@ -24,6 +24,7 @@ param domainName string = 'contoso.local'
 ])
 param networkPlugin string = 'kubenet'
 
+// Load the JSON file depending on the parameter chosen for network plugin. Used by VNET creation below
 var env = {
   kubenet: {
     vnets : json(loadTextContent('./modules/vnet/vnet_kubenet.json')).vnets
