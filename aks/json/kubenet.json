@@ -45,7 +45,7 @@
     },
     "networkPlugin": {
       "type": "string",
-      "defaultValue": "azure",
+      "defaultValue": "kubenet",
       "allowedValues": [
         "kubenet",
         "azure"
