@@ -10,6 +10,50 @@ This architecture uses the for AKS Basic/Kubenet Network Model. Observe that the
 
 Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF](aks-all-reference-architectures-PDF.pdf)
 
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Fkubenet.json)
+
+# Quickstart deployment
+
+## AKS deployed architecture
+
+Components with blue dotted lines in the diagram above are automatically deployed and a three node AKS cluster is deployed in kubenet mode by default. 
+
+The Node CIDR is 172.16.239.0/24 (aks-node-subnet) and POD CIDR is 10.244.0.0/16.
+
+
+## Supporting Servers
+The username for the deployed support VMs (jump servers\domain controller etc) is `localadmin`
+The passwords for supporting servers are stored in a keyvault deployed to the same resource group.
+
+
+### Task 1: Start Deployment
+
+1. Click Deploy to Azure button above and supply the signed-in user ID from step 2.
+
+2. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
+
+```
+az ad signed-in-user show --query objectId -o tsv
+```
+
+3. You can log in to the supporting VMs using the username `localadmin` and passwords from keyvault.
+
+4. You can log into the AKS cluster by using kubectl from cloud shell. Follow the challenges below. 
+
+### Task 2 (optional): SSH to the supporting VMs.
+
+1. Locate the Network Security Group (NSG) called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
+
+2. Retrieve the public IP address (or DNS label) for each VM
+
+3. Retrieve the VM passwords from the keyvault.
+
+4. SSH to your VMs
+
+```
+ssh localadmin@[VM Public IP or DNS]
+```
+
 ## Azure Documentation links
 
 1. [Choosing a network model](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#choose-a-network-model-to-use)
