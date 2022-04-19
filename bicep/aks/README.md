@@ -43,7 +43,6 @@ az ad signed-in-user show --query objectId -o tsv
  az deployment sub create --name aks --template-file main.bicep --location [region] --parameters adUserId=11111111-2222-3333-4444-555555555555 networkPlugin=kubenet
  ```
 
-6. Once your deployment has finished you can log on to the supporting VMs using Azure bastion and the AKS cluster using kubectl (see page links below). The username is `localadmin` and passwords can be found in the keyvault.
-
+6. Once your deployment has finished you can log on to the supporting VMs using Azure bastion. The username is `localadmin` and passwords can be found in the keyvault. The AKS cluster using kubectl (see page links below).
 
 For further information on the deployment, setting up SSH to the hosts and advanced troubleshooting please refer to the docker series pages [here (kubenet)](../../aks/README-kubenet.md) and [here (cni)](../../aks/README-advanced.md).
