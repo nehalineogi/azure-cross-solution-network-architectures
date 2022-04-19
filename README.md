@@ -28,16 +28,16 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 ### [Azure Kubernetes Services (AKS) Networking Series](aks/README-advanced.md)
 
 - Download [Multi-tab Visio](aks/aks-all-reference-architectures-visio.vsdx) and [PDF](aks/aks-all-reference-architectures-PDF.pdf)
-- [Docker Networking](aks/README-docker-multihost.md)
+- Docker Networking
   - [Single Host](aks/README-docker-singlehost.md)
   - [Multi Host](aks/README-docker-multihost.md)
   - kind Cluster (Kubernetes In Docker)
   - [Bicep automated deployment](bicep/dockerhost)
-- [Basic/Kubenet Networking](aks/README-kubenet.md)
-  - [Bicep automated deployment](bicep/aks)
-- [Advanced/Azure CNI Networking](aks/README-advanced.md)
-  - [Bicep automated deployment](bicep/aks)
-- [AKS Private Cluster](aks/README-private-cluster.md)
+- AKS Networking
+  - [Basic/Kubenet Networking](aks/README-kubenet.md)
+  - [Advanced/Azure CNI Networking](aks/README-advanced.md)
+  - [Kubenet\CNI Bicep automated deployment](bicep/aks)
+  - [AKS Private Cluster](aks/README-private-cluster.md)
   - [AKS Private Cluster with Azure Front Door](aks/README-private-cluster-with-AFD.md)
 - [Ingress Controllers](aks/README-ingress-appgw.md)
   - [AKS Application Gateway Ingress Controller (AGIC)](aks/README-ingress-appgw.md)
