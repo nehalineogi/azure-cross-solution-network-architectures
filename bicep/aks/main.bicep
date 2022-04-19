@@ -24,6 +24,15 @@ param domainName string = 'contoso.local'
 ])
 param networkPlugin string = 'kubenet'
 
+var env = {
+  kubenet: {
+    vnets : json(loadTextContent('./modules/vnet/vnet_kubenet.json')).vnets
+  }
+  azure: {
+    vnets : json(loadTextContent('./modules/vnet/vnet_cni.json')).vnets
+  }
+}
+
 var repoName        = 'nehalineogi'
 var branchName      = 'aks'
 var githubPath      = 'https://raw.githubusercontent.com/${repoName}/azure-cross-solution-network-architectures/${branchName}/bicep/aks/scripts/'
@@ -38,6 +47,7 @@ var hubDNSVmName              = 'hubdnsvm'
 var hubVmName                 = 'hubjump'
 var spokeVmName               = 'spokejump'
 var dcVmName                  = 'dc1'
+var podCidr                   = '10.244.0.0/16'
 
 // VNet and Subnet References (module outputs)
 var hubVnetId              = virtualnetwork[0].outputs.vnid
@@ -62,8 +72,6 @@ var hubBastionSubnetName   = virtualnetwork[0].outputs.subnets[1].name
 var hubBastionAddPrefix    = virtualnetwork[0].outputs.subnets[1].properties.addressPrefix
 var gwSubnetId             = virtualnetwork[0].outputs.subnets[2].id
 
-var vnets = json(loadTextContent('./modules/vnet/vnet_kubenet.json')).vnets
-
 var vpnVars = {
     psk                : psk.outputs.psk
     gwip               : hubgw.outputs.gwpip
@@ -79,7 +87,7 @@ targetScope = 'subscription'
     location: location
   }
 
-module virtualnetwork './modules/vnet.bicep' = [for vnet in vnets: {
+module virtualnetwork './modules/vnet.bicep' = [for vnet in env[networkPlugin].vnets: {
   params: {
     vnetName         : vnet.vnetName
     vnetAddressPrefix: vnet.vnetAddressPrefix
@@ -381,7 +389,7 @@ module aks_cluster 'modules/aks.bicep' = {
     networkPolicy       : 'calico'
     vnetSubnetID        : SpokeSubnetRef
     dockerBridgeCidr    : '172.20.0.1/16'
-    podCidr             : '10.244.0.0/16'
+    podCidr             : podCidr
     serviceCidr         : '10.101.0.0/16'
     serviceIP           : '10.101.0.10'
     enablePrivateCluster: false

@@ -6,7 +6,7 @@ param vmSize string = 'Standard_B4ms'
 param networkPlugin string
 param networkPolicy string
 param enablePrivateCluster bool = false // will form part of question when private cluster code written
-param podCidr string = '10.244.0.0/16'
+param podCidr string 
 param serviceCidr string
 param vnetSubnetID string
 param serviceIP string
