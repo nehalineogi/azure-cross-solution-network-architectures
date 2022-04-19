@@ -31,10 +31,10 @@ az ad signed-in-user show --query objectId -o tsv
 4. (optional) If you wish to customise or change the main.bicep or related module code, you can do this now and save your changes locally.  
 
 
-5.  Run the following command to deploy using az cli (change networkPlugin parameter from 'kubenet' to 'azure' to provision a CNI cluster)
+5.  Run the following command to deploy using az cli (networkPlugin parameter value 'kubenet' for a kubenet deployment or 'azure' to provision a CNI based cluster)
 
 ```
- az deployment sub create --name aks --template-file main.bicep --location [region] --parameters adUserId=[paste-asUserId-here] networkPlugin=kubenet
+ az deployment sub create --name aks --template-file main.bicep --location [region] --parameters adUserId=[paste-asUserId-here] networkPlugin=[kubenet\azure]
  ```
 
  example : 
