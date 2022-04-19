@@ -16,7 +16,7 @@ param HostVmSize string = 'Standard_D2_v3'
 @minLength(3)
 param domainName string = 'contoso.local'
 
-@description('kubenet or azure (azure deploys Azure CNI network plugin)')
+@description('AKS network Plugin - kubenet or azure (azure deploys Container Networking Interface (CNI) ')
 @minLength(3)
 @allowed([
   'kubenet'
