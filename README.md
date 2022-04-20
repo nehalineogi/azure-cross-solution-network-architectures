@@ -25,7 +25,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - Cluster Networking - [IPVLAN, MACVLAN, TUN/TAP drivers](https://kubernetes.io/docs/concepts/cluster-administration/networking/)
 - [Bicep automated deployment](bicep/linuxhost)
 
-### [Azure Kubernetes Services (AKS) Networking Series](aks/README-advanced.md)
+### Azure Kubernetes Services (AKS) Networking Series
 
 - Download [Multi-tab Visio](aks/aks-all-reference-architectures-visio.vsdx) and [PDF](aks/aks-all-reference-architectures-PDF.pdf)
 - Docker Networking
