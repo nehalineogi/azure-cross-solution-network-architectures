@@ -13,19 +13,6 @@ Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF]
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2F%2Faks%2Fjson%2Fkubenet.json)
 
 # Quickstart deployment
-
-## AKS deployed architecture
-
-Components with blue dotted lines in the diagram above are automatically deployed and a three node AKS cluster is deployed in kubenet mode by default. 
-
-The Node CIDR is 172.16.239.0/24 (aks-node-subnet) and POD CIDR is 10.244.0.0/16.
-
-
-## Supporting Servers
-The username for the deployed support VMs (jump servers\domain controller etc) is `localadmin`
-The passwords for supporting servers are stored in a keyvault deployed to the same resource group.
-
-
 ### Task 1: Start Deployment
 
 1. Click Deploy to Azure button above and supply the signed-in user ID from step 2.
@@ -36,7 +23,7 @@ The passwords for supporting servers are stored in a keyvault deployed to the sa
 az ad signed-in-user show --query objectId -o tsv
 ```
 
-3. You can log in to the supporting VMs using the username `localadmin` and passwords from keyvault.
+3. You can log in to the supporting VMs using the username `localadmin` and passwords from the deployed keyvault.
 
 4. You can log into the AKS cluster by using kubectl from cloud shell. Follow the challenges below. 
 
@@ -68,7 +55,12 @@ ssh localadmin@[VM Public IP or DNS]
 
 ### [Design Considerations](https://docs.microsoft.com/en-us/azure/aks/concepts-network#kubenet-basic-networking)
 
-The kubenet networking option is the default configuration for AKS cluster creation.Some design considerations for Kubenet
+The kubenet networking option is the default configuration for AKS cluster creation. 
+Components with blue dotted lines in the diagram above are automatically deployed and a three node AKS cluster is deployed in kubenet mode by default. 
+
+The Node CIDR is 172.16.239.0/24 (aks-node-subnet) and POD CIDR is 10.244.0.0/16.
+
+Some design considerations for Kubenet
 
 - Nodes receive an IP address from the Azure subnet (NODE CIDR). You can deploy these nodes in existing Azure VNET or a new VNET.
 - Pods receive an IP address from a POD CIDR which is logically different address space than the NODE CIDR. Direct pod addressing isn't supported for kubenet due to kubenet design.
@@ -102,7 +94,6 @@ nehali@nehali-laptop:~$ curl  172.16.239.7:8080
 red
 
 ```
-
 ### DNS Design
 
 Azure Subnet can use custom DNS or Azure Default DNS. Core DNS can be used along with Azure DNS.
@@ -123,7 +114,7 @@ Outbound traffic from the pods to the Internet flows via Azure External load Bal
 
 These steps will deploy a single test pod and delete it.
 
-1. Obtain the cluster credentials to log in to kubectl (if you did not use the default, replace resource-group with your specified resource group name)
+1. Obtain the cluster credentials to log in to kubectl (if you did not use the default, replace resource-group with your specified resource group name). 
 
 ```az aks get-credentials --resource-group aks --name myAKSCluster```
 
