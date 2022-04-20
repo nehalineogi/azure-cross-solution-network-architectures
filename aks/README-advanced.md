@@ -87,7 +87,7 @@ Screen capture of the Azure VNET and AKS subnet:
 Note that AKS nodes and pods get IPs from the same AKS subnet
 
 ```
-k get nodes,pods,service -o wide -n colors-ns
+kubectlget nodes,pods,service -o wide -n colors-ns
 NAME                                     STATUS   ROLES   AGE   VERSION    INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
 node/aks-nodepool1-38290826-vmss000000   Ready    agent   10h   v1.19.11   172.16.240.4    <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
 node/aks-nodepool1-38290826-vmss000001   Ready    agent   10h   v1.19.11   172.16.240.35   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
@@ -109,7 +109,7 @@ service/red-service-internal   LoadBalancer   10.101.54.70     172.16.240.97   8
 Note that node inherits the DNS from the Azure VNET DNS setting. The outbound IP for the node is the External Load balancer outbound SNAT.
 
 ```
-k get nodes,pods -o wide
+kubectl get nodes,pods -o wide
 NAME                                     STATUS   ROLES   AGE   VERSION    INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
 node/aks-nodepool1-38290826-vmss000000   Ready    agent   11m   v1.19.11   172.16.240.4    <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
 node/aks-nodepool1-38290826-vmss000001   Ready    agent   11m   v1.19.11   172.16.240.35   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
@@ -185,7 +185,7 @@ root@aks-nodepool1-38290826-vmss000002:/# curl ifconfig.io
 Note that the outbound IP of the POD is the External Load balancer SNAT.
 
 ```
-k exec -it dnsutils -- sh
+kubectl exec -it dnsutils -- sh
 / # ip add
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -223,7 +223,7 @@ Note: On-Premises server sees the Node IP.
 k exec -it dnsutils -- sh
 / # ip add
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    link/loopbackubectl 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
     inet6 ::1/128 scope host
@@ -283,7 +283,7 @@ Note: Azure VM on the same VNET sees the actual POD IP.
 
 ```
 POD:
-k exec -it dnsutils -- sh
+kubectl exec -it dnsutils -- sh
 / # ip add
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
 link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -330,7 +330,7 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 Note the Endpoints are up. Node the Type:LoadBalancer and exposed IP is public
 
 ```
-k describe service red-service -n colors-ns
+kubectl describe service red-service -n colors-ns
 Name:                     red-service
 Namespace:                colors-ns
 Labels:                   <none>
@@ -360,7 +360,7 @@ Events:
 Note the type: Load balancer and the exposed IP is private
 
 ```
- k describe service red-service-internal -n colors-ns
+ kubectl describe service red-service-internal -n colors-ns
 Name:                     red-service-internal
 Namespace:                colors-ns
 Labels:                   <none>
