@@ -35,7 +35,7 @@ var env = {
 }
 
 var repoName        = 'nehalineogi'
-var branchName      = 'aks'
+var branchName      = 'aks-private'
 var githubPath      = 'https://raw.githubusercontent.com/${repoName}/azure-cross-solution-network-architectures/${branchName}/bicep/aks/scripts/'
 
 var VmAdminUsername = 'localadmin'
