@@ -126,7 +126,7 @@ Screen capture of the Azure VNET and AKS subnet:
 Note that AKS nodes and pods get IPs from the same AKS subnet
 
 ```
-kubectlget nodes,pods,service -o wide -n colors-ns
+kubectl get nodes,pods,service -o wide -n colors-ns
 NAME                                     STATUS   ROLES   AGE   VERSION    INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
 node/aks-nodepool1-38290826-vmss000000   Ready    agent   10h   v1.19.11   172.16.240.4    <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
 node/aks-nodepool1-38290826-vmss000001   Ready    agent   10h   v1.19.11   172.16.240.35   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
@@ -399,7 +399,7 @@ Events:
 Note the type: Load balancer and the exposed IP is private
 
 ```
- kubectl describe service red-service-internal -n colors-ns
+kubectl describe service red-service-internal -n colors-ns
 Name:                     red-service-internal
 Namespace:                colors-ns
 Labels:                   <none>
