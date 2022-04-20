@@ -8,7 +8,7 @@ param adUserId string  = ''
 @maxLength(10)
 param ResourceGroupName string = 'aks'
 
-@description('Set the size for the supporting VMs (jump servers, domain controller etc) ')
+@description('Set the size for the supporting VMs (domain controller, hub DNS, VPN VM etc) ')
 @minLength(6)
 param HostVmSize string = 'Standard_D2_v3'
 

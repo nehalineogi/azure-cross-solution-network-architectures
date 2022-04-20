@@ -23,7 +23,7 @@ Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF]
 az ad signed-in-user show --query objectId -o tsv
 ```
 
-3. You can log in to the supporting VMs using the username `localadmin` and passwords from the deployed keyvault.
+3. You can log in to the supporting VMs (DC, hub DNS, VPN VM) using the username `localadmin` and passwords from the deployed keyvault.
 
 4. You can log into the AKS cluster by using kubectl from cloud shell. Follow the challenges below. 
 
