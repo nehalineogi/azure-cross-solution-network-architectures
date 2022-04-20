@@ -10,6 +10,37 @@ This architecture uses the for AKS Advanced/CNI Network Model. Observe that the 
 
 Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF](aks-all-reference-architectures-PDF.pdf)
 
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2F%2Faks%2Fjson%2Fcni.json)
+
+# Quickstart deployment
+### Task 1: Start Deployment
+
+1. Click Deploy to Azure button above and supply the signed-in user ID from step 2.
+
+2. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
+
+```
+az ad signed-in-user show --query objectId -o tsv
+```
+
+3. You can log in to the supporting VMs using the username `localadmin` and passwords from the deployed keyvault.
+
+4. You can log into the AKS cluster by using kubectl from cloud shell. Follow the challenges below. 
+
+### Task 2 (optional): SSH to the supporting VMs.
+
+1. Locate the Network Security Group (NSG) called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
+
+2. Retrieve the public IP address (or DNS label) for each VM
+
+3. Retrieve the VM passwords from the keyvault.
+
+4. SSH to your VMs
+
+```
+ssh localadmin@[VM Public IP or DNS]
+```
+
 ## Azure Documentation links
 
 1. [Choose a Network Model](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#choose-a-network-model-to-use)
@@ -26,9 +57,15 @@ Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF]
 
 1. [Key Design considerations](https://docs.microsoft.com/en-us/azure/aks/concepts-network#azure-cni-advanced-networking)
 
-- Nodes and PODs get IPs from the same subnet. This could lead to IP exhaustion issue and need for a large IP space to be available.
+The CNI networking option is used during AKS cluster creation. 
+
+Components with blue dotted lines in the diagram above are automatically deployed and a three node AKS cluster is deployed in CNI mode by default. 
+
+The Node CIDR is 172.16.240.0/24 (aks-node-subnet) and PODs will use IPs from the same subnet.
+
+- Nodes and PODs get IPs from the same subnet - this could lead to IP exhaustion issue and need for a large IP space to be available.
 - Pods get full virtual network connectivity and can be directly reached via their private IP address from connected networks
-- Needs a large available IP address space.Common consideration is the assigned IP address range is too small to then add additional nodes when you scale or upgrade a cluster.
+- Needs a large available IP address space. Common consideration is the assigned IP address range is too small to then add additional nodes when you scale or upgrade a cluster.
 - The network team may also not be able to issue a large enough IP address range to support your expected application demands.
 - There is no user defined routes for pod connectivity.
 - Azure Network Policy support
@@ -51,31 +88,33 @@ Diagram showing Load Balancer traffic flow in an AKS cluster
 4. [Internal Load Balancer](https://docs.microsoft.com/en-us/azure/aks/internal-lb)
    Internal load balancer can be used to expose the services. This exposed IP will reside on the AKS-subnet. If you'd like to specify a specific IP address following instructions in [link here](https://docs.microsoft.com/en-us/azure/aks/internal-lb#specify-an-ip-address).
 
-## Design Validations
+## Deployment Validations
 
-#### Cluster Deployment
+These steps will deploy a single test pod and delete it.
 
-The AKS cluster in the diagram is deployed using these settings (Note: bicep automated deployment coming soon....)
+1. Obtain the cluster credentials to log in to kubectl (if you did not use the default, replace resource-group with your specified resource group name). 
 
-```
-az aks create \
- --resource-group $RG \
- --name $AKSCLUSTER \
- --node-count 3 \
- --generate-ssh-keys \
- --enable-addons monitoring \
- --dns-name-prefix $AKSDNS \
- --network-plugin $PLUGIN \
- --service-cidr 10.101.0.0/16 \
- --dns-service-ip 10.101.0.10 \
- --docker-bridge-address 172.20.0.1/16 \
- --vnet-subnet-id $SUBNET_ID \
- --enable-managed-identity \
- --attach-acr $MYACR \
- --max-pods 30 \
- --verbose
+```az aks get-credentials --resource-group aks --name myAKSCluster```
 
-```
+2. Open Cloud Shell and clone the reposity
+
+```git clone https://github.com/nehalineogi/azure-cross-solution-network-architectures```
+
+3. Navigate to the dnsutils directory 
+
+```cd azure-cross-solution-network-architectures/aks/yaml/dns```
+
+4. Deploy a simple pod
+
+```kubectl apply -f dnsutils.yaml```
+
+5. Check pod is running successfully 
+
+```kubectl get pods -o wide```
+
+6. Delete pod (cleanup)
+
+```kubectl delete pod dnsutils```
 
 #### IP Address Assignment
 
