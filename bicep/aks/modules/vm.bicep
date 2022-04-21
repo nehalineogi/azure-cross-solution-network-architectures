@@ -23,6 +23,7 @@ param vpnVars object = 	{
   gwaddressPrefix    : null
   onpremAddressPrefix: null
   spokeAddressPrefix : null
+  hubAddressPrefix   : null
 }
 
 @description('Size of the virtual machine.')
@@ -36,9 +37,10 @@ var nicName = '${vmname}nic'
 
 param publicIPAddressNameSuffix string = 'pip'
 
-param deployPIP bool = false
-param deployVpn bool = false
-param deployDC bool  = false
+param deployPIP bool    = false
+param deployVpn bool    = false
+param deployDC bool     = false
+param deployHubDns bool = false
 
 var dnsLabelPrefix = 'dns-${uniqueString(resourceGroup().id, vmname)}-${publicIPAddressNameSuffix}'
 
@@ -187,6 +189,28 @@ resource cse 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (dep
         '${githubPath}cse.sh'
       ]
       commandToExecute: deployVpn ? 'sh cse.sh ${nInter.properties.ipConfigurations[0].properties.privateIPAddress} ${pip.properties.ipAddress} ${vpnVars.gwip} ${vpnVars.gwaddressPrefix} ${vpnVars.psk} ${vpnVars.onpremAddressPrefix} ${vpnVars.spokeAddressPrefix}' : ''
+    }
+    
+   }
+}
+
+resource csehubdns 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (deployHubDns) {
+  name: '${vmname}/cse'
+  location: location
+  dependsOn:[
+    VM
+  ]
+   properties: {
+    publisher: 'Microsoft.Azure.Extensions'
+    type: 'CustomScript'
+    typeHandlerVersion: '2.1' 
+    autoUpgradeMinorVersion: false
+    settings: {}
+    protectedSettings: {
+      fileUris: [
+        '${githubPath}hubdns.sh'
+      ]
+      commandToExecute: deployHubDns ? 'sh cse.sh ${vpnVars.onpremAddressPrefix} ${vpnVars.spokeAddressPrefix} ${vpnVars.hubAddressPrefix}' : ''
     }
     
    }
