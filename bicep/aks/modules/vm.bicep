@@ -195,7 +195,7 @@ resource cse 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (dep
 }
 
 resource csehubdns 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (deployHubDns) {
-  name: '${vmname}/cse'
+  name: '${vmname}/csehubdns'
   location: location
   dependsOn:[
     VM
