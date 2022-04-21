@@ -1,5 +1,8 @@
+sleep 10
 sudo apt-get update
+sleep 5 
 sudo apt-get install bind9 bind9utils bind9-doc net-tools
+sleep 5
 sudo cp /etc/bind/named.conf.options /etc/bind/named.conf.options.orig
 sudo rm /etc/bind/named.conf.options
 echo "acl goodclients {" >> /etc/bind/named.conf.options
