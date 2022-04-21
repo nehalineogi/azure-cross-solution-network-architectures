@@ -210,7 +210,7 @@ resource csehubdns 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = i
       fileUris: [
         '${githubPath}hubdns.sh'
       ]
-      commandToExecute: deployHubDns ? 'sh cse.sh ${vpnVars.onpremAddressPrefix} ${vpnVars.spokeAddressPrefix} ${vpnVars.hubAddressPrefix}' : ''
+      commandToExecute: deployHubDns ? 'sh hubdns.sh ${vpnVars.onpremAddressPrefix} ${vpnVars.spokeAddressPrefix} ${vpnVars.hubAddressPrefix}' : ''
     }
     
    }
