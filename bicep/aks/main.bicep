@@ -30,7 +30,6 @@ param networkPlugin string = 'kubenet'
 ])
 param aksPrivatePublic string = 'public'
 
-
 // Load the JSON file depending on the parameter chosen for network plugin. Used by VNET creation below
 var env = {
   kubenet: {
@@ -85,12 +84,14 @@ var hubBastionAddPrefix    = virtualnetwork[0].outputs.subnets[1].properties.add
 var gwSubnetId             = virtualnetwork[0].outputs.subnets[2].id
 var vpnVars = {
  //   psk                : psk.outputs.psk
- //   gwip               : hubgw.outputs.gwpip
+    gwip               : hubgw.outputs.gwpip
     gwaddressPrefix    : hubAddressPrefix
     onpremAddressPrefix: onpremAddressPrefix
     spokeAddressPrefix : spokeAddressPrefix
     hubAddressPrefix   : hubAddressPrefix
   } 
+
+  var clusterName = 'MyAKSCluster'
 
 targetScope = 'subscription'
 
@@ -190,14 +191,14 @@ scope:rg
 //   name: 'hubDnsVM'
 //   scope: rg
 // } 
-// module hubgw './modules/vnetgw.bicep' = {
-//   name: 'hubgw'
-//   scope: rg
-//   params:{
-//     gatewaySubnetId: gwSubnetId
-//     location: location
-//   }
-// }
+module hubgw './modules/vnetgw.bicep' = {
+  name: 'hubgw'
+  scope: rg
+  params:{
+    gatewaySubnetId: gwSubnetId
+    location: location
+  }
+}
 // module localNetworkGW 'modules/lng.bicep' = {
 //   scope: rg
 //   name: 'onpremgw'
@@ -218,28 +219,28 @@ scope:rg
     
 //   }
 // // }
-//  module vnetPeering './modules/vnetpeering.bicep' = {
-//   params:{
-//     hubVnetId    : hubVnetId
-//     spokeVnetId  : spokeVnetId
-//     hubVnetName  : hubVnetName
-//     spokeVnetName: spokeVnetName
-//   }
-//   scope: rg
-//   name: 'vNetpeering'
-//   dependsOn: [
-//     hubgw
-//   ]
-// }
-// module hubBastion './modules/bastion.bicep' = {
-// params:{
-//   bastionHostName: 'hubBastion'
-//   location: location
-//   subnetRef: hubBastionSubnetRef
-// }
-// scope:rg
-// name: 'hubBastion'
-// }
+ module vnetPeering './modules/vnetpeering.bicep' = {
+  params:{
+    hubVnetId    : hubVnetId
+    spokeVnetId  : spokeVnetId
+    hubVnetName  : hubVnetName
+    spokeVnetName: spokeVnetName
+  }
+  scope: rg
+  name: 'vNetpeering'
+  dependsOn: [
+    hubgw
+  ]
+}
+module hubBastion './modules/bastion.bicep' = {
+params:{
+  bastionHostName: 'hubBastion'
+  location: location
+  subnetRef: hubBastionSubnetRef
+}
+scope:rg
+name: 'hubBastion'
+}
 // module onpremBastion './modules/bastion.bicep' = {
 //   params:{
 //     bastionHostName: 'onpremBastion'
@@ -324,6 +325,23 @@ module bastionHubNSGAttachment './modules/nsgAttachment.bicep' = {
 //   }
 //   scope:rg
 // }
+
+module privateDNSZone 'modules/privatezone.bicep' = if (contains(aksPrivatePublic, 'private')) {
+  name: 'create-DNS-private-zone-for-AKS'
+  params: {
+    privateDNSZoneName: '${clusterName}.privatelink.${location}.azmk8s.io'
+  }
+  scope: rg
+}
+
+module privateDNSZoneLink 'modules/privatezonelink.bicep' = if (contains(aksPrivatePublic, 'private')){
+  name: 'link-DNS-zone-to-vnet'
+  params: {
+    privateDnsZoneName: privateDNSZone.outputs.privateDNSZoneName
+    vnetId: spokeVnetId
+  }
+  scope: rg
+}
 module aks_user_identity 'modules/identity.bicep' = {
   name: 'aks_user_identity'
   params: {
@@ -347,7 +365,7 @@ module user_assigned_RBAC_assign './modules/rbac_assign.bicep' = {
 module aks_cluster 'modules/aks.bicep' = {
   name: 'aks_cluster' 
   params: {
-    clusterName         : 'MyAKSCluster'
+    clusterName         : clusterName
     location            : location
     networkPlugin       : networkPlugin
     networkPolicy       : 'calico'
@@ -357,6 +375,7 @@ module aks_cluster 'modules/aks.bicep' = {
     serviceCidr         : '10.101.0.0/16'
     serviceIP           : '10.101.0.10'
     PublicPrivateCluster: aksPrivatePublic
+    privateDNSZoneId    : contains(aksPrivatePublic, 'private') ? privateDNSZone.outputs.privateDNSZoneId : ''
     userAssignedId      : aks_user_identity.outputs.uId
   }
   scope: rg
