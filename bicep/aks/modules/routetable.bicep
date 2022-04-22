@@ -35,6 +35,7 @@ resource routeTable 'Microsoft.Network/routeTables@2021-02-01' = {
 resource routeAttachment 'Microsoft.Network/virtualNetworks/subnets@2020-07-01' = {
   name: '${vnetName}/${subnetName}'
   properties: {
+    privateEndpointNetworkPolicies: 'Disabled'
     addressPrefix: subnetAddressPrefix
     routeTable: {
       id: routeTable.id

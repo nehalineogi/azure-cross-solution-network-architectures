@@ -17,7 +17,7 @@
         {
             "name": "GatewaySubnet",
             "prefix": "172.17.3.0/24",
-            "customNsg": true 
+            "customNsg": true
         }
       ]
     },
