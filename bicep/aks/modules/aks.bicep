@@ -83,4 +83,4 @@ userAssignedIdentities: {
 
 }
 
-output controlPlaneFQDN string =  contains(PublicPrivateCluster, 'private') ? aks.properties.fqdn : ''
+output controlPlaneFQDN string =  contains(PublicPrivateCluster, 'private') ?  '' : aks.properties.fqdn
