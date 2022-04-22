@@ -17,12 +17,19 @@ param HostVmSize string = 'Standard_D2_v3'
 param domainName string = 'contoso.local'
 
 @description('AKS network Plugin - kubenet or azure (azure deploys Container Networking Interface (CNI) ')
-@minLength(3)
 @allowed([
   'kubenet'
   'azure'
 ])
 param networkPlugin string = 'kubenet'
+
+@description('Private or Public AKS cluster')
+@allowed([
+  'private'
+  'public'
+])
+param aksPrivatePublic string = 'public'
+
 
 // Load the JSON file depending on the parameter chosen for network plugin. Used by VNET creation below
 var env = {
@@ -31,6 +38,9 @@ var env = {
   }
   azure: {
     vnets : json(loadTextContent('./modules/vnet/vnet_cni.json')).vnets
+  }
+  private: {
+    vnets : json(loadTextContent('./modules/vnet/vnet_private.json')).vnets
   }
 }
 
@@ -43,7 +53,7 @@ var location        = deployment().location    // linting warning here, but for 
                                                // there will be two "location" options on the "Deploy to Azure" custom deployment and this is confusing for the user.
 
 var hubVmName                 = 'hubjump'
-//var spokeVmName               = 'spokejump'
+var spokeVmName               = 'spokejump'
 var onpremVPNVmName           = 'vpnvm'
 var publicIPAddressNameSuffix = 'vpnpip'
 var hubDNSVmName              = 'hubdnsvm'
@@ -207,7 +217,7 @@ module hubDnsVM './modules/vm.bicep' = {
 //     name    : 'onprem-azure-conn'
     
 //   }
-// }
+// // }
 //  module vnetPeering './modules/vnetpeering.bicep' = {
 //   params:{
 //     hubVnetId    : hubVnetId
@@ -314,30 +324,30 @@ module bastionHubNSGAttachment './modules/nsgAttachment.bicep' = {
 //   }
 //   scope:rg
 // }
-// module aks_user_identity 'modules/identity.bicep' = {
-//   name: 'aks_user_identity'
-//   params: {
-//     prefix: 'aks_user_'
-//   }
-//   scope: rg
-// }
-// module aks_cluster 'modules/aks.bicep' = {
-//   name: 'aks_cluster' 
-//   params: {
-//     clusterName         : 'MyAKSCluster'
-//     location            : location
-//     networkPlugin       : networkPlugin
-//     networkPolicy       : 'calico'
-//     vnetSubnetID        : SpokeSubnetRef
-//     dockerBridgeCidr    : '172.20.0.1/16'
-//     podCidr             : podCidr
-//     serviceCidr         : '10.101.0.0/16'
-//     serviceIP           : '10.101.0.10'
-//     enablePrivateCluster: false
-//     userAssignedId      : aks_user_identity.outputs.uId
-//   }
-//   scope: rg
-// }
+module aks_user_identity 'modules/identity.bicep' = {
+  name: 'aks_user_identity'
+  params: {
+    prefix: 'aks_user_'
+  }
+  scope: rg
+}
+module aks_cluster 'modules/aks.bicep' = {
+  name: 'aks_cluster' 
+  params: {
+    clusterName         : 'MyAKSCluster'
+    location            : location
+    networkPlugin       : networkPlugin
+    networkPolicy       : 'calico'
+    vnetSubnetID        : SpokeSubnetRef
+    dockerBridgeCidr    : '172.20.0.1/16'
+    podCidr             : podCidr
+    serviceCidr         : '10.101.0.0/16'
+    serviceIP           : '10.101.0.10'
+    PublicPrivateCluster: aksPrivatePublic
+    userAssignedId      : aks_user_identity.outputs.uId
+  }
+  scope: rg
+}
 // The VM passwords are generated at run time and automatically stored in Keyvault. 
 // It is not possible to create a loop through the vm var because the 'subnetref' which is an output only known at runtime is not calculated until after deployment. It is not possible therefore to use it in a loop.
 module hubJumpServer './modules/vm.bicep' = {

@@ -1,7 +1,7 @@
 sleep 10
-sudo apt-get update
+sudo apt-get update --yes
 sleep 5 
-sudo apt-get install bind9 bind9utils bind9-doc net-tools
+sudo apt-get install bind9 bind9utils bind9-doc net-tools --yes
 sleep 5
 sudo cp /etc/bind/named.conf.options /etc/bind/named.conf.options.orig
 sudo rm /etc/bind/named.conf.options
