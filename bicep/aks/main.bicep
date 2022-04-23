@@ -23,7 +23,7 @@ param domainName string = 'contoso.local'
 ])
 param networkPlugin string = 'kubenet'
 
-@description('Private or Public AKS cluster')
+@description('Choose Cluster Type (kubectl access mode private or public)')
 @allowed([
   'private'
   'public'
