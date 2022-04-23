@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.4.1272.37030",
-      "templateHash": "14340830518890593146"
+      "version": "0.5.6.12127",
+      "templateHash": "10761517057266960854"
     }
   },
   "parameters": {
@@ -136,8 +136,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1272.37030",
-              "templateHash": "3264211696184606472"
+              "version": "0.5.6.12127",
+              "templateHash": "17333198398361387868"
             }
           },
           "parameters": {
@@ -228,8 +228,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1272.37030",
-              "templateHash": "18050040486525191651"
+              "version": "0.5.6.12127",
+              "templateHash": "10878028552529758646"
             }
           },
           "parameters": {
@@ -298,8 +298,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1272.37030",
-              "templateHash": "8336305879010718462"
+              "version": "0.5.6.12127",
+              "templateHash": "6131504830686472556"
             }
           },
           "parameters": {
@@ -423,8 +423,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1272.37030",
-              "templateHash": "10103651270570324268"
+              "version": "0.5.6.12127",
+              "templateHash": "15551583321460082648"
             }
           },
           "parameters": {
@@ -531,8 +531,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1272.37030",
-              "templateHash": "4609358276767886195"
+              "version": "0.5.6.12127",
+              "templateHash": "8961229143450768164"
             }
           },
           "parameters": {
@@ -584,10 +584,10 @@
       "dependsOn": [
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubgw')]",
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[parameters('networkPlugin')].vnets[0].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[parameters('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[parameters('networkPlugin')].vnets[1].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[parameters('networkPlugin')].vnets[1].vnetName))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[parameters('networkPlugin')].vnets[1].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[parameters('networkPlugin')].vnets[0].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[parameters('networkPlugin')].vnets[0].vnetName))]"
       ]
     },
     {
@@ -617,8 +617,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1272.37030",
-              "templateHash": "7365817005961216546"
+              "version": "0.5.6.12127",
+              "templateHash": "14143154583079709968"
             }
           },
           "parameters": {
@@ -708,8 +708,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1272.37030",
-              "templateHash": "13581613585198492611"
+              "version": "0.5.6.12127",
+              "templateHash": "7315693655668643126"
             }
           },
           "parameters": {
@@ -771,8 +771,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1272.37030",
-              "templateHash": "14589863278350159636"
+              "version": "0.5.6.12127",
+              "templateHash": "2898377365681646193"
             }
           },
           "parameters": {
@@ -938,8 +938,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1272.37030",
-              "templateHash": "10254377167427730563"
+              "version": "0.5.6.12127",
+              "templateHash": "6050571304658245974"
             }
           },
           "parameters": {
@@ -998,8 +998,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1272.37030",
-              "templateHash": "13581613585198492611"
+              "version": "0.5.6.12127",
+              "templateHash": "7315693655668643126"
             }
           },
           "parameters": {
@@ -1062,8 +1062,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1272.37030",
-              "templateHash": "5690084285621516585"
+              "version": "0.5.6.12127",
+              "templateHash": "14174037933933891742"
             }
           },
           "parameters": {
@@ -1108,7 +1108,7 @@
         "mode": "Incremental",
         "parameters": {
           "privateDnsZoneName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'create-DNS-private-zone-for-AKS')).outputs.privateDNSZoneName.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'create-DNS-private-zone-for-AKS'), '2020-10-01').outputs.privateDNSZoneName.value]"
           },
           "vnetId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[parameters('networkPlugin')].vnets[1].vnetName))).outputs.vnid.value]"
@@ -1120,8 +1120,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1272.37030",
-              "templateHash": "8547640158401591024"
+              "version": "0.5.6.12127",
+              "templateHash": "7126199287526977212"
             }
           },
           "parameters": {
@@ -1175,8 +1175,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1272.37030",
-              "templateHash": "3685780894144320481"
+              "version": "0.5.6.12127",
+              "templateHash": "7391418068048859678"
             }
           },
           "parameters": {
@@ -1239,8 +1239,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1272.37030",
-              "templateHash": "5535036357450881848"
+              "version": "0.5.6.12127",
+              "templateHash": "2479522725980906020"
             }
           },
           "parameters": {
@@ -1355,7 +1355,7 @@
             "value": "[parameters('aksPrivatePublic')]"
           },
           "privateDNSZoneId": {
-            "value": "[if(contains(parameters('aksPrivatePublic'), 'private'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'create-DNS-private-zone-for-AKS')).outputs.privateDNSZoneId.value, '')]"
+            "value": "[if(contains(parameters('aksPrivatePublic'), 'private'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'create-DNS-private-zone-for-AKS'), '2020-10-01').outputs.privateDNSZoneId.value, '')]"
           },
           "userAssignedId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'aks_user_identity')).outputs.uId.value]"
@@ -1367,8 +1367,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1272.37030",
-              "templateHash": "4181344807059784013"
+              "version": "0.5.6.12127",
+              "templateHash": "2000372972496922748"
             }
           },
           "parameters": {
@@ -1545,8 +1545,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.4.1272.37030",
-              "templateHash": "14755279453352512571"
+              "version": "0.5.6.12127",
+              "templateHash": "16995197833065509201"
             }
           },
           "parameters": {
@@ -1632,7 +1632,7 @@
                 "createOption": "Empty"
               }
             ],
-            "storageAccountName": "[format('{0}', uniqueString(resourceGroup().id, parameters('vmname')))]",
+            "storageAccountName": "[uniqueString(resourceGroup().id, parameters('vmname'))]",
             "nicName": "[format('{0}nic', parameters('vmname'))]",
             "dnsLabelPrefix": "[format('dns-{0}-{1}', uniqueString(resourceGroup().id, parameters('vmname')), parameters('publicIPAddressNameSuffix'))]"
           },
@@ -1794,7 +1794,7 @@
                   "fileUris": [
                     "[format('{0}cse.sh', parameters('githubPath'))]"
                   ],
-                  "commandToExecute": "[if(parameters('deployVpn'), format('sh cse.sh {0} {1} {2} {3} {4} {5} {6}', reference(resourceId('Microsoft.Network/networkInterfaces', format('{0}pip', variables('nicName')))).ipConfigurations[0].properties.privateIPAddress, reference(resourceId('Microsoft.Network/publicIPAddresses', format('{0}-{1}', variables('nicName'), parameters('publicIPAddressNameSuffix')))).ipAddress, parameters('vpnVars').gwip, parameters('vpnVars').gwaddressPrefix, parameters('vpnVars').psk, parameters('vpnVars').onpremAddressPrefix, parameters('vpnVars').spokeAddressPrefix), '')]"
+                  "commandToExecute": "[if(parameters('deployVpn'), format('sh cse.sh {0} {1} {2} {3} {4} {5} {6}', reference(resourceId('Microsoft.Network/networkInterfaces', format('{0}pip', variables('nicName'))), '2020-06-01').ipConfigurations[0].properties.privateIPAddress, reference(resourceId('Microsoft.Network/publicIPAddresses', format('{0}-{1}', variables('nicName'), parameters('publicIPAddressNameSuffix'))), '2020-06-01').ipAddress, parameters('vpnVars').gwip, parameters('vpnVars').gwaddressPrefix, parameters('vpnVars').psk, parameters('vpnVars').onpremAddressPrefix, parameters('vpnVars').spokeAddressPrefix), '')]"
                 }
               },
               "dependsOn": [
@@ -1862,15 +1862,15 @@
           "outputs": {
             "VmPip": {
               "type": "string",
-              "value": "[if(parameters('deployPIP'), reference(resourceId('Microsoft.Network/publicIPAddresses', format('{0}-{1}', variables('nicName'), parameters('publicIPAddressNameSuffix')))).dnsSettings.fqdn, '')]"
+              "value": "[if(parameters('deployPIP'), reference(resourceId('Microsoft.Network/publicIPAddresses', format('{0}-{1}', variables('nicName'), parameters('publicIPAddressNameSuffix'))), '2020-06-01').dnsSettings.fqdn, '')]"
             },
             "VmIp": {
               "type": "string",
-              "value": "[if(parameters('deployPIP'), reference(resourceId('Microsoft.Network/publicIPAddresses', format('{0}-{1}', variables('nicName'), parameters('publicIPAddressNameSuffix')))).ipAddress, '')]"
+              "value": "[if(parameters('deployPIP'), reference(resourceId('Microsoft.Network/publicIPAddresses', format('{0}-{1}', variables('nicName'), parameters('publicIPAddressNameSuffix'))), '2020-06-01').ipAddress, '')]"
             },
             "VmPrivIp": {
               "type": "string",
-              "value": "[if(parameters('deployPIP'), reference(resourceId('Microsoft.Network/networkInterfaces', format('{0}pip', variables('nicName')))).ipConfigurations[0].properties.privateIPAddress, '')]"
+              "value": "[if(parameters('deployPIP'), reference(resourceId('Microsoft.Network/networkInterfaces', format('{0}pip', variables('nicName'))), '2020-06-01').ipConfigurations[0].properties.privateIPAddress, '')]"
             }
           }
         }

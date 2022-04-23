@@ -32,7 +32,7 @@ param vmSize string
 @description('location for all resources')
 param location string = resourceGroup().location
 
-var storageAccountName = '${uniqueString(resourceGroup().id, vmname)}'
+var storageAccountName = uniqueString(resourceGroup().id, vmname)
 var nicName = '${vmname}nic'
 
 param publicIPAddressNameSuffix string = 'pip'
