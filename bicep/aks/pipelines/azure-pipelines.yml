@@ -10,6 +10,6 @@ jobs:
         inlineScript: |
           az deployment sub create \
             --name $(Build.BuildNumber) \
-            --location uksouth
-            --template-file bicep/aks/main.bicep \ 
+            --location uksouth \
+            --template-file bicep/aks/main.bicep \
             --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_pbk) networkPlugin=$(NetworkPlugin_kubenet) aksPrivatePublic=$(aksPrivatePublic_pbl)
