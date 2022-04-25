@@ -337,7 +337,7 @@ module privateDNSZone 'modules/privatezone.bicep' = if (contains(aksPrivatePubli
 module privateDNSZoneLink 'modules/privatezonelink.bicep' = if (contains(aksPrivatePublic, 'private')){
   name: 'link-DNS-zone-to-vnet'
   params: {
-    privateDnsZoneName: privateDNSZone.outputs.privateDNSZoneName
+    privateDnsZoneName: contains(aksPrivatePublic, 'private') ? privateDNSZone.outputs.privateDNSZoneName : ''
     vnetId: spokeVnetId
   }
   scope: rg
