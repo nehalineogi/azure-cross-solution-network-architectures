@@ -1,15 +1,14 @@
 jobs:
   - job:
     steps:
-      
+
     - task: AzureCLI@2
       inputs:
         azureSubscription: $(ServiceConnectionName)
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          az deployment group create \
+          az deployment sub create \
             --name $(Build.BuildNumber) \
-            --resource-group $(ResourceGroupName) \
             --template-file aks/bicep/aks/pipelines/azure-pipelines.yml \ 
-            --parameters environmentType=$(EnvironmentType) deployToyManualsStorageAccount=$(DeployToyManualsStorageAccount)
+            --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_pbk) networkPlugin=$(NetworkPlugin_kubenet) aksPrivatePublic=$(aksPrivatePublic_pbl)
