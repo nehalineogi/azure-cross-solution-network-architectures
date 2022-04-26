@@ -2,10 +2,7 @@ trigger:
   branches:
     include:
       - pipelinetesting
-    exclude:
-      - main
-      - aks
-      - aks-private
+
   paths:
     include:
       - bicep/aks/main.bicep
