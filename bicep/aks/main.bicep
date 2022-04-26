@@ -326,29 +326,29 @@ module bastionHubNSGAttachment './modules/nsgAttachment.bicep' = {
 //   scope:rg
 // }
 
-// module privateDNSZone 'modules/privatezone.bicep' = if (contains(aksPrivatePublic, 'private')) {
-//   name: 'create-DNS-private-zone-for-AKS'
-//   params: {
-//     privateDNSZoneName: '${clusterName}.privatelink.${location}.azmk8s.io'
-//   }
-//   scope: rg
-// }
+module privateDNSZone 'modules/privatezone.bicep' = if (contains(aksPrivatePublic, 'private')) {
+  name: 'create-DNS-private-zone-for-AKS'
+  params: {
+    privateDNSZoneName: '${clusterName}.privatelink.${location}.azmk8s.io'
+  }
+  scope: rg
+}
 
-// module privateDNSZoneLink 'modules/privatezonelink.bicep' = if (contains(aksPrivatePublic, 'private')){
-//   name: 'link-DNS-zone-to-vnet'
-//   params: {
-//     privateDnsZoneName: contains(aksPrivatePublic, 'private') ? privateDNSZone.outputs.privateDNSZoneName : ''
-//     vnetId: spokeVnetId
-//   }
-//   scope: rg
-// }
-// module aks_user_identity 'modules/identity.bicep' = {
-//   name: 'aks_user_identity'
-//   params: {
-//     prefix: 'aks_user_'
-//   }
-//   scope: rg
-// }
+module privateDNSZoneLink 'modules/privatezonelink.bicep' = if (contains(aksPrivatePublic, 'private')){
+  name: 'link-DNS-zone-to-vnet'
+  params: {
+    privateDnsZoneName: contains(aksPrivatePublic, 'private') ? privateDNSZone.outputs.privateDNSZoneName : ''
+    vnetId: spokeVnetId
+  }
+  scope: rg
+}
+module aks_user_identity 'modules/identity.bicep' = {
+  name: 'aks_user_identity'
+  params: {
+    prefix: 'aks_user_'
+  }
+  scope: rg
+}
 
 // module user_assigned_RBAC_assign './modules/rbac_assign.bicep' = {
 //   name: 'assign-RBAC-to-aks-rg' 
