@@ -28,3 +28,33 @@ jobs:
             --location uksouth \
             --template-file bicep/aks/main.bicep \
             --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_prv) networkPlugin=$(NetworkPlugin_kubenet) aksPrivatePublic=$(aksPrivatePublic_prv)
+
+  - job:
+    steps:
+
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: $(ServiceConnectionName)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az deployment sub create \
+            --name $(Build.BuildNumber)-public-kubenet \
+            --location uksouth \
+            --template-file bicep/aks/main.bicep \
+            --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpb) networkPlugin=$(NetworkPlugin_CNI) aksPrivatePublic=$(aksPrivatePublic_pbl)
+
+  - job:
+    steps:
+
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: $(ServiceConnectionName)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az deployment sub create \
+            --name $(Build.BuildNumber)-public-kubenet \
+            --location uksouth \
+            --template-file bicep/aks/main.bicep \
+            --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpr) networkPlugin=$(NetworkPlugin_CNI) aksPrivatePublic=$(aksPrivatePublic_prv)
