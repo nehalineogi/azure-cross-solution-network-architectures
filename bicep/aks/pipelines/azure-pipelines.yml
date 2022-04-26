@@ -1,3 +1,16 @@
+trigger: 
+  branches:
+    include:
+      - pipelinetesting
+    exclude:
+      - main
+      - aks
+      - aks-private
+  paths:
+    include:
+      - bicep/aks/main.bicep
+      - bicep/aks/modules/*
+      
 jobs:
   - job:
     steps:
@@ -16,10 +29,11 @@ jobs:
 
   - job:
     steps:
-
+      
     - task: AzureCLI@2
       inputs:
         azureSubscription: $(ServiceConnectionName)
+        
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
