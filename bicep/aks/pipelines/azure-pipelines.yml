@@ -54,7 +54,7 @@ jobs:
         scriptLocation: 'inlineScript'
         inlineScript: |
           az deployment sub create \
-            --name $(Build.BuildNumber)-public-cni \
+            --name $(Build.BuildNumber)-private-cni \
             --location uksouth \
             --template-file bicep/aks/main.bicep \
             --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpr) networkPlugin=$(NetworkPlugin_CNI) aksPrivatePublic=$(aksPrivatePublic_prv)
