@@ -24,7 +24,7 @@ jobs:
         scriptLocation: 'inlineScript'
         inlineScript: |
           az deployment sub create \
-            --name $(Build.BuildNumber)-public-kubenet \
+            --name $(Build.BuildNumber)-private-kubenet \
             --location uksouth \
             --template-file bicep/aks/main.bicep \
             --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_prv) networkPlugin=$(NetworkPlugin_kubenet) aksPrivatePublic=$(aksPrivatePublic_prv)
@@ -39,7 +39,7 @@ jobs:
         scriptLocation: 'inlineScript'
         inlineScript: |
           az deployment sub create \
-            --name $(Build.BuildNumber)-public-kubenet \
+            --name $(Build.BuildNumber)-public-cni \
             --location uksouth \
             --template-file bicep/aks/main.bicep \
             --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpb) networkPlugin=$(NetworkPlugin_CNI) aksPrivatePublic=$(aksPrivatePublic_pbl)
@@ -54,7 +54,7 @@ jobs:
         scriptLocation: 'inlineScript'
         inlineScript: |
           az deployment sub create \
-            --name $(Build.BuildNumber)-public-kubenet \
+            --name $(Build.BuildNumber)-public-cni \
             --location uksouth \
             --template-file bicep/aks/main.bicep \
             --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpr) networkPlugin=$(NetworkPlugin_CNI) aksPrivatePublic=$(aksPrivatePublic_prv)

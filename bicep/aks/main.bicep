@@ -191,14 +191,14 @@ scope:rg
 //   name: 'hubDnsVM'
 //   scope: rg
 // } 
-module hubgw './modules/vnetgw.bicep' = {
-  name: 'hubgw'
-  scope: rg
-  params:{
-    gatewaySubnetId: gwSubnetId
-    location: location
-  }
-}
+// module hubgw './modules/vnetgw.bicep' = {
+//   name: 'hubgw'
+//   scope: rg
+//   params:{
+//     gatewaySubnetId: gwSubnetId
+//     location: location
+//   }
+// }
 // module localNetworkGW 'modules/lng.bicep' = {
 //   scope: rg
 //   name: 'onpremgw'
@@ -219,28 +219,28 @@ module hubgw './modules/vnetgw.bicep' = {
     
 //   }
 // // }
- module vnetPeering './modules/vnetpeering.bicep' = {
-  params:{
-    hubVnetId    : hubVnetId
-    spokeVnetId  : spokeVnetId
-    hubVnetName  : hubVnetName
-    spokeVnetName: spokeVnetName
-  }
-  scope: rg
-  name: 'vNetpeering'
-  dependsOn: [
-    hubgw
-  ]
-}
-module hubBastion './modules/bastion.bicep' = {
-params:{
-  bastionHostName: 'hubBastion'
-  location: location
-  subnetRef: hubBastionSubnetRef
-}
-scope:rg
-name: 'hubBastion'
-}
+//  module vnetPeering './modules/vnetpeering.bicep' = {
+//   params:{
+//     hubVnetId    : hubVnetId
+//     spokeVnetId  : spokeVnetId
+//     hubVnetName  : hubVnetName
+//     spokeVnetName: spokeVnetName
+//   }
+//   scope: rg
+//   name: 'vNetpeering'
+//   dependsOn: [
+//     hubgw
+//   ]
+// }
+// module hubBastion './modules/bastion.bicep' = {
+// params:{
+//   bastionHostName: 'hubBastion'
+//   location: location
+//   subnetRef: hubBastionSubnetRef
+// }
+// scope:rg
+// name: 'hubBastion'
+// }
 // module onpremBastion './modules/bastion.bicep' = {
 //   params:{
 //     bastionHostName: 'onpremBastion'
@@ -326,60 +326,60 @@ module bastionHubNSGAttachment './modules/nsgAttachment.bicep' = {
 //   scope:rg
 // }
 
-module privateDNSZone 'modules/privatezone.bicep' = if (contains(aksPrivatePublic, 'private')) {
-  name: 'create-DNS-private-zone-for-AKS'
-  params: {
-    privateDNSZoneName: '${clusterName}.privatelink.${location}.azmk8s.io'
-  }
-  scope: rg
-}
+// module privateDNSZone 'modules/privatezone.bicep' = if (contains(aksPrivatePublic, 'private')) {
+//   name: 'create-DNS-private-zone-for-AKS'
+//   params: {
+//     privateDNSZoneName: '${clusterName}.privatelink.${location}.azmk8s.io'
+//   }
+//   scope: rg
+// }
 
-module privateDNSZoneLink 'modules/privatezonelink.bicep' = if (contains(aksPrivatePublic, 'private')){
-  name: 'link-DNS-zone-to-vnet'
-  params: {
-    privateDnsZoneName: contains(aksPrivatePublic, 'private') ? privateDNSZone.outputs.privateDNSZoneName : ''
-    vnetId: spokeVnetId
-  }
-  scope: rg
-}
-module aks_user_identity 'modules/identity.bicep' = {
-  name: 'aks_user_identity'
-  params: {
-    prefix: 'aks_user_'
-  }
-  scope: rg
-}
+// module privateDNSZoneLink 'modules/privatezonelink.bicep' = if (contains(aksPrivatePublic, 'private')){
+//   name: 'link-DNS-zone-to-vnet'
+//   params: {
+//     privateDnsZoneName: contains(aksPrivatePublic, 'private') ? privateDNSZone.outputs.privateDNSZoneName : ''
+//     vnetId: spokeVnetId
+//   }
+//   scope: rg
+// }
+// module aks_user_identity 'modules/identity.bicep' = {
+//   name: 'aks_user_identity'
+//   params: {
+//     prefix: 'aks_user_'
+//   }
+//   scope: rg
+// }
 
-module user_assigned_RBAC_assign './modules/rbac_assign.bicep' = {
-  name: 'assign-RBAC-to-aks-rg' 
-  params: {
-    principalId: aks_user_identity.outputs.principleId
-    roleDefinitionIdOrNames: [
-      'Network Contributor' 
-      'Private DNS Zone Contributor'
-    ]
-  }
-  scope: rg
-}
+// module user_assigned_RBAC_assign './modules/rbac_assign.bicep' = {
+//   name: 'assign-RBAC-to-aks-rg' 
+//   params: {
+//     principalId: aks_user_identity.outputs.principleId
+//     roleDefinitionIdOrNames: [
+//       'Network Contributor' 
+//       'Private DNS Zone Contributor'
+//     ]
+//   }
+//   scope: rg
+// }
 
-module aks_cluster 'modules/aks.bicep' = {
-  name: 'aks_cluster' 
-  params: {
-    clusterName         : clusterName
-    location            : location
-    networkPlugin       : networkPlugin
-    networkPolicy       : 'calico'
-    vnetSubnetID        : SpokeSubnetRef
-    dockerBridgeCidr    : '172.20.0.1/16'
-    podCidr             : podCidr
-    serviceCidr         : '10.101.0.0/16'
-    serviceIP           : '10.101.0.10'
-    PublicPrivateCluster: aksPrivatePublic
-    privateDNSZoneId    : contains(aksPrivatePublic, 'private') ? privateDNSZone.outputs.privateDNSZoneId : ''
-    userAssignedId      : aks_user_identity.outputs.uId
-  }
-  scope: rg
-}
+// module aks_cluster 'modules/aks.bicep' = {
+//   name: 'aks_cluster' 
+//   params: {
+//     clusterName         : clusterName
+//     location            : location
+//     networkPlugin       : networkPlugin
+//     networkPolicy       : 'calico'
+//     vnetSubnetID        : SpokeSubnetRef
+//     dockerBridgeCidr    : '172.20.0.1/16'
+//     podCidr             : podCidr
+//     serviceCidr         : '10.101.0.0/16'
+//     serviceIP           : '10.101.0.10'
+//     PublicPrivateCluster: aksPrivatePublic
+//     privateDNSZoneId    : contains(aksPrivatePublic, 'private') ? privateDNSZone.outputs.privateDNSZoneId : ''
+//     userAssignedId      : aks_user_identity.outputs.uId
+//   }
+//   scope: rg
+// }
 // The VM passwords are generated at run time and automatically stored in Keyvault. 
 // It is not possible to create a loop through the vm var because the 'subnetref' which is an output only known at runtime is not calculated until after deployment. It is not possible therefore to use it in a loop.
 // module hubJumpServer './modules/vm.bicep' = {
@@ -399,18 +399,18 @@ module aks_cluster 'modules/aks.bicep' = {
 //   name: 'hubjump'
 //   scope: rg
 // }  
-module spokeJumpServer './modules/vm.bicep' = {
-  params: {
-    location     : location
-    windowsVM    : true
-    adminusername: VmAdminUsername
-    keyvault_name: kv.outputs.keyvaultname
-    vmname       : spokeVmName
-    subnet1ref   : SpokeSubnetRef
-    vmSize       : HostVmSize
-    githubPath   : githubPath
-    adUserId     : adUserId
-  }
-  name: 'spokejump'
-  scope: rg
-}  
+// module spokeJumpServer './modules/vm.bicep' = {
+//   params: {
+//     location     : location
+//     windowsVM    : true
+//     adminusername: VmAdminUsername
+//     keyvault_name: kv.outputs.keyvaultname
+//     vmname       : spokeVmName
+//     subnet1ref   : SpokeSubnetRef
+//     vmSize       : HostVmSize
+//     githubPath   : githubPath
+//     adUserId     : adUserId
+//   }
+//   name: 'spokejump'
+//   scope: rg
+// }  
