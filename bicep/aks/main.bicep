@@ -11,7 +11,7 @@ param ResourceGroupName string = 'aks'
 @description('AKS network Plugin - kubenet or azure (azure deploys Container Networking Interface (CNI) ')
 @allowed([
   'kubenet'
-  'azure'
+  'CNI'
 ])
 param KubenetOrCniNetworkPolicy string = 'kubenet'
 
@@ -35,7 +35,7 @@ var env = {
   kubenet: {
     vnets : json(loadTextContent('./modules/vnet/vnet_kubenet.json')).vnets
   }
-  azure: {
+  CNI: {
     vnets : json(loadTextContent('./modules/vnet/vnet_cni.json')).vnets
   }
   private: {
@@ -372,7 +372,7 @@ module aks_cluster 'modules/aks.bicep' = {
   params: {
     clusterName         : clusterName
     location            : location
-    networkPlugin       : networkPlugin
+    networkPlugin       : contains(networkPlugin, 'CNI') ? 'azure' : 'kubenet'
     networkPolicy       : 'calico'
     vnetSubnetID        : SpokeSubnetRef
     dockerBridgeCidr    : '172.20.0.1/16'
