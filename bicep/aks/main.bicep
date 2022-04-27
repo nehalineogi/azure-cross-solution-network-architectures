@@ -8,27 +8,27 @@ param adUserId string  = ''
 @maxLength(10)
 param ResourceGroupName string = 'aks'
 
-@description('Set the size for the supporting VMs (domain controller, hub DNS, VPN VM etc) ')
-@minLength(6)
-param HostVmSize string = 'Standard_D2_v3'
-
-@description('Set the name of the domain eg contoso.local')
-@minLength(3)
-param domainName string = 'contoso.local'
-
 @description('AKS network Plugin - kubenet or azure (azure deploys Container Networking Interface (CNI) ')
 @allowed([
   'kubenet'
   'azure'
 ])
-param networkPlugin string = 'kubenet'
+param KubenetOrCniNetworkPolicy string = 'kubenet'
 
-@description('Choose Cluster Type (kubectl access mode private or public)')
+@description('Choose AKS Cluster Type (this is used to define kubectl access mode)')
 @allowed([
   'private'
   'public'
 ])
-param aksPrivatePublic string = 'public'
+param PublicOrPrivateCluster string = 'public'
+
+@description('Set the size for the supporting VMs (domain controller, hub DNS, VPN VM etc) ')
+@minLength(6)
+param SupportingServersVmSize string = 'Standard_D2_v3'
+
+@description('Set the name of the domain eg contoso.local')
+@minLength(3)
+param domainName string = 'contoso.local'
 
 // Load the JSON file depending on the parameter chosen for network plugin. Used by VNET creation below
 var env = {
@@ -43,9 +43,14 @@ var env = {
   }
 }
 
-var repoName        = 'nehalineogi'
-var branchName      = 'aks-private'
-var githubPath      = 'https://raw.githubusercontent.com/${repoName}/azure-cross-solution-network-architectures/${branchName}/bicep/aks/scripts/'
+// Friendly parameter names used above for the custom deployment ARM presentation. Reverted to shorter names here for readability
+var HostVmSize       = SupportingServersVmSize
+var aksPrivatePublic = PublicOrPrivateCluster
+var networkPlugin    = KubenetOrCniNetworkPolicy
+
+var repoName         = 'nehalineogi'
+var branchName       = 'aks-private'
+var githubPath       = 'https://raw.githubusercontent.com/${repoName}/azure-cross-solution-network-architectures/${branchName}/bicep/aks/scripts/'
 
 var VmAdminUsername = 'localadmin'
 var location        = deployment().location    // linting warning here, but for this deployment it is at subscription level and so if we have a separate parameter specified here, 
