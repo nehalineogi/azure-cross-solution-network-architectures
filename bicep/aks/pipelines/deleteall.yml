@@ -10,7 +10,7 @@ jobs:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          az az group delete -g $(ResourceGroupName_pbk) 
+          az group delete -g $(ResourceGroupName_pbk) 
 
   - job:
     steps:
@@ -22,7 +22,7 @@ jobs:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          az az group delete -g $(ResourceGroupName_prv)
+          az group delete -g $(ResourceGroupName_prv)
 
   - job:
     steps:
@@ -33,7 +33,7 @@ jobs:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          az az group delete -g $(ResourceGroupName_cpb)
+          az group delete -g $(ResourceGroupName_cpb)
 
   - job:
     steps:
@@ -44,4 +44,4 @@ jobs:
         scriptType: 'bash'
         scriptLocation: 'inlineScript'
         inlineScript: |
-          az az group delete -g $(ResourceGroupName_cpr) 
+          az group delete -g $(ResourceGroupName_cpr) 
