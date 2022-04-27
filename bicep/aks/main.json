@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.5.6.12127",
-      "templateHash": "8374846195606166675"
+      "templateHash": "839660825347965680"
     }
   },
   "parameters": {
@@ -528,7 +528,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.5.6.12127",
-              "templateHash": "16995197833065509201"
+              "templateHash": "13135552051687517332"
             }
           },
           "parameters": {
@@ -580,7 +580,6 @@
             },
             "location": {
               "type": "string",
-              "defaultValue": "[resourceGroup().location]",
               "metadata": {
                 "description": "location for all resources"
               }
@@ -929,7 +928,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.5.6.12127",
-              "templateHash": "16995197833065509201"
+              "templateHash": "13135552051687517332"
             }
           },
           "parameters": {
@@ -981,7 +980,6 @@
             },
             "location": {
               "type": "string",
-              "defaultValue": "[resourceGroup().location]",
               "metadata": {
                 "description": "location for all resources"
               }
@@ -1263,11 +1261,11 @@
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'kv')]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'psk')]",
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]"
       ]
     },
     {
@@ -1329,7 +1327,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.5.6.12127",
-              "templateHash": "16995197833065509201"
+              "templateHash": "13135552051687517332"
             }
           },
           "parameters": {
@@ -1381,7 +1379,6 @@
             },
             "location": {
               "type": "string",
-              "defaultValue": "[resourceGroup().location]",
               "metadata": {
                 "description": "location for all resources"
               }
@@ -1664,8 +1661,8 @@
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'psk')]",
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]"
       ]
@@ -1783,6 +1780,9 @@
         },
         "mode": "Incremental",
         "parameters": {
+          "location": {
+            "value": "[variables('location')]"
+          },
           "addressSpace": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.subnets.value[0].properties.addressPrefix]"
           },
@@ -1800,7 +1800,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.5.6.12127",
-              "templateHash": "13924989069933855312"
+              "templateHash": "17560667264369840117"
             }
           },
           "parameters": {
@@ -1812,6 +1812,9 @@
             },
             "addressSpace": {
               "type": "string"
+            },
+            "location": {
+              "type": "string"
             }
           },
           "resources": [
@@ -1819,7 +1822,7 @@
               "type": "Microsoft.Network/localNetworkGateways",
               "apiVersion": "2021-02-01",
               "name": "[parameters('name')]",
-              "location": "[resourceGroup().location]",
+              "location": "[parameters('location')]",
               "properties": {
                 "localNetworkAddressSpace": {
                   "addressPrefixes": [
@@ -1855,6 +1858,9 @@
         },
         "mode": "Incremental",
         "parameters": {
+          "location": {
+            "value": "[variables('location')]"
+          },
           "psk": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'psk')).outputs.psk.value]"
           },
@@ -1875,7 +1881,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.5.6.12127",
-              "templateHash": "15880043627515592282"
+              "templateHash": "15757497971141002271"
             }
           },
           "parameters": {
@@ -1890,6 +1896,9 @@
             },
             "psk": {
               "type": "string"
+            },
+            "location": {
+              "type": "string"
             }
           },
           "resources": [
@@ -1897,7 +1906,7 @@
               "type": "Microsoft.Network/connections",
               "apiVersion": "2021-02-01",
               "name": "[parameters('name')]",
-              "location": "[resourceGroup().location]",
+              "location": "[parameters('location')]",
               "properties": {
                 "connectionType": "IPsec",
                 "connectionProtocol": "IKEv2",
@@ -2437,6 +2446,9 @@
         },
         "mode": "Incremental",
         "parameters": {
+          "location": {
+            "value": "[variables('location')]"
+          },
           "applianceAddress": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'onpremVpnVM')).outputs.VmPrivIp.value]"
           },
@@ -2466,7 +2478,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.5.6.12127",
-              "templateHash": "13350266269844144041"
+              "templateHash": "13251335738994457530"
             }
           },
           "parameters": {
@@ -2490,6 +2502,9 @@
             },
             "nsgId": {
               "type": "string"
+            },
+            "location": {
+              "type": "string"
             }
           },
           "resources": [
@@ -2497,7 +2512,7 @@
               "type": "Microsoft.Network/routeTables",
               "apiVersion": "2021-02-01",
               "name": "onprem-route-table",
-              "location": "[resourceGroup().location]",
+              "location": "[parameters('location')]",
               "properties": {
                 "routes": [
                   {
@@ -2545,11 +2560,11 @@
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubNSG')]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'onpremVpnVM')]",
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]"
       ]
     },
     {
@@ -3039,6 +3054,9 @@
         },
         "mode": "Incremental",
         "parameters": {
+          "location": {
+            "value": "[variables('location')]"
+          },
           "prefix": {
             "value": "aks_user_"
           }
@@ -3050,11 +3068,14 @@
             "_generator": {
               "name": "bicep",
               "version": "0.5.6.12127",
-              "templateHash": "7391418068048859678"
+              "templateHash": "10906939223989797552"
             }
           },
           "parameters": {
             "prefix": {
+              "type": "string"
+            },
+            "location": {
               "type": "string"
             }
           },
@@ -3063,7 +3084,7 @@
               "type": "Microsoft.ManagedIdentity/userAssignedIdentities",
               "apiVersion": "2018-11-30",
               "name": "[format('{0}identity', parameters('prefix'))]",
-              "location": "[resourceGroup().location]"
+              "location": "[parameters('location')]"
             }
           ],
           "outputs": {
@@ -3097,6 +3118,9 @@
         },
         "mode": "Incremental",
         "parameters": {
+          "location": {
+            "value": "[variables('location')]"
+          },
           "principalId": {
             "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'aks_user_identity')).outputs.principleId.value]"
           },
@@ -3114,7 +3138,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.5.6.12127",
-              "templateHash": "2479522725980906020"
+              "templateHash": "8989350677629220736"
             }
           },
           "parameters": {
@@ -3127,6 +3151,9 @@
             },
             "roleDefinitionIdOrNames": {
               "type": "array"
+            },
+            "location": {
+              "type": "string"
             }
           },
           "variables": {
@@ -3170,8 +3197,8 @@
                 "count": "[length(parameters('roleDefinitionIdOrNames'))]"
               },
               "type": "Microsoft.Authorization/roleAssignments",
-              "apiVersion": "2021-04-01-preview",
-              "name": "[guid(resourceGroup().id, parameters('principalId'), parameters('roleDefinitionIdOrNames')[copyIndex()])]",
+              "apiVersion": "2020-10-01-preview",
+              "name": "[guid(parameters('location'), parameters('principalId'), parameters('roleDefinitionIdOrNames')[copyIndex()])]",
               "properties": {
                 "description": "[parameters('description')]",
                 "roleDefinitionId": "[if(contains(variables('builtInRoleNames'), parameters('roleDefinitionIdOrNames')[copyIndex()]), variables('builtInRoleNames')[parameters('roleDefinitionIdOrNames')[copyIndex()]], parameters('roleDefinitionIdOrNames')[copyIndex()])]",
@@ -3423,7 +3450,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.5.6.12127",
-              "templateHash": "16995197833065509201"
+              "templateHash": "13135552051687517332"
             }
           },
           "parameters": {
@@ -3475,7 +3502,6 @@
             },
             "location": {
               "type": "string",
-              "defaultValue": "[resourceGroup().location]",
               "metadata": {
                 "description": "location for all resources"
               }
@@ -3805,7 +3831,7 @@
             "_generator": {
               "name": "bicep",
               "version": "0.5.6.12127",
-              "templateHash": "16995197833065509201"
+              "templateHash": "13135552051687517332"
             }
           },
           "parameters": {
@@ -3857,7 +3883,6 @@
             },
             "location": {
               "type": "string",
-              "defaultValue": "[resourceGroup().location]",
               "metadata": {
                 "description": "location for all resources"
               }
