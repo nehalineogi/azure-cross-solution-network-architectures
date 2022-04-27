@@ -83,7 +83,7 @@ var hubBastionSubnetName   = virtualnetwork[0].outputs.subnets[1].name
 var hubBastionAddPrefix    = virtualnetwork[0].outputs.subnets[1].properties.addressPrefix
 var gwSubnetId             = virtualnetwork[0].outputs.subnets[2].id
 var vpnVars = {
- //   psk                : psk.outputs.psk
+    psk                : psk.outputs.psk
     gwip               : hubgw.outputs.gwpip
     gwaddressPrefix    : hubAddressPrefix
     onpremAddressPrefix: onpremAddressPrefix
@@ -127,70 +127,70 @@ scope:rg
   name : 'kv'
   scope: rg
 }
-// module psk 'modules/psk.bicep' = {
-//   scope: rg
-//   name: 'psk'
-//   params: {
-//     keyvault_name  : kv.outputs.keyvaultname
-//     onpremSubnetRef: onpremSubnetRef
-//     name           : 'azure-conn'
-//   }
-// } 
+module psk 'modules/psk.bicep' = {
+  scope: rg
+  name: 'psk'
+  params: {
+    keyvault_name  : kv.outputs.keyvaultname
+    onpremSubnetRef: onpremSubnetRef
+    name           : 'azure-conn'
+  }
+} 
 
-// module dc './modules/vm.bicep' = {
-//   params: {
-//     location     : location
-//     windowsVM    : true
-//     deployDC     : true
-//     domainName   : domainName
-//     adminusername: VmAdminUsername
-//     keyvault_name: kv.outputs.keyvaultname
-//     vmname       : dcVmName
-//     subnet1ref   : onpremSubnetRef
-//     vmSize       : HostVmSize
-//     githubPath   : githubPath
-//     adUserId     : adUserId
-//   }
-//   name: 'OnpremDC'
-//   scope: rg
-// } 
-// module onpremVpnVM './modules/vm.bicep' = {
-//   params: {
-//     location                 : location
-//     windowsVM                : false
-//     deployPIP                : true
-//     deployVpn                : true
-//     adminusername            : VmAdminUsername
-//     keyvault_name            : kv.outputs.keyvaultname
-//     vmname                   : onpremVPNVmName
-//     subnet1ref               : onpremSubnetRef
-//     vmSize                   : HostVmSize
-//     githubPath               : githubPath
-//     publicIPAddressNameSuffix: publicIPAddressNameSuffix
-//     vpnVars                  : vpnVars
-//     adUserId                 : adUserId
-//   }
-//   name: 'onpremVpnVM'
-//   scope: rg
-// } 
-// module hubDnsVM './modules/vm.bicep' = {
-//   params: {
-//     location     : location
-//     windowsVM    : false
-//     adminusername: VmAdminUsername
-//     keyvault_name: kv.outputs.keyvaultname
-//     vmname       : hubDNSVmName
-//     subnet1ref   : hubSubnetRef
-//     vmSize       : HostVmSize
-//     githubPath   : githubPath
-//     adUserId     : adUserId
-//     vpnVars      : vpnVars
-//     deployHubDns : true
+module dc './modules/vm.bicep' = {
+  params: {
+    location     : location
+    windowsVM    : true
+    deployDC     : true
+    domainName   : domainName
+    adminusername: VmAdminUsername
+    keyvault_name: kv.outputs.keyvaultname
+    vmname       : dcVmName
+    subnet1ref   : onpremSubnetRef
+    vmSize       : HostVmSize
+    githubPath   : githubPath
+    adUserId     : adUserId
+  }
+  name: 'OnpremDC'
+  scope: rg
+} 
+module onpremVpnVM './modules/vm.bicep' = {
+  params: {
+    location                 : location
+    windowsVM                : false
+    deployPIP                : true
+    deployVpn                : true
+    adminusername            : VmAdminUsername
+    keyvault_name            : kv.outputs.keyvaultname
+    vmname                   : onpremVPNVmName
+    subnet1ref               : onpremSubnetRef
+    vmSize                   : HostVmSize
+    githubPath               : githubPath
+    publicIPAddressNameSuffix: publicIPAddressNameSuffix
+    vpnVars                  : vpnVars
+    adUserId                 : adUserId
+  }
+  name: 'onpremVpnVM'
+  scope: rg
+} 
+module hubDnsVM './modules/vm.bicep' = {
+  params: {
+    location     : location
+    windowsVM    : false
+    adminusername: VmAdminUsername
+    keyvault_name: kv.outputs.keyvaultname
+    vmname       : hubDNSVmName
+    subnet1ref   : hubSubnetRef
+    vmSize       : HostVmSize
+    githubPath   : githubPath
+    adUserId     : adUserId
+    vpnVars      : vpnVars
+    deployHubDns : true
 
-//   }
-//   name: 'hubDnsVM'
-//   scope: rg
-// } 
+  }
+  name: 'hubDnsVM'
+  scope: rg
+} 
 module hubgw './modules/vnetgw.bicep' = {
   name: 'hubgw'
   scope: rg
@@ -199,26 +199,26 @@ module hubgw './modules/vnetgw.bicep' = {
     location: location
   }
 }
-// module localNetworkGW 'modules/lng.bicep' = {
-//   scope: rg
-//   name: 'onpremgw'
-//   params: {
-//     addressSpace:  onpremAddressPrefix
-//     ipAddress: onpremVpnVM.outputs.VmIp
-//     name: 'onpremgw'
-//   }
-// }
-// module vpnconn 'modules/vpnconn.bicep' = {
-//   scope: rg
-//   name: 'onprem-azure-conn'
-//   params: {
-//     psk     : psk.outputs.psk
-//     lngid   : localNetworkGW.outputs.lngid
-//     vnetgwid: hubgw.outputs.vnetgwid
-//     name    : 'onprem-azure-conn'
+module localNetworkGW 'modules/lng.bicep' = {
+  scope: rg
+  name: 'onpremgw'
+  params: {
+    addressSpace:  onpremAddressPrefix
+    ipAddress: onpremVpnVM.outputs.VmIp
+    name: 'onpremgw'
+  }
+}
+module vpnconn 'modules/vpnconn.bicep' = {
+  scope: rg
+  name: 'onprem-azure-conn'
+  params: {
+    psk     : psk.outputs.psk
+    lngid   : localNetworkGW.outputs.lngid
+    vnetgwid: hubgw.outputs.vnetgwid
+    name    : 'onprem-azure-conn'
     
-//   }
-// // }
+  }
+}
  module vnetPeering './modules/vnetpeering.bicep' = {
   params:{
     hubVnetId    : hubVnetId
@@ -241,33 +241,33 @@ params:{
 scope:rg
 name: 'hubBastion'
 }
-// module onpremBastion './modules/bastion.bicep' = {
-//   params:{
-//     bastionHostName: 'onpremBastion'
-//     location: location
-//     subnetRef: onpremBastionSubnetRef
-//   }
-//   scope:rg
-//   name: 'onpremBastion'
-//   }
-// module onpremNSG './modules/nsg/nsg_onprem.bicep' = {
-//   name: 'hubNSG'
-//   params:{
-//     location: location
-//     sourceAddressPrefix: hubgw.outputs.gwpip
-//   }
-// scope:rg
-// }
-// module onpremNsgAttachment './modules/nsgAttachment.bicep' = {
-//   name: 'onpremNsgAttachment'
-//   params:{
-//     nsgId              : onpremNSG.outputs.onpremNsgId
-//     subnetAddressPrefix: onpremAddressPrefix                    
-//     subnetName         : onpremSubnetName
-//     vnetName           : onpremVnetName
-//   }
-//   scope:rg
-// }
+module onpremBastion './modules/bastion.bicep' = {
+  params:{
+    bastionHostName: 'onpremBastion'
+    location: location
+    subnetRef: onpremBastionSubnetRef
+  }
+  scope:rg
+  name: 'onpremBastion'
+  }
+module onpremNSG './modules/nsg/nsg_onprem.bicep' = {
+  name: 'hubNSG'
+  params:{
+    location: location
+    sourceAddressPrefix: hubgw.outputs.gwpip
+  }
+scope:rg
+}
+module onpremNsgAttachment './modules/nsgAttachment.bicep' = {
+  name: 'onpremNsgAttachment'
+  params:{
+    nsgId              : onpremNSG.outputs.onpremNsgId
+    subnetAddressPrefix: onpremAddressPrefix                    
+    subnetName         : onpremSubnetName
+    vnetName           : onpremVnetName
+  }
+  scope:rg
+}
 module aksNsgAttachment './modules/nsgAttachment.bicep' = {
   name: 'aksNsgAttachment'
   params:{
@@ -278,19 +278,19 @@ module aksNsgAttachment './modules/nsgAttachment.bicep' = {
   }
   scope:rg
 }
-// module routeTableAttachment 'modules/routetable.bicep' = {
-//   scope: rg
-//   name: 'rt'
-//   params: {
-//     applianceAddress   : onpremVpnVM.outputs.VmPrivIp
-//     nsgId              : onpremNSG.outputs.onpremNsgId
-//     hubAddressPrefix   : hubAddressPrefix
-//     spokeAddressPrefix : spokeAddressPrefix
-//     subnetAddressPrefix: onpremAddressPrefix
-//     subnetName         : onpremSubnetName
-//     vnetName           : onpremVnetName
-//   }
-// }
+module routeTableAttachment 'modules/routetable.bicep' = {
+  scope: rg
+  name: 'rt'
+  params: {
+    applianceAddress   : onpremVpnVM.outputs.VmPrivIp
+    nsgId              : onpremNSG.outputs.onpremNsgId
+    hubAddressPrefix   : hubAddressPrefix
+    spokeAddressPrefix : spokeAddressPrefix
+    subnetAddressPrefix: onpremAddressPrefix
+    subnetName         : onpremSubnetName
+    vnetName           : onpremVnetName
+  }
+}
 module bastionNSG './modules/nsg/nsg_bastion.bicep' = {
   name: 'bastionNSG'
   params:{
@@ -315,16 +315,16 @@ module bastionHubNSGAttachment './modules/nsgAttachment.bicep' = {
   }
   scope:rg
 }
-// module bastionOnpremNSGAttachment './modules/nsgAttachment.bicep' = {
-//   name: 'bastionOnpremNsgAttachment'
-//   params:{
-//     nsgId              : bastionNSG.outputs.nsgId
-//     subnetAddressPrefix: onpremBastionAddPrefix
-//     subnetName         : onpremBastionSubnetName
-//     vnetName           : onpremVnetName
-//   }
-//   scope:rg
-// }
+module bastionOnpremNSGAttachment './modules/nsgAttachment.bicep' = {
+  name: 'bastionOnpremNsgAttachment'
+  params:{
+    nsgId              : bastionNSG.outputs.nsgId
+    subnetAddressPrefix: onpremBastionAddPrefix
+    subnetName         : onpremBastionSubnetName
+    vnetName           : onpremVnetName
+  }
+  scope:rg
+}
 
 module privateDNSZone 'modules/privatezone.bicep' = if (contains(aksPrivatePublic, 'private')) {
   name: 'create-DNS-private-zone-for-AKS'
@@ -382,23 +382,23 @@ module aks_cluster 'modules/aks.bicep' = {
 }
 // The VM passwords are generated at run time and automatically stored in Keyvault. 
 // It is not possible to create a loop through the vm var because the 'subnetref' which is an output only known at runtime is not calculated until after deployment. It is not possible therefore to use it in a loop.
-// module hubJumpServer './modules/vm.bicep' = {
-//   params: {
-//     location     : location
-//     windowsVM    : true
-//     deployDC     : false
-//     adminusername: VmAdminUsername
-//     keyvault_name: kv.outputs.keyvaultname
-//     vmname       : hubVmName
-//     subnet1ref   : hubSubnetRef
-//     vmSize       : HostVmSize
-//     githubPath   : githubPath
-//     adUserId     : adUserId
+module hubJumpServer './modules/vm.bicep' = {
+  params: {
+    location     : location
+    windowsVM    : true
+    deployDC     : false
+    adminusername: VmAdminUsername
+    keyvault_name: kv.outputs.keyvaultname
+    vmname       : hubVmName
+    subnet1ref   : hubSubnetRef
+    vmSize       : HostVmSize
+    githubPath   : githubPath
+    adUserId     : adUserId
 
-//   }
-//   name: 'hubjump'
-//   scope: rg
-// }  
+  }
+  name: 'hubjump'
+  scope: rg
+}  
 module spokeJumpServer './modules/vm.bicep' = {
   params: {
     location     : location
