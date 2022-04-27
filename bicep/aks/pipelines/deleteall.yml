@@ -1,0 +1,47 @@
+trigger: none
+      
+jobs:
+  - job:
+    steps:
+
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: $(ServiceConnectionName)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az az group delete -g $(ResourceGroupName_pbk) 
+
+  - job:
+    steps:
+      
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: $(ServiceConnectionName)
+        
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az az group delete -g $(ResourceGroupName_prv)
+
+  - job:
+    steps:
+
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: $(ServiceConnectionName)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az az group delete -g $(ResourceGroupName_cpb)
+
+  - job:
+    steps:
+
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: $(ServiceConnectionName)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az az group delete -g $(ResourceGroupName_cpr) 
