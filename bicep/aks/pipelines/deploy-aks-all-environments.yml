@@ -23,7 +23,7 @@ jobs:
             --name $(Build.BuildNumber)-public-kubenet \
             --location $(location) \
             --template-file bicep/aks/main.bicep \
-            --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_pbk) networkPlugin=$(NetworkPlugin_kubenet) aksPrivatePublic=$(aksPrivatePublic_pbl)
+            --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_pbk) KubenetOrCniNetworkPolicy=$(NetworkPlugin_kubenet) PublicOrPrivateCluster=$(aksPrivatePublic_pbl)
 
   - job:
     steps:
@@ -39,7 +39,7 @@ jobs:
             --name $(Build.BuildNumber)-private-kubenet \
             --location $(location) \
             --template-file bicep/aks/main.bicep \
-            --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_prv) networkPlugin=$(NetworkPlugin_kubenet) aksPrivatePublic=$(aksPrivatePublic_prv)
+            --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_prv) KubenetOrCniNetworkPolicy=$(NetworkPlugin_kubenet) PublicOrPrivateCluster=$(aksPrivatePublic_prv)
 
   - job:
     steps:
@@ -54,7 +54,7 @@ jobs:
             --name $(Build.BuildNumber)-public-cni \
             --location $(location) \
             --template-file bicep/aks/main.bicep \
-            --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpb) networkPlugin=$(NetworkPlugin_CNI) aksPrivatePublic=$(aksPrivatePublic_pbl)
+            --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpb) KubenetOrCniNetworkPolicy=$(NetworkPlugin_CNI) PublicOrPrivateCluster=$(aksPrivatePublic_pbl)
 
   - job:
     steps:
@@ -69,4 +69,4 @@ jobs:
             --name $(Build.BuildNumber)-private-cni \
             --location $(location) \
             --template-file bicep/aks/main.bicep \
-            --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpr) networkPlugin=$(NetworkPlugin_CNI) aksPrivatePublic=$(aksPrivatePublic_prv)
+            --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpr) KubenetOrCniNetworkPolicy=$(NetworkPlugin_CNI) PublicOrPrivateCluster=$(aksPrivatePublic_prv)
