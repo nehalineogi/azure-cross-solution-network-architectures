@@ -20,7 +20,7 @@ jobs:
         inlineScript: |
           az deployment sub create \
             --name $(Build.BuildNumber)-public-kubenet \
-            --location uksouth \
+            --location $(location) \
             --template-file bicep/aks/main.bicep \
             --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_pbk) networkPlugin=$(NetworkPlugin_kubenet) aksPrivatePublic=$(aksPrivatePublic_pbl)
 
@@ -36,7 +36,7 @@ jobs:
         inlineScript: |
           az deployment sub create \
             --name $(Build.BuildNumber)-private-kubenet \
-            --location uksouth \
+            --location $(location) \
             --template-file bicep/aks/main.bicep \
             --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_prv) networkPlugin=$(NetworkPlugin_kubenet) aksPrivatePublic=$(aksPrivatePublic_prv)
 
@@ -51,7 +51,7 @@ jobs:
         inlineScript: |
           az deployment sub create \
             --name $(Build.BuildNumber)-public-cni \
-            --location uksouth \
+            --location $(location) \
             --template-file bicep/aks/main.bicep \
             --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpb) networkPlugin=$(NetworkPlugin_CNI) aksPrivatePublic=$(aksPrivatePublic_pbl)
 
@@ -66,6 +66,6 @@ jobs:
         inlineScript: |
           az deployment sub create \
             --name $(Build.BuildNumber)-private-cni \
-            --location uksouth \
+            --location $(location) \
             --template-file bicep/aks/main.bicep \
             --parameters adUserId=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpr) networkPlugin=$(NetworkPlugin_CNI) aksPrivatePublic=$(aksPrivatePublic_prv)
