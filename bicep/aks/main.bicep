@@ -8,7 +8,7 @@ param ADUserID string  = ''
 @maxLength(10)
 param ResourceGroupName string = 'aks'
 
-@description('AKS network Plugin - kubenet or azure (azure deploys Container Networking Interface (CNI) ')
+@description('AKS network Plugin - kubenet or CNI')
 @allowed([
   'kubenet'
   'CNI'
