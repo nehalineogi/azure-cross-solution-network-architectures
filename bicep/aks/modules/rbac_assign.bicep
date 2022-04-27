@@ -1,6 +1,7 @@
 param description string = ''
 param principalId string
 param roleDefinitionIdOrNames array
+param location string
 
 var builtInRoleNames = {
   'Owner'                               : subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '8e3af657-a8ff-443c-a75c-2fe8c4bcb635')
@@ -35,8 +36,8 @@ var builtInRoleNames = {
   'Virtual Machine User Login'          : subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'fb879df8-f326-4884-b1cf-06f3ad86be52')
 }
 
-resource roleAssignment 'Microsoft.Authorization/roleAssignments@2021-04-01-preview' = [for roleDefinitionIdOrName in roleDefinitionIdOrNames: {
-  name: guid(resourceGroup().id, principalId, roleDefinitionIdOrName)
+resource roleAssignment 'Microsoft.Authorization/roleAssignments@2020-10-01-preview' = [for roleDefinitionIdOrName in roleDefinitionIdOrNames: {
+  name: guid(location, principalId, roleDefinitionIdOrName)
   properties: {
     description: description
     roleDefinitionId: contains(builtInRoleNames, roleDefinitionIdOrName) ? builtInRoleNames[roleDefinitionIdOrName] : roleDefinitionIdOrName

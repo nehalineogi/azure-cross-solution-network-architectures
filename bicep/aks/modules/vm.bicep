@@ -30,7 +30,7 @@ param vpnVars object = 	{
 param vmSize string 
 
 @description('location for all resources')
-param location string = resourceGroup().location
+param location string
 
 var storageAccountName = uniqueString(resourceGroup().id, vmname)
 var nicName = '${vmname}nic'

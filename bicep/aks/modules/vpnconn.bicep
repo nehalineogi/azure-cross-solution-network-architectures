@@ -2,10 +2,11 @@ param name string
 param vnetgwid string
 param lngid string
 param psk string
+param location string
 
 
 resource conn 'Microsoft.Network/connections@2021-02-01' = {
-  location: resourceGroup().location
+  location: location
   name: name
   properties: {
     connectionType                : 'IPsec'

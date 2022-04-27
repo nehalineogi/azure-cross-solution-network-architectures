@@ -5,10 +5,11 @@ param vnetName string
 param subnetName string
 param applianceAddress string
 param nsgId string
+param location string
 
 resource routeTable 'Microsoft.Network/routeTables@2021-02-01' = {
   name: 'onprem-route-table'
-  location: resourceGroup().location
+  location: location
   properties: {
     routes: [
       {

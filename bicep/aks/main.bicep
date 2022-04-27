@@ -208,6 +208,7 @@ module localNetworkGW 'modules/lng.bicep' = {
   scope: rg
   name: 'onpremgw'
   params: {
+    location: location
     addressSpace:  onpremAddressPrefix
     ipAddress: onpremVpnVM.outputs.VmIp
     name: 'onpremgw'
@@ -217,6 +218,7 @@ module vpnconn 'modules/vpnconn.bicep' = {
   scope: rg
   name: 'onprem-azure-conn'
   params: {
+    location: location
     psk     : psk.outputs.psk
     lngid   : localNetworkGW.outputs.lngid
     vnetgwid: hubgw.outputs.vnetgwid
@@ -287,6 +289,7 @@ module routeTableAttachment 'modules/routetable.bicep' = {
   scope: rg
   name: 'rt'
   params: {
+    location           : location
     applianceAddress   : onpremVpnVM.outputs.VmPrivIp
     nsgId              : onpremNSG.outputs.onpremNsgId
     hubAddressPrefix   : hubAddressPrefix
@@ -350,7 +353,8 @@ module privateDNSZoneLink 'modules/privatezonelink.bicep' = if (contains(aksPriv
 module aks_user_identity 'modules/identity.bicep' = {
   name: 'aks_user_identity'
   params: {
-    prefix: 'aks_user_'
+    location: location
+    prefix  : 'aks_user_'
   }
   scope: rg
 }
@@ -358,7 +362,8 @@ module aks_user_identity 'modules/identity.bicep' = {
 module user_assigned_RBAC_assign './modules/rbac_assign.bicep' = {
   name: 'assign-RBAC-to-aks-rg' 
   params: {
-    principalId: aks_user_identity.outputs.principleId
+    location               : location
+    principalId            : aks_user_identity.outputs.principleId
     roleDefinitionIdOrNames: [
       'Network Contributor' 
       'Private DNS Zone Contributor'
