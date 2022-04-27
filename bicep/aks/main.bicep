@@ -48,9 +48,9 @@ var HostVmSize       = SupportingServersVMSize
 var aksPrivatePublic = PublicOrPrivateCluster
 var networkPlugin    = KubenetOrCNINetworkPolicy
 
-var repoName         = 'nehalineogi'
-var branchName       = 'aks-private'
-var githubPath       = 'https://raw.githubusercontent.com/${repoName}/azure-cross-solution-network-architectures/${branchName}/bicep/aks/scripts/'
+var repoOwnerName = 'nehalineogi'
+var branchName    = 'aks-private'
+var githubPath    = 'https://raw.githubusercontent.com/${repoOwnerName}/azure-cross-solution-network-architectures/${branchName}/bicep/aks/scripts/'
 
 var VmAdminUsername = 'localadmin'
 var location        = deployment().location    // linting warning here, but for this deployment it is at subscription level and so if we have a separate parameter specified here, 
