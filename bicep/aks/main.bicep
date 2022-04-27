@@ -1,7 +1,7 @@
 @minLength(36)
 @maxLength(36)
 @description('Used to set the Keyvault access policy - run this command using az cli to get your ObjectID : az ad signed-in-user show --query objectId -o tsv')
-param adUserId string  = ''
+param ADUserID string  = ''
 
 @description('Set the resource group name, this will be created automatically')
 @minLength(3)
@@ -13,7 +13,7 @@ param ResourceGroupName string = 'aks'
   'kubenet'
   'CNI'
 ])
-param KubenetOrCniNetworkPolicy string = 'kubenet'
+param KubenetOrCNINetworkPolicy string = 'kubenet'
 
 @description('Choose AKS Cluster Type (this is used to define kubectl access mode)')
 @allowed([
@@ -24,7 +24,7 @@ param PublicOrPrivateCluster string = 'public'
 
 @description('Set the size for the supporting VMs (domain controller, hub DNS, VPN VM etc) ')
 @minLength(6)
-param SupportingServersVmSize string = 'Standard_D2_v3'
+param SupportingServersVMSize string = 'Standard_D2_v3'
 
 @description('Set the name of the domain eg contoso.local')
 @minLength(3)
@@ -44,9 +44,9 @@ var env = {
 }
 
 // Friendly parameter names used above for the custom deployment ARM presentation. Reverted to shorter names here for readability
-var HostVmSize       = SupportingServersVmSize
+var HostVmSize       = SupportingServersVMSize
 var aksPrivatePublic = PublicOrPrivateCluster
-var networkPlugin    = KubenetOrCniNetworkPolicy
+var networkPlugin    = KubenetOrCNINetworkPolicy
 
 var repoName         = 'nehalineogi'
 var branchName       = 'aks-private'
@@ -127,7 +127,7 @@ scope:rg
   module kv './modules/kv.bicep' = {
   params: {
     location: location
-    adUserId: adUserId
+    adUserId: ADUserID
   }
   name : 'kv'
   scope: rg
@@ -154,7 +154,7 @@ module dc './modules/vm.bicep' = {
     subnet1ref   : onpremSubnetRef
     vmSize       : HostVmSize
     githubPath   : githubPath
-    adUserId     : adUserId
+    adUserId     : ADUserID
   }
   name: 'OnpremDC'
   scope: rg
@@ -173,7 +173,7 @@ module onpremVpnVM './modules/vm.bicep' = {
     githubPath               : githubPath
     publicIPAddressNameSuffix: publicIPAddressNameSuffix
     vpnVars                  : vpnVars
-    adUserId                 : adUserId
+    adUserId                 : ADUserID
   }
   name: 'onpremVpnVM'
   scope: rg
@@ -188,7 +188,7 @@ module hubDnsVM './modules/vm.bicep' = {
     subnet1ref   : hubSubnetRef
     vmSize       : HostVmSize
     githubPath   : githubPath
-    adUserId     : adUserId
+    adUserId     : ADUserID
     vpnVars      : vpnVars
     deployHubDns : true
 
@@ -403,7 +403,7 @@ module hubJumpServer './modules/vm.bicep' = {
     subnet1ref   : hubSubnetRef
     vmSize       : HostVmSize
     githubPath   : githubPath
-    adUserId     : adUserId
+    adUserId     : ADUserID
 
   }
   name: 'hubjump'
@@ -419,7 +419,7 @@ module spokeJumpServer './modules/vm.bicep' = {
     subnet1ref   : SpokeSubnetRef
     vmSize       : HostVmSize
     githubPath   : githubPath
-    adUserId     : adUserId
+    adUserId     : ADUserID
   }
   name: 'spokejump'
   scope: rg
