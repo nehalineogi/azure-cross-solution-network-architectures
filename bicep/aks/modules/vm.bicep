@@ -234,8 +234,8 @@ resource csedc 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (d
       ConfigurationFunction: 'CreateADPDC.ps1\\CreateADPDC'
       Properties: {
         DomainName: domainName
-        pDNSZone: pDNSZone
-        HubDNSIP: HubDNSIP
+        pDNSZone  : pDNSZone
+       // HubDNSIP  : HubDNSIP
         AdminCreds: {
           UserName: adminusername
           Password: 'PrivateSettingsRef:AdminPassword'
