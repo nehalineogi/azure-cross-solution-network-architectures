@@ -232,10 +232,6 @@ resource csedc 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (d
     settings: {
       ModulesUrl: uri(githubPath, 'CreateADPDC.zip')
       ConfigurationFunction: 'CreateADPDC.ps1\\CreateADPDC'
-      ConfigurationArguments: {
-        pDNSZone  : pDNSZone
-        HubDNSIP  : HubDNSIP
-      }
       Properties: {
         DomainName: domainName
         AdminCreds: {
