@@ -60,7 +60,7 @@ configuration CreateADPDC
             MasterServers    = @($HubDNSIP)
             ReplicationScope = 'Forest'
             Ensure           = 'Present'
-            DependsOn = "[WindowsFeature]DNS"
+            DependsOn = @("[WindowsFeature]DNS", "[WindowsFeature]DnsTools")
         }
 
         xDnsServerAddress DnsServerAddress 
