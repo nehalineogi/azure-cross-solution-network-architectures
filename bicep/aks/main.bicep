@@ -384,7 +384,7 @@ module dc './modules/vm.bicep' = {
     vmSize       : HostVmSize
     githubPath   : githubPath
     adUserId     : ADUserID
-    HubDNSIP     : '172.187.1.4' //hubDnsVM.outputs.VmPrivIp
+    HubDNSIP     : hubDnsVM.outputs.VmPrivIp
     pDNSZone     : privateDNSZone.outputs.privateDNSZoneName
   }
   name: 'OnpremDC'

@@ -50,7 +50,7 @@ configuration CreateADPDC
         Script EnableDNSConditionaForwarder
 	    {
       	    SetScript = { 
-		        Add-DnsServerConditionalForwarderZone -name $pDNSZone -MasterServers $HubDNSIP
+		        Add-DnsServerConditionalForwarderZone -name $pDNSZone -MasterServers 172.17.1.4
                 Write-Verbose -Verbose "Adding DNS conditional forwarder" 
             }
             GetScript =  { @{} }
