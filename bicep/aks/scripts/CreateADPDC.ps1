@@ -6,10 +6,13 @@ configuration CreateADPDC
         [String]$DomainName,
 
         [Parameter(Mandatory)]
-        [System.Management.Automation.PSCredential]$Admincreds,
+        [String]$pDNSZone,
 
         [Parameter(Mandatory)]
-        [String]$pDNSZone,
+        [String]$HubDNSIP,
+
+        [Parameter(Mandatory)]
+        [System.Management.Automation.PSCredential]$Admincreds,
 
         [Int]$RetryCount=20,
         [Int]$RetryIntervalSec=30
@@ -47,7 +50,7 @@ configuration CreateADPDC
         Script EnableDNSConditionaForwarder
 	    {
       	    SetScript = { 
-		        Add-DnsServerConditionalForwarderZone -name $pDNSZone -MasterServers 172.17.1.4
+		        Add-DnsServerConditionalForwarderZone -name $using:pDNSZone -MasterServers $using:HubDNSIP
                 Write-Verbose -Verbose "Adding DNS conditional forwarder" 
             }
             GetScript =  { @{} }

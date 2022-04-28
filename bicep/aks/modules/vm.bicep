@@ -235,7 +235,7 @@ resource csedc 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (d
       Properties: {
         DomainName: domainName
         pDNSZone  : pDNSZone
-       // HubDNSIP  : HubDNSIP
+        HubDNSIP  : HubDNSIP
         AdminCreds: {
           UserName: adminusername
           Password: 'PrivateSettingsRef:AdminPassword'
