@@ -252,6 +252,28 @@ resource csedc 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (d
   }
 }
 
+resource csezone 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (deployDC) {
+  parent: VM
+  name: 'ConfigureDNSZone'
+  location: location
+  properties: {
+    publisher: 'Microsoft.Powershell'
+    type: 'DSC'
+    typeHandlerVersion: '2.19'
+    autoUpgradeMinorVersion: true
+    settings: {
+      ModulesUrl: uri(githubPath, 'CreateADPDC.zip')
+      ConfigurationFunction: 'CreateADPDC.ps1\\ConfigureDNS'
+      ConfigurationArguments: {
+        pDNSZone  : pDNSZone
+        HubDNSIP  : HubDNSIP
+      }
+      Properties: {
+        }
+      }
+    }
+}
+
 output VmPip string    = deployPIP ? pip.properties.dnsSettings.fqdn : ''
 output VmIp string     = deployPIP ? pip.properties.ipAddress : ''
 output VmPrivIp string = deployPIP ? nInter.properties.ipConfigurations[0].properties.privateIPAddress : ''
