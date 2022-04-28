@@ -18,7 +18,7 @@ configuration CreateADPDC
         [Int]$RetryIntervalSec=30
     ) 
     
-    Import-DscResource -ModuleName xActiveDirectory, xStorage, xNetworking, PSDesiredStateConfiguration, xPendingReboot
+    Import-DscResource -ModuleName xActiveDirectory, xStorage, xNetworking, PSDesiredStateConfiguration, xPendingReboot, xDnsServerDsc
     [System.Management.Automation.PSCredential ]$DomainCreds = New-Object System.Management.Automation.PSCredential ("${DomainName}\$($Admincreds.UserName)", $Admincreds.Password)
     $Interface=Get-NetAdapter|Where Name -Like "Ethernet*"|Select-Object -First 1
     $InterfaceAlias=$($Interface.Name)
@@ -47,23 +47,20 @@ configuration CreateADPDC
 	        DependsOn = "[WindowsFeature]DNS"
         }
 
-        Script EnableDNSConditionalForwarder
-	    {
-      	    SetScript = { 
-		        Add-DnsServerConditionalForwarderZone -name $using:pDNSZone -MasterServers $using:HubDNSIP
-                Write-Verbose -Verbose "Adding DNS conditional forwarder" 
-            }
-            GetScript =  { @{} }
-            TestScript = { $false }
-	        DependsOn = "[WindowsFeature]DNS"
-        }
-
 	    WindowsFeature DnsTools
 	    {
 	        Ensure = "Present"
             Name = "RSAT-DNS-Server"
             DependsOn = "[WindowsFeature]DNS"
 	    }
+
+        DnsServerConditionalForwarder 'AKSConditionalForwarder'
+        {
+            Name             = $using:pDNSZone
+            MasterServers    = @($using:HubDNSIP)
+            ReplicationScope = 'Forest'
+            Ensure           = 'Present'
+        }
 
         xDnsServerAddress DnsServerAddress 
         { 
