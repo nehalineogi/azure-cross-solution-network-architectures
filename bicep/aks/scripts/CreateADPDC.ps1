@@ -54,14 +54,7 @@ configuration CreateADPDC
             DependsOn = "[WindowsFeature]DNS"
 	    }
 
-        xDnsServerDsc DnsServerConditionalForwarder 
-        {
-            Name             = 'shaun.com' # $pDNSZone
-            MasterServers    = @('1.2.3.4') # $HubDNSIP
-            ReplicationScope = 'Forest'
-            Ensure           = 'Present'
-            DependsOn = @("[WindowsFeature]DNS", "[WindowsFeature]DnsTools")
-        }
+        
 
         xDnsServerAddress DnsServerAddress 
         { 
@@ -118,3 +111,30 @@ configuration CreateADPDC
 
    }
 } 
+
+configuration CreateADPDC 
+{ 
+   param 
+   ( 
+        [Parameter(Mandatory)]
+        [String]$pDNSZone,
+
+        [Parameter(Mandatory)]
+        [String]$HubDNSIP,
+
+        [Int]$RetryCount=20,
+        [Int]$RetryIntervalSec=30
+    ) 
+
+    Import-DscResource -ModuleName xDnsServerDsc
+
+xDnsServerDsc DnsServerConditionalForwarder 
+        {
+            Name             = 'shaun.com' # $pDNSZone
+            MasterServers    = @('1.2.3.4') # $HubDNSIP
+            ReplicationScope = 'Forest'
+            Ensure           = 'Present'
+            DependsOn = @("[WindowsFeature]DNS", "[WindowsFeature]DnsTools")
+        }
+
+    }
