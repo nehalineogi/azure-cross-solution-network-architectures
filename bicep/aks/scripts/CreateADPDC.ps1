@@ -54,7 +54,7 @@ configuration CreateADPDC
             DependsOn = "[WindowsFeature]DNS"
 	    }
 
-        DnsServerConditionalForwarder 'AKSConditionalForwarder'
+        DnsServerConditionalForwarder6 'AKSConditionalForwarder'
         {
             Name             = $pDNSZone
             MasterServers    = @($HubDNSIP)
