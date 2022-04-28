@@ -112,7 +112,7 @@ configuration CreateADPDC
    }
 } 
 
-configuration CreateADPDC 
+configuration ConfigureDNS 
 { 
    param 
    ( 
