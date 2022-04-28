@@ -11,9 +11,6 @@ configuration CreateADPDC
         [Parameter(Mandatory)]
         [String]$pDNSZone,
 
-        [Parameter(Mandatory)]
-        [String]$HubDNSIP,
-
         [Int]$RetryCount=20,
         [Int]$RetryIntervalSec=30
     ) 
