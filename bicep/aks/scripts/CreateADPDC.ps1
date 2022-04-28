@@ -8,6 +8,12 @@ configuration CreateADPDC
         [Parameter(Mandatory)]
         [System.Management.Automation.PSCredential]$Admincreds,
 
+        [Parameter(Mandatory)]
+        [String]$pDNSZone,
+
+        [Parameter(Mandatory)]
+        [String]$HubDNSIP,
+
         [Int]$RetryCount=20,
         [Int]$RetryIntervalSec=30
     ) 
@@ -35,6 +41,17 @@ configuration CreateADPDC
       	    SetScript = { 
 		        Set-DnsServerDiagnostics -All $true
                 Write-Verbose -Verbose "Enabling DNS client diagnostics" 
+            }
+            GetScript =  { @{} }
+            TestScript = { $false }
+	        DependsOn = "[WindowsFeature]DNS"
+        }
+
+        Script EnableDNSConditionaForwarder
+	    {
+      	    SetScript = { 
+		        Add-DnsServerConditionalForwarderZone -name $pDNSZone -MasterServers $HubDNSIP
+                Write-Verbose -Verbose "Adding DNS conditional forwarder" 
             }
             GetScript =  { @{} }
             TestScript = { $false }

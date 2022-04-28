@@ -8,6 +8,8 @@ param adUserId string
 param adminPassword string = '${uniqueString(resourceGroup().id, vmname)}aA1!${uniqueString(adUserId)}' // Note passwords not cryptographically secure, deployment is not designed for production use
 param windowsVM bool
 param domainName string = 'contoso.local' // this has a default so that module calls do not need to supply a domain name when deployDC is set to false, as to-do-so is misleading.
+param pDNSZone string = ''
+param HubDNSIP string = ''
 
 var dcdisk = [
   {
@@ -232,6 +234,8 @@ resource csedc 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (d
       ConfigurationFunction: 'CreateADPDC.ps1\\CreateADPDC'
       Properties: {
         DomainName: domainName
+        pDNSZone: pDNSZone
+        HubDNSIP: HubDNSIP
         AdminCreds: {
           UserName: adminusername
           Password: 'PrivateSettingsRef:AdminPassword'
