@@ -56,8 +56,8 @@ configuration CreateADPDC
 
         DnsServerConditionalForwarder 'AKSConditionalForwarder'
         {
-            Name             = $using:pDNSZone
-            MasterServers    = @($using:HubDNSIP)
+            Name             = $pDNSZone
+            MasterServers    = @($HubDNSIP)
             ReplicationScope = 'Forest'
             Ensure           = 'Present'
             DependsOn = "[WindowsFeature]DNS"
