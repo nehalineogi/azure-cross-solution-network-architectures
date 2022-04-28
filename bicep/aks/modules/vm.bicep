@@ -255,7 +255,7 @@ resource csezone 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if 
   properties: {
     publisher: 'Microsoft.Powershell'
     type: 'DSC'
-    typeHandlerVersion: '2.19'
+    typeHandlerVersion: '2.83'
     autoUpgradeMinorVersion: true
     settings: {
       ModulesUrl: uri(githubPath, 'CreateADPDC.zip')
@@ -268,6 +268,9 @@ resource csezone 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if 
         }
       }
     }
+    dependsOn: [
+      csedc
+    ]
 }
 
 output VmPip string    = deployPIP ? pip.properties.dnsSettings.fqdn : ''

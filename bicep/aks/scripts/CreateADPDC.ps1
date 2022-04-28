@@ -134,7 +134,6 @@ xDnsServerDsc DnsServerConditionalForwarder
             MasterServers    = @('1.2.3.4') # $HubDNSIP
             ReplicationScope = 'Forest'
             Ensure           = 'Present'
-            DependsOn = @("[WindowsFeature]DNS", "[WindowsFeature]DnsTools")
         }
 
     }
