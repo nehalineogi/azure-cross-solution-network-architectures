@@ -47,7 +47,7 @@ configuration CreateADPDC
 	        DependsOn = "[WindowsFeature]DNS"
         }
 
-        Script EnableDNSConditionaForwarder
+        Script EnableDNSConditionalForwarder
 	    {
       	    SetScript = { 
 		        Add-DnsServerConditionalForwarderZone -name $using:pDNSZone -MasterServers $using:HubDNSIP
