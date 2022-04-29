@@ -384,7 +384,7 @@ module dc './modules/vm.bicep' = {
     vmSize       : HostVmSize
     githubPath   : githubPath
     adUserId     : ADUserID
-    pDNSZone     : privateDNSZone.outputs.privateDNSZoneName
+    pDNSZone     : contains(aksPrivatePublic, 'private') ? privateDNSZone.outputs.privateDNSZoneName : 'placeholder.placeholder.placeholder'
     HubDNSIP     : hubDnsVM.outputs.VmPrivIp
   }
   name: 'OnpremDC'
