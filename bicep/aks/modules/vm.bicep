@@ -234,7 +234,7 @@ resource csedc 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (d
       ConfigurationFunction: 'CreateADPDC.ps1\\CreateADPDC'
       Properties: {
         pDNSZone  : pDNSZone
-        HubDNSIP  : '172.16.1.1' //HubDNSIP
+        HubDNSIP  : HubDNSIP
         DomainName: domainName
         AdminCreds: {
           UserName: adminusername
@@ -252,4 +252,4 @@ resource csedc 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (d
 
 output VmPip string    = deployPIP ? pip.properties.dnsSettings.fqdn : ''
 output VmIp string     = deployPIP ? pip.properties.ipAddress : ''
-output VmPrivIp string = deployPIP ? nInter.properties.ipConfigurations[0].properties.privateIPAddress : ''
+output VmPrivIp string = deployPIP ? nInter.properties.ipConfigurations[0].properties.privateIPAddress : nInternoIP.properties.ipConfigurations[0].properties.privateIPAddress
