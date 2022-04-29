@@ -142,13 +142,13 @@ module virtualnetwork './modules/vnet.bicep' = [for vnet in env[networkPlugin].v
 //   }
 // scope:rg
 // // }
-// module defaultnsg './modules/nsg/nsg_default.bicep' = {
-//   name : 'default-nsg'
-//   params: {
-//     location: location
-//   }
-//   scope: rg
-// }
+module defaultnsg './modules/nsg/nsg_default.bicep' = {
+  name : 'default-nsg'
+  params: {
+    location: location
+  }
+  scope: rg
+}
 // module bastionHubNSGAttachment './modules/nsgAttachment.bicep' = {
 //   name: 'bastionHubNsgAttachment'
 //   params:{
