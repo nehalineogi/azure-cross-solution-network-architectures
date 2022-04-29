@@ -89,8 +89,8 @@ var hubBastionAddPrefix    = virtualnetwork[0].outputs.subnets[1].properties.add
 var gwSubnetId             = virtualnetwork[0].outputs.subnets[2].id
 
 var vpnVars = {
-  //  psk                : psk.outputs.psk
-  //  gwip               : hubgw.outputs.gwpip
+    psk                : psk.outputs.psk
+    gwip               : hubgw.outputs.gwpip
     gwaddressPrefix    : hubAddressPrefix
     onpremAddressPrefix: onpremAddressPrefix
     spokeAddressPrefix : spokeAddressPrefix
