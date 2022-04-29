@@ -315,8 +315,8 @@ module aks_cluster 'modules/aks.bicep' = {
   scope: rg
 }
 
-The VM passwords are generated at run time and automatically stored in Keyvault. 
-It is not possible to create a loop through the vm var because the 'subnetref' which is an output only known at runtime is not calculated until after deployment. It is not possible therefore to use it in a loop.
+// The VM passwords are generated at run time and automatically stored in Keyvault. 
+// It is not possible to create a loop through the vm var because the 'subnetref' which is an output only known at runtime is not calculated until after deployment. It is not possible therefore to use it in a loop.
 module hubJumpServer './modules/vm.bicep' = {
   params: {
     location     : location
@@ -350,7 +350,7 @@ module spokeJumpServer './modules/vm.bicep' = {
   scope: rg
 }  
 
-ON-PREM RESOURCES // 
+// ON-PREM RESOURCES // 
 
 module onpremBastion './modules/bastion.bicep' = {
   params:{
