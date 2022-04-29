@@ -90,7 +90,7 @@ var gwSubnetId             = virtualnetwork[0].outputs.subnets[2].id
 
 var vpnVars = {
   //  psk                : psk.outputs.psk
-    gwip               : hubgw.outputs.gwpip
+  //  gwip               : hubgw.outputs.gwpip
     gwaddressPrefix    : hubAddressPrefix
     onpremAddressPrefix: onpremAddressPrefix
     spokeAddressPrefix : spokeAddressPrefix
@@ -160,14 +160,14 @@ module defaultnsg './modules/nsg/nsg_default.bicep' = {
 //   scope:rg
 // }
 
-module hubgw './modules/vnetgw.bicep' = {
-  name: 'hubgw'
-  scope: rg
-  params:{
-    gatewaySubnetId: gwSubnetId
-    location: location
-  }
-}
+// module hubgw './modules/vnetgw.bicep' = {
+//   name: 'hubgw'
+//   scope: rg
+//   params:{
+//     gatewaySubnetId: gwSubnetId
+//     location: location
+//   }
+// }
 
 // module localNetworkGW 'modules/lng.bicep' = {
 //   scope: rg
