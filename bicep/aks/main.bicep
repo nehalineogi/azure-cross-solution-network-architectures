@@ -89,7 +89,7 @@ var hubBastionAddPrefix    = virtualnetwork[0].outputs.subnets[1].properties.add
 var gwSubnetId             = virtualnetwork[0].outputs.subnets[2].id
 
 var vpnVars = {
-    psk                : psk.outputs.psk
+  //  psk                : psk.outputs.psk
     gwip               : hubgw.outputs.gwpip
     gwaddressPrefix    : hubAddressPrefix
     onpremAddressPrefix: onpremAddressPrefix
@@ -121,44 +121,44 @@ module virtualnetwork './modules/vnet.bicep' = [for vnet in env[networkPlugin].v
   scope: rg
 } ]
 
-module vnetPeering './modules/vnetpeering.bicep' = {
-  params:{
-    hubVnetId    : hubVnetId
-    spokeVnetId  : spokeVnetId
-    hubVnetName  : hubVnetName
-    spokeVnetName: spokeVnetName
-  }
-  scope: rg
-  name: 'vNetpeering'
-  dependsOn: [
-    hubgw
-  ]
-}
+// module vnetPeering './modules/vnetpeering.bicep' = {
+//   params:{
+//     hubVnetId    : hubVnetId
+//     spokeVnetId  : spokeVnetId
+//     hubVnetName  : hubVnetName
+//     spokeVnetName: spokeVnetName
+//   }
+//   scope: rg
+//   name: 'vNetpeering'
+//   dependsOn: [
+//     hubgw
+//   ]
+// }
 
-module bastionNSG './modules/nsg/nsg_bastion.bicep' = {
-  name: 'bastionNSG'
-  params:{
-    location: location
-  }
-scope:rg
-}
-module defaultnsg './modules/nsg/nsg_default.bicep' = {
-  name : 'default-nsg'
-  params: {
-    location: location
-  }
-  scope: rg
-}
-module bastionHubNSGAttachment './modules/nsgAttachment.bicep' = {
-  name: 'bastionHubNsgAttachment'
-  params:{
-    nsgId              : bastionNSG.outputs.nsgId
-    subnetAddressPrefix: hubBastionAddPrefix
-    subnetName         : hubBastionSubnetName
-    vnetName           : hubVnetName
-  }
-  scope:rg
-}
+// module bastionNSG './modules/nsg/nsg_bastion.bicep' = {
+//   name: 'bastionNSG'
+//   params:{
+//     location: location
+//   }
+// scope:rg
+// // }
+// module defaultnsg './modules/nsg/nsg_default.bicep' = {
+//   name : 'default-nsg'
+//   params: {
+//     location: location
+//   }
+//   scope: rg
+// }
+// module bastionHubNSGAttachment './modules/nsgAttachment.bicep' = {
+//   name: 'bastionHubNsgAttachment'
+//   params:{
+//     nsgId              : bastionNSG.outputs.nsgId
+//     subnetAddressPrefix: hubBastionAddPrefix
+//     subnetName         : hubBastionSubnetName
+//     vnetName           : hubVnetName
+//   }
+//   scope:rg
+// }
 
 module hubgw './modules/vnetgw.bicep' = {
   name: 'hubgw'
@@ -169,28 +169,28 @@ module hubgw './modules/vnetgw.bicep' = {
   }
 }
 
-module localNetworkGW 'modules/lng.bicep' = {
-  scope: rg
-  name: 'onpremgw'
-  params: {
-    location: location
-    addressSpace:  onpremAddressPrefix
-    ipAddress: onpremVpnVM.outputs.VmIp
-    name: 'onpremgw'
-  }
-}
-module vpnconn 'modules/vpnconn.bicep' = {
-  scope: rg
-  name: 'onprem-azure-conn'
-  params: {
-    location: location
-    psk     : psk.outputs.psk
-    lngid   : localNetworkGW.outputs.lngid
-    vnetgwid: hubgw.outputs.vnetgwid
-    name    : 'onprem-azure-conn'
+// module localNetworkGW 'modules/lng.bicep' = {
+//   scope: rg
+//   name: 'onpremgw'
+//   params: {
+//     location: location
+//     addressSpace:  onpremAddressPrefix
+//     ipAddress: onpremVpnVM.outputs.VmIp
+//     name: 'onpremgw'
+//   }
+// }
+// module vpnconn 'modules/vpnconn.bicep' = {
+//   scope: rg
+//   name: 'onprem-azure-conn'
+//   params: {
+//     location: location
+//     psk     : psk.outputs.psk
+//     lngid   : localNetworkGW.outputs.lngid
+//     vnetgwid: hubgw.outputs.vnetgwid
+//     name    : 'onprem-azure-conn'
     
-  }
-}
+//   }
+// }
 
 
 
@@ -204,16 +204,16 @@ module kv './modules/kv.bicep' = {
   scope: rg
 }
 
-// HUB & SPOKE RESOURCES //
-module hubBastion './modules/bastion.bicep' = {
-  params:{
-    bastionHostName: 'hubBastion'
-    location: location
-    subnetRef: hubBastionSubnetRef
-  }
-  scope:rg
-  name: 'hubBastion'
-  }
+// // HUB & SPOKE RESOURCES //
+// module hubBastion './modules/bastion.bicep' = {
+//   params:{
+//     bastionHostName: 'hubBastion'
+//     location: location
+//     subnetRef: hubBastionSubnetRef
+//   }
+//   scope:rg
+//   name: 'hubBastion'
+//   }
 module hubDnsVM './modules/vm.bicep' = {
   params: {
     location     : location
@@ -277,25 +277,25 @@ module privateDNSZone 'modules/privatezone.bicep' = if (contains(aksPrivatePubli
   }
   scope: rg
 }
-module privateDNSZoneLinkSpoke 'modules/privatezonelink.bicep' = if (contains(aksPrivatePublic, 'private')){
-  name: 'link-DNS-zone-to-spoke-vnet'
-  params: {
-    privateDnsZoneName: contains(aksPrivatePublic, 'private') ? privateDNSZone.outputs.privateDNSZoneName : ''
-    vnetId: spokeVnetId
-    vnetName: spokeVnetName
-  }
-  scope: rg
-}
+// module privateDNSZoneLinkSpoke 'modules/privatezonelink.bicep' = if (contains(aksPrivatePublic, 'private')){
+//   name: 'link-DNS-zone-to-spoke-vnet'
+//   params: {
+//     privateDnsZoneName: contains(aksPrivatePublic, 'private') ? privateDNSZone.outputs.privateDNSZoneName : ''
+//     vnetId: spokeVnetId
+//     vnetName: spokeVnetName
+//   }
+//   scope: rg
+// }
 
-module privateDNSZoneLinkHub 'modules/privatezonelink.bicep' = if (contains(aksPrivatePublic, 'private')){
-  name: 'link-DNS-zone-to-hub-vnet'
-  params: {
-    privateDnsZoneName: contains(aksPrivatePublic, 'private') ? privateDNSZone.outputs.privateDNSZoneName : ''
-    vnetId: hubVnetId
-    vnetName: hubVnetName
-  }
-  scope: rg
-}
+// module privateDNSZoneLinkHub 'modules/privatezonelink.bicep' = if (contains(aksPrivatePublic, 'private')){
+//   name: 'link-DNS-zone-to-hub-vnet'
+//   params: {
+//     privateDnsZoneName: contains(aksPrivatePublic, 'private') ? privateDNSZone.outputs.privateDNSZoneName : ''
+//     vnetId: hubVnetId
+//     vnetName: hubVnetName
+//   }
+//   scope: rg
+// }
 // module aks_cluster 'modules/aks.bicep' = {
 //   name: 'aks_cluster' 
 //   params: {
@@ -352,24 +352,24 @@ module privateDNSZoneLinkHub 'modules/privatezonelink.bicep' = if (contains(aksP
 
 // ON-PREM RESOURCES // 
 
-module onpremBastion './modules/bastion.bicep' = {
-  params:{
-    bastionHostName: 'onpremBastion'
-    location: location
-    subnetRef: onpremBastionSubnetRef
-  }
-  scope:rg
-  name: 'onpremBastion'
-  }
-module psk 'modules/psk.bicep' = {
-  scope: rg
-  name: 'psk'
-  params: {
-    keyvault_name  : kv.outputs.keyvaultname
-    onpremSubnetRef: onpremSubnetRef
-    name           : 'azure-conn'
-  }
-} 
+// module onpremBastion './modules/bastion.bicep' = {
+//   params:{
+//     bastionHostName: 'onpremBastion'
+//     location: location
+//     subnetRef: onpremBastionSubnetRef
+//   }
+//   scope:rg
+//   name: 'onpremBastion'
+//   }
+// module psk 'modules/psk.bicep' = {
+//   scope: rg
+//   name: 'psk'
+//   params: {
+//     keyvault_name  : kv.outputs.keyvaultname
+//     onpremSubnetRef: onpremSubnetRef
+//     name           : 'azure-conn'
+//   }
+// } 
 
 module dc './modules/vm.bicep' = {
   params: {
@@ -390,66 +390,66 @@ module dc './modules/vm.bicep' = {
   name: 'OnpremDC'
   scope: rg
 } 
-module onpremVpnVM './modules/vm.bicep' = {
-  params: {
-    location                 : location
-    windowsVM                : false
-    deployPIP                : true
-    deployVpn                : true
-    adminusername            : VmAdminUsername
-    keyvault_name            : kv.outputs.keyvaultname
-    vmname                   : onpremVPNVmName
-    subnet1ref               : onpremSubnetRef
-    vmSize                   : HostVmSize
-    githubPath               : githubPath
-    publicIPAddressNameSuffix: publicIPAddressNameSuffix
-    vpnVars                  : vpnVars
-    adUserId                 : ADUserID
-  }
-  name: 'onpremVpnVM'
-  scope: rg
-} 
-module onpremNSG './modules/nsg/nsg_onprem.bicep' = {
-  name: 'hubNSG'
-  params:{
-    location: location
-    sourceAddressPrefix: hubgw.outputs.gwpip
-  }
-scope:rg
-}
-module onpremNsgAttachment './modules/nsgAttachment.bicep' = {
-  name: 'onpremNsgAttachment'
-  params:{
-    nsgId              : onpremNSG.outputs.onpremNsgId
-    subnetAddressPrefix: onpremAddressPrefix                    
-    subnetName         : onpremSubnetName
-    vnetName           : onpremVnetName
-  }
-  scope:rg
-}
+// module onpremVpnVM './modules/vm.bicep' = {
+//   params: {
+//     location                 : location
+//     windowsVM                : false
+//     deployPIP                : true
+//     deployVpn                : true
+//     adminusername            : VmAdminUsername
+//     keyvault_name            : kv.outputs.keyvaultname
+//     vmname                   : onpremVPNVmName
+//     subnet1ref               : onpremSubnetRef
+//     vmSize                   : HostVmSize
+//     githubPath               : githubPath
+//     publicIPAddressNameSuffix: publicIPAddressNameSuffix
+//     vpnVars                  : vpnVars
+//     adUserId                 : ADUserID
+//   }
+//   name: 'onpremVpnVM'
+//   scope: rg
+// } 
+// module onpremNSG './modules/nsg/nsg_onprem.bicep' = {
+//   name: 'hubNSG'
+//   params:{
+//     location: location
+//     sourceAddressPrefix: hubgw.outputs.gwpip
+//   }
+// scope:rg
+// }
+// module onpremNsgAttachment './modules/nsgAttachment.bicep' = {
+//   name: 'onpremNsgAttachment'
+//   params:{
+//     nsgId              : onpremNSG.outputs.onpremNsgId
+//     subnetAddressPrefix: onpremAddressPrefix                    
+//     subnetName         : onpremSubnetName
+//     vnetName           : onpremVnetName
+//   }
+//   scope:rg
+// }
 
-module routeTableAttachment 'modules/routetable.bicep' = {
-  scope: rg
-  name: 'rt'
-  params: {
-    location           : location
-    applianceAddress   : onpremVpnVM.outputs.VmPrivIp
-    nsgId              : onpremNSG.outputs.onpremNsgId
-    hubAddressPrefix   : hubAddressPrefix
-    spokeAddressPrefix : spokeAddressPrefix
-    subnetAddressPrefix: onpremAddressPrefix
-    subnetName         : onpremSubnetName
-    vnetName           : onpremVnetName
-  }
-}
+// module routeTableAttachment 'modules/routetable.bicep' = {
+//   scope: rg
+//   name: 'rt'
+//   params: {
+//     location           : location
+//     applianceAddress   : onpremVpnVM.outputs.VmPrivIp
+//     nsgId              : onpremNSG.outputs.onpremNsgId
+//     hubAddressPrefix   : hubAddressPrefix
+//     spokeAddressPrefix : spokeAddressPrefix
+//     subnetAddressPrefix: onpremAddressPrefix
+//     subnetName         : onpremSubnetName
+//     vnetName           : onpremVnetName
+//   }
+// }
 
-module bastionOnpremNSGAttachment './modules/nsgAttachment.bicep' = {
-  name: 'bastionOnpremNsgAttachment'
-  params:{
-    nsgId              : bastionNSG.outputs.nsgId
-    subnetAddressPrefix: onpremBastionAddPrefix
-    subnetName         : onpremBastionSubnetName
-    vnetName           : onpremVnetName
-  }
-  scope:rg
-}
+// module bastionOnpremNSGAttachment './modules/nsgAttachment.bicep' = {
+//   name: 'bastionOnpremNsgAttachment'
+//   params:{
+//     nsgId              : bastionNSG.outputs.nsgId
+//     subnetAddressPrefix: onpremBastionAddPrefix
+//     subnetName         : onpremBastionSubnetName
+//     vnetName           : onpremVnetName
+//   }
+//   scope:rg
+// }
