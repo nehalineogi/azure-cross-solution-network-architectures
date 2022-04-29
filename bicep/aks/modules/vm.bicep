@@ -8,8 +8,6 @@ param adUserId string
 param adminPassword string = '${uniqueString(resourceGroup().id, vmname)}aA1!${uniqueString(adUserId)}' // Note passwords not cryptographically secure, deployment is not designed for production use
 param windowsVM bool
 param domainName string = 'contoso.local' // this has a default so that module calls do not need to supply a domain name when deployDC is set to false, as to-do-so is misleading.
-param pDNSZone string = ''
-param HubDNSIP string = ''
 
 var dcdisk = [
   {
@@ -246,31 +244,6 @@ resource csedc 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (d
       } 
     }
   }
-}
-
-resource csezone 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (deployDC) {
-  parent: VM
-  name: 'ConfigureDNSZone'
-  location: location
-  properties: {
-    publisher: 'Microsoft.Powershell'
-    type: 'DSC'
-    typeHandlerVersion: '2.83'
-    autoUpgradeMinorVersion: true
-    settings: {
-      ModulesUrl: uri(githubPath, 'CreateADPDC.zip')
-      ConfigurationFunction: 'CreateADPDC.ps1\\ConfigureDNS'
-      ConfigurationArguments: {
-        pDNSZone  : pDNSZone
-        HubDNSIP  : HubDNSIP
-      }
-      Properties: {
-        }
-      }
-    }
-    dependsOn: [
-      csedc
-    ]
 }
 
 output VmPip string    = deployPIP ? pip.properties.dnsSettings.fqdn : ''
