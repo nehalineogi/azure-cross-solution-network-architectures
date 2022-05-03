@@ -85,7 +85,9 @@ With the above command AKS Private DNS Zone and Private endpoint gets created.
 
 ## On-Premises to Kube API server connectivity
 
-Note the kubeAPI / cluster IP resolves to [clustername].privatelink.[location].azmk8s.io (private endpoint IP)
+Note the kubeAPI / cluster IP will resolve differently in your deployment based on the clustername and the location you deploy to. The references below are specifically for the deployment used for this demo series, you will need to replace the environment specific references to match your own deployment. 
+
+The form will be [clustername].privatelink.[location].azmk8s.io (private endpoint IP)
 
 ```
 kubectlcluster-info
