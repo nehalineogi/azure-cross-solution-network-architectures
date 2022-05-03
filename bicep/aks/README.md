@@ -31,16 +31,16 @@ az ad signed-in-user show --query objectId -o tsv
 4. (optional) If you wish to customise or change the main.bicep or related module code, you can do this now and save your changes locally.  
 
 
-5.  Run the following command to deploy using az cli (networkPlugin parameter value 'kubenet' for a kubenet deployment or 'azure' to provision a CNI based cluster)
+5.  Run the following command to deploy using az cli
 
 ```
- az deployment sub create --name aks --template-file main.bicep --location [region] --parameters adUserId=[paste-asUserId-here] networkPlugin=[kubenet\azure]
+ az deployment sub create --name aks --template-file main.bicep --location [region] --parameters ADUserID=[paste-asUserId-here] KubenetOrCNINetworkPolicy=[kubenet\azure] PublicOrPrivateCluster=[public\private]
  ```
 
  example : 
 
  ```
- az deployment sub create --name aks --template-file main.bicep --location [region] --parameters adUserId=11111111-2222-3333-4444-555555555555 networkPlugin=kubenet
+ az deployment sub create --name aks --template-file main.bicep --location [region] --parameters ADUserID=11111111-2222-3333-4444-555555555555 KubenetOrCNINetworkPolicy=kubenet PublicOrPrivateCluster=public
  ```
 
 6. Once your deployment has finished you can log on to the supporting VMs using Azure bastion. The username is `localadmin` and passwords can be found in the keyvault. The AKS cluster using kubectl (see page links below).

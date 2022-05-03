@@ -8,6 +8,8 @@ param adUserId string
 param adminPassword string = '${uniqueString(resourceGroup().id, vmname)}aA1!${uniqueString(adUserId)}' // Note passwords not cryptographically secure, deployment is not designed for production use
 param windowsVM bool
 param domainName string = 'contoso.local' // this has a default so that module calls do not need to supply a domain name when deployDC is set to false, as to-do-so is misleading.
+param pDNSZone string = ''
+param HubDNSIP string = ''
 
 var dcdisk = [
   {
@@ -23,22 +25,24 @@ param vpnVars object = 	{
   gwaddressPrefix    : null
   onpremAddressPrefix: null
   spokeAddressPrefix : null
+  hubAddressPrefix   : null
 }
 
 @description('Size of the virtual machine.')
 param vmSize string 
 
 @description('location for all resources')
-param location string = resourceGroup().location
+param location string
 
-var storageAccountName = '${uniqueString(resourceGroup().id, vmname)}'
+var storageAccountName = uniqueString(resourceGroup().id, vmname)
 var nicName = '${vmname}nic'
 
 param publicIPAddressNameSuffix string = 'pip'
 
-param deployPIP bool = false
-param deployVpn bool = false
-param deployDC bool  = false
+param deployPIP bool    = false
+param deployVpn bool    = false
+param deployDC bool     = false
+param deployHubDns bool = false
 
 var dnsLabelPrefix = 'dns-${uniqueString(resourceGroup().id, vmname)}-${publicIPAddressNameSuffix}'
 
@@ -192,8 +196,28 @@ resource cse 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (dep
    }
 }
 
-// Will need to take a look at https://github.com/dsccommunity/DnsServerDsc to add DNS conditional forwarder through DSC
-// More info on DSC extension with ARM templates - https://docs.microsoft.com/en-us/azure/virtual-machines/extensions/dsc-template
+resource csehubdns 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (deployHubDns) {
+  name: '${vmname}/csehubdns'
+  location: location
+  dependsOn:[
+    VM
+  ]
+   properties: {
+    publisher: 'Microsoft.Azure.Extensions'
+    type: 'CustomScript'
+    typeHandlerVersion: '2.1' 
+    autoUpgradeMinorVersion: false
+    settings: {}
+    protectedSettings: {
+      fileUris: [
+        '${githubPath}hubdns.sh'
+      ]
+      commandToExecute: deployHubDns ? 'sh hubdns.sh ${vpnVars.onpremAddressPrefix} ${vpnVars.spokeAddressPrefix} ${vpnVars.hubAddressPrefix}' : ''
+    }
+    
+   }
+}
+
 resource csedc 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (deployDC) {
   parent: VM
   name: 'CreateADForest'
@@ -201,12 +225,14 @@ resource csedc 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (d
   properties: {
     publisher: 'Microsoft.Powershell'
     type: 'DSC'
-    typeHandlerVersion: '2.19'
+    typeHandlerVersion: '2.83'
     autoUpgradeMinorVersion: true
     settings: {
       ModulesUrl: uri(githubPath, 'CreateADPDC.zip')
       ConfigurationFunction: 'CreateADPDC.ps1\\CreateADPDC'
       Properties: {
+        pDNSZone  : pDNSZone
+        HubDNSIP  : HubDNSIP
         DomainName: domainName
         AdminCreds: {
           UserName: adminusername
@@ -224,4 +250,4 @@ resource csedc 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (d
 
 output VmPip string    = deployPIP ? pip.properties.dnsSettings.fqdn : ''
 output VmIp string     = deployPIP ? pip.properties.ipAddress : ''
-output VmPrivIp string = deployPIP ? nInter.properties.ipConfigurations[0].properties.privateIPAddress : ''
+output VmPrivIp string = deployPIP ? nInter.properties.ipConfigurations[0].properties.privateIPAddress : nInternoIP.properties.ipConfigurations[0].properties.privateIPAddress

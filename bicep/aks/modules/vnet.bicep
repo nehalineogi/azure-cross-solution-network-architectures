@@ -16,6 +16,7 @@ resource vn 'Microsoft.Network/virtualNetworks@2021-02-01' = {
     subnets: [for subnet in subnets: {
       name: subnet.name
       properties: {
+        privateEndpointNetworkPolicies: 'Disabled'
         addressPrefix: subnet.prefix
         networkSecurityGroup: subnet.customNsg ? null : {
           id        : nsgDefaultId
