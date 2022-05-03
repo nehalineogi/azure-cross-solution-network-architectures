@@ -10,12 +10,12 @@ This architecture uses the for AKS Advanced/CNI Network Model. Observe that the 
 
 Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF](aks-all-reference-architectures-PDF.pdf)
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Faks-private%2Faks%2Fjson%2Fcni.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Faks%2Faks%2Fjson%2Faks-cni.json)
 
 # Quickstart deployment
 ### Task 1: Start Deployment
 
-1. Click Deploy to Azure button above and supply the signed-in user ID from step 2.
+1. Click Deploy to Azure button above and supply the signed-in user ID from step 2. Leave all defaults and deploy.
 
 2. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
 

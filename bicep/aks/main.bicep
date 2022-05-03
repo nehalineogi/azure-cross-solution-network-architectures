@@ -49,7 +49,7 @@ var aksPrivatePublic = PublicOrPrivateCluster
 var networkPlugin    = KubenetOrCNINetworkPolicy
 
 var repoOwnerName = 'nehalineogi'
-var branchName    = 'aks-private'
+var branchName    = 'aks'
 var githubPath    = 'https://raw.githubusercontent.com/${repoOwnerName}/azure-cross-solution-network-architectures/${branchName}/bicep/aks/scripts/'
 
 var VmAdminUsername = 'localadmin'
