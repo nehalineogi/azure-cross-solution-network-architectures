@@ -11,6 +11,7 @@ trigger:
       - bicep/aks/scripts/*
 jobs:
   - job:
+    timeoutInMinutes: 120 
     steps:
 
     - task: AzureCLI@2
@@ -26,6 +27,7 @@ jobs:
             --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_pbk) KubenetOrCNINetworkPolicy=$(NetworkPlugin_kubenet) PublicOrPrivateCluster=$(aksPrivatePublic_pbl)
 
   - job:
+    timeoutInMinutes: 120
     steps:
       
     - task: AzureCLI@2
@@ -42,6 +44,7 @@ jobs:
             --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_prv) KubenetOrCNINetworkPolicy=$(NetworkPlugin_kubenet) PublicOrPrivateCluster=$(aksPrivatePublic_prv)
 
   - job:
+    timeoutInMinutes: 120
     steps:
 
     - task: AzureCLI@2
@@ -57,6 +60,7 @@ jobs:
             --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpb) KubenetOrCNINetworkPolicy=$(NetworkPlugin_CNI) PublicOrPrivateCluster=$(aksPrivatePublic_pbl)
 
   - job:
+    timeoutInMinutes: 120
     steps:
 
     - task: AzureCLI@2
