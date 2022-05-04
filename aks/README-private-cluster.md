@@ -107,6 +107,51 @@ nehali@nehali-laptop:/mnt/c/Users/neneogi/Documents/repos/k8s/aks-azcli$ more /e
 172.16.238.4 nnaks-private-b8afe38a.abc8bcf2-73d8-4d97-83d5-0ae74d9aa974.privatelink.eastus.azmk8s.io
 
 ```
+## Deployment Validations
+
+These steps will deploy a single test pod and delete it. This deployment type is 'Private' so you can run these commands from a VM connected to any VNet, but not from outside of the deployed environment. The VM called dc1 can be used for this purpose. 
+
+1. Install the following tools on dc1 or other VM:
+
+- az cli tools
+- git client
+- Microsoft Edge (optional, easy authentication for az cli and git). 
+
+A powershell script has been made available for convenience that will auto download and install the tools on Windows - [Tool deployment script](../bicep/aks/scripts/install_edge_and_azcli.ps1). 
+
+Note: Alternatively you may be able use Cloud Shell from dc1 (dependant on Conditional Access etc) in which case you can skip this step and steps 2 and use a Cloud Shell session instead. 
+
+2. Authenticate to your tenant 
+
+``` az login ```
+
+3. Install az cli aks (kubetcl) and follow on screen instructions to add the executables to your environment variables path.
+
+``` az aks install-cli ```
+
+4. Obtain the cluster credentials to log in to kubectl (if you did not use the default, replace resource-group with your specified resource group name). 
+
+```az aks get-credentials --resource-group aks --name myAKSCluster```
+
+5. Clone the reposity
+
+```git clone https://github.com/nehalineogi/azure-cross-solution-network-architectures```
+
+6. Navigate to the dnsutils directory 
+
+```cd azure-cross-solution-network-architectures/aks/yaml/dns```
+
+7. Deploy a simple pod
+
+```kubectl apply -f dnsutils.yaml```
+
+8. Check pod is running successfully 
+
+```kubectl get pods -o wide```
+
+9. Delete pod (cleanup)
+
+```kubectl delete pod dnsutils```
 
 ## IP Address Assignment
 
