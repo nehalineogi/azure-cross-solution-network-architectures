@@ -5,7 +5,6 @@ param ADUserID string  = ''
 
 @description('Set the resource group name, this will be created automatically')
 @minLength(3)
-@maxLength(10)
 param ResourceGroupName string = 'aks'
 
 @description('AKS network Plugin - kubenet or CNI')
