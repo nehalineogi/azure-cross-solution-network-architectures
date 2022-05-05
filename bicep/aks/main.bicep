@@ -191,8 +191,6 @@ module vpnconn 'modules/vpnconn.bicep' = {
   }
 }
 
-
-
 // GENERAL RESOURCES //
 module kv './modules/kv.bicep' = {
   params: {
@@ -316,38 +314,38 @@ module aks_cluster 'modules/aks.bicep' = {
 
 // The VM passwords are generated at run time and automatically stored in Keyvault. 
 // It is not possible to create a loop through the vm var because the 'subnetref' which is an output only known at runtime is not calculated until after deployment. It is not possible therefore to use it in a loop.
-module hubJumpServer './modules/vm.bicep' = {
-  params: {
-    location     : location
-    windowsVM    : true
-    deployDC     : false
-    adminusername: VmAdminUsername
-    keyvault_name: kv.outputs.keyvaultname
-    vmname       : hubVmName
-    subnet1ref   : hubSubnetRef
-    vmSize       : HostVmSize
-    githubPath   : githubPath
-    adUserId     : ADUserID
+// module hubJumpServer './modules/vm.bicep' = {
+//   params: {
+//     location     : location
+//     windowsVM    : true
+//     deployDC     : false
+//     adminusername: VmAdminUsername
+//     keyvault_name: kv.outputs.keyvaultname
+//     vmname       : hubVmName
+//     subnet1ref   : hubSubnetRef
+//     vmSize       : HostVmSize
+//     githubPath   : githubPath
+//     adUserId     : ADUserID
 
-  }
-  name: 'hubjump'
-  scope: rg
-}  
-module spokeJumpServer './modules/vm.bicep' = {
-  params: {
-    location     : location
-    windowsVM    : true
-    adminusername: VmAdminUsername
-    keyvault_name: kv.outputs.keyvaultname
-    vmname       : spokeVmName
-    subnet1ref   : SpokeSubnetRef
-    vmSize       : HostVmSize
-    githubPath   : githubPath
-    adUserId     : ADUserID
-  }
-  name: 'spokejump'
-  scope: rg
-}  
+//   }
+//   name: 'hubjump'
+//   scope: rg
+// }  
+// module spokeJumpServer './modules/vm.bicep' = {
+//   params: {
+//     location     : location
+//     windowsVM    : true
+//     adminusername: VmAdminUsername
+//     keyvault_name: kv.outputs.keyvaultname
+//     vmname       : spokeVmName
+//     subnet1ref   : SpokeSubnetRef
+//     vmSize       : HostVmSize
+//     githubPath   : githubPath
+//     adUserId     : ADUserID
+//   }
+//   name: 'spokejump'
+//   scope: rg
+// }  
 
 // ON-PREM RESOURCES // 
 
