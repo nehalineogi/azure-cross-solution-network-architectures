@@ -1,21 +1,24 @@
-### [Azure Kubernetes Services (AKS)](README-advanced.md)
+### Azure Kubernetes Services (AKS) Networking Series
 
-- [Docker Networking](README-docker-multihost.md)
+- Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF](aks-all-reference-architectures-PDF.pdf)
+- Docker Networking
   - [Single Host](README-docker-singlehost.md)
   - [Multi Host](README-docker-multihost.md)
-  - Bicep automated deployment (Coming soon...)
   - kind Cluster (Kubernetes In Docker)
-- [Basic/Kubenet Networking](README-kubenet.md)
-- [Advanced/Azure CNI Networking](README-advanced.md)
-- [AKS Private Cluster](README-private-cluster.md)
+  - [Bicep automated deployment](../bicep/dockerhost)
+- AKS Cluster
+  - [Basic/Kubenet Networking](README-kubenet.md)
+  - [Advanced/Azure CNI Networking](README-advanced.md)
+  - [AKS Private Cluster](README-private-cluster.md)
   - [AKS Private Cluster with Azure Front Door](README-private-cluster-with-AFD.md)
-- [Ingress Controllers](README-ingress-appgw.md)
+  - [Bicep automated deployment](../bicep/aks)
+- Ingress and Egress Control
   - [AKS Application Gateway Ingress Controller (AGIC)](README-ingress-appgw.md)
   - [Nginx Ingress controller](README-ingress-nginx.md)
-- [AKS Egress with Azure firewall/NVA](README-aks-egress.md)
-- [AKS Egress via NAT Gateway](README-aks-egress.md)
-- [AKS Multiple Nodepool Design](README-multinode.md)
-- Core DNS and Azure DNS Integrations (Coming soon...)
-- Kubernetes Network Model - Multus, Flannel,Weave, Calico, Cilium
-- Kubernets Serivce Mesh (Istio, Linkerd and Consul)
-- [ Demo/Example Apps ](README-common.md)
+  - [AKS Egress with Azure firewall/NVA](README-aks-egress.md)
+- Design Extras
+  - [AKS Multiple Nodepool Design](README-multinode.md)
+  - Core DNS and Azure DNS Integrations
+  - Kubernetes Network Model - Multus, Flannel,Weave, Calico, Cilium
+  - Kubernetes Service Mesh (Istio, Linkerd and Consul)
+  - [ Demo/Example Apps ](README-common.md)
