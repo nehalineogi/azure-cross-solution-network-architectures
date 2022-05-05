@@ -6,6 +6,8 @@ This code can be deployed using `az cli` or `powershell` as detailed [here](http
 
 For convenience you can also follow the quickstart deployment below to get started. 
 
+For configuration of Front Door for ingress, this is currently best done after deployment of the cluster by following the instructions [AKS Private Cluster with Azure Front Door](../../aks/README-private-cluster-with-AFD.md)
+
 # Quickstart deployment
 
 ### Task 1: clone the repository and deploy

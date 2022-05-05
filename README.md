@@ -33,20 +33,21 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
   - [Multi Host](aks/README-docker-multihost.md)
   - kind Cluster (Kubernetes In Docker)
   - [Bicep automated deployment](bicep/dockerhost)
-- AKS Networking
+- AKS Cluster
   - [Basic/Kubenet Networking](aks/README-kubenet.md)
   - [Advanced/Azure CNI Networking](aks/README-advanced.md)
   - [AKS Private Cluster](aks/README-private-cluster.md)
   - [AKS Private Cluster with Azure Front Door](aks/README-private-cluster-with-AFD.md)
   - [Bicep automated deployment](bicep/aks)
-- Ingress Controllers
+- Ingress and Egress Control
   - [AKS Application Gateway Ingress Controller (AGIC)](aks/README-ingress-appgw.md)
   - [Nginx Ingress controller](aks/README-ingress-nginx.md)
-- [AKS Egress with Azure firewall/NVA](aks/README-aks-egress.md)
-- [AKS Multiple Nodepool Design](aks/README-multinode.md)
-- Core DNS and Azure DNS Integrations
-- Kubernetes Network Model - Multus, Flannel,Weave, Calico, Cilium
-- Kubernetes Service Mesh (Istio, Linkerd and Consul)
+  - [AKS Egress with Azure firewall/NVA](aks/README-aks-egress.md)
+- Design Extras
+  - [AKS Multiple Nodepool Design](aks/README-multinode.md)
+  - Core DNS and Azure DNS Integrations
+  - Kubernetes Network Model - Multus, Flannel,Weave, Calico, Cilium
+  - Kubernetes Service Mesh (Istio, Linkerd and Consul)
 
 ### Azure Database Services
 
