@@ -83,7 +83,7 @@ stages:
   dependsOn: Validate_KubenetPrivate
   jobs:
   - deployment: 
-    displayName: Deploy Kubenet Public
+    displayName: Deploy Kubenet Private
     environment: Production
     timeoutInMinutes: 120
     strategy:
