@@ -55,8 +55,8 @@ var VmAdminUsername = 'localadmin'
 var location        = deployment().location    // linting warning here, but for this deployment it is at subscription level and so if we have a separate parameter specified here, 
                                                // there will be two "location" options on the "Deploy to Azure" custom deployment and this is confusing for the user.
 
-var hubVmName                 = 'hubjump'
-var spokeVmName               = 'spokejump'
+//var hubVmName                 = 'hubjump'
+//var spokeVmName               = 'spokejump'
 var onpremVPNVmName           = 'vpnvm'
 var publicIPAddressNameSuffix = 'vpnpip'
 var hubDNSVmName              = 'hubdnsvm'
