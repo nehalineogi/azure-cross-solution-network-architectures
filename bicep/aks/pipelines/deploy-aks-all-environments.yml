@@ -20,7 +20,7 @@ stages:
           az bicep build --file bicep/aks/main.bicep
 
 
-- stage: Validate-KubenetPublic
+- stage: Validate_KubenetPublic
   dependsOn: Lint
   jobs:
   - job:
@@ -36,8 +36,8 @@ stages:
             --template-file bicep/aks/main.bicep \
             --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_pbk) KubenetOrCNINetworkPolicy=$(NetworkPlugin_kubenet) PublicOrPrivateCluster=$(aksPrivatePublic_pbl) 
             
-- stage: Deploy-KubenetPublic
-  dependsOn: Validate-KubenetPublic
+- stage: Deploy_KubenetPublic
+  dependsOn: Validate_KubenetPublic
   jobs:
   - job: 
     timeoutInMinutes: 120 
@@ -55,7 +55,7 @@ stages:
             --template-file bicep/aks/main.bicep \
             --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_pbk) KubenetOrCNINetworkPolicy=$(NetworkPlugin_kubenet) PublicOrPrivateCluster=$(aksPrivatePublic_pbl)
 
-- stage: Validate-KubenetPrivate
+- stage: Validate_KubenetPrivate
   dependsOn: Lint
   jobs:
   - job:
@@ -71,8 +71,8 @@ stages:
             --template-file bicep/aks/main.bicep \
             --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_prv) KubenetOrCNINetworkPolicy=$(NetworkPlugin_kubenet) PublicOrPrivateCluster=$(aksPrivatePublic_prv)       
 
-- stage: Deploy-KubenetPrivate
-  dependsOn: Validate-KubenetPrivate
+- stage: Deploy_KubenetPrivate
+  dependsOn: Validate_KubenetPrivate
   jobs:
   - job:
     timeoutInMinutes: 120
