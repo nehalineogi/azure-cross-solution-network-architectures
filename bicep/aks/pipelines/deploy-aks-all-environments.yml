@@ -91,34 +91,72 @@ stages:
             --template-file bicep/aks/main.bicep \
             --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_prv) KubenetOrCNINetworkPolicy=$(NetworkPlugin_kubenet) PublicOrPrivateCluster=$(aksPrivatePublic_prv)
 
-  # - job:
-  #   timeoutInMinutes: 120
-  #   steps:
+- stage: Validate_CNIPublic
+  dependsOn: Lint
+  jobs:
+  - job:
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: $(ServiceConnectionName)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az deployment sub validate \
+            --location $(location) \
+            --template-file bicep/aks/main.bicep \
+            --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpb) KubenetOrCNINetworkPolicy=$(NetworkPlugin_CNI) PublicOrPrivateCluster=$(aksPrivatePublic_pbl)
 
-  #   - task: AzureCLI@2
-  #     inputs:
-  #       azureSubscription: $(ServiceConnectionName)
-  #       scriptType: 'bash'
-  #       scriptLocation: 'inlineScript'
-  #       inlineScript: |
-  #         az deployment sub create \
-  #           --name $(Build.BuildNumber)-public-cni \
-  #           --location $(location) \
-  #           --template-file bicep/aks/main.bicep \
-  #           --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpb) KubenetOrCNINetworkPolicy=$(NetworkPlugin_CNI) PublicOrPrivateCluster=$(aksPrivatePublic_pbl)
+- stage: Deploy_CNIPublic
+  dependsOn: Validate_CNIPublic
+  jobs:
+  - job:
+    timeoutInMinutes: 120
+    steps:
 
-  # - job:
-  #   timeoutInMinutes: 120
-  #   steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: $(ServiceConnectionName)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az deployment sub create \
+            --name $(Build.BuildNumber)-public-cni \
+            --location $(location) \
+            --template-file bicep/aks/main.bicep \
+            --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpb) KubenetOrCNINetworkPolicy=$(NetworkPlugin_CNI) PublicOrPrivateCluster=$(aksPrivatePublic_pbl)
 
-  #   - task: AzureCLI@2
-  #     inputs:
-  #       azureSubscription: $(ServiceConnectionName)
-  #       scriptType: 'bash'
-  #       scriptLocation: 'inlineScript'
-  #       inlineScript: |
-  #         az deployment sub create \
-  #           --name $(Build.BuildNumber)-private-cni \
-  #           --location $(location) \
-  #           --template-file bicep/aks/main.bicep \
-  #           --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpr) KubenetOrCNINetworkPolicy=$(NetworkPlugin_CNI) PublicOrPrivateCluster=$(aksPrivatePublic_prv)
+- stage: Validate_CNIPrivate
+  dependsOn: Lint
+  jobs:
+  - job:
+    steps:
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: $(ServiceConnectionName)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az deployment sub validate \
+            --location $(location) \
+            --template-file bicep/aks/main.bicep \
+            --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpr) KubenetOrCNINetworkPolicy=$(NetworkPlugin_CNI) PublicOrPrivateCluster=$(aksPrivatePublic_prv)
+
+- stage: Deploy_CNIPrivate
+  dependsOn: Validate_CNIPrivate
+  jobs:
+  - job:
+    timeoutInMinutes: 120
+    steps:
+
+    - task: AzureCLI@2
+      inputs:
+        azureSubscription: $(ServiceConnectionName)
+        scriptType: 'bash'
+        scriptLocation: 'inlineScript'
+        inlineScript: |
+          az deployment sub create \
+            --name $(Build.BuildNumber)-private-cni \
+            --location $(location) \
+            --template-file bicep/aks/main.bicep \
+            --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpr) KubenetOrCNINetworkPolicy=$(NetworkPlugin_CNI) PublicOrPrivateCluster=$(aksPrivatePublic_prv)
