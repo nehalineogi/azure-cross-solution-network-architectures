@@ -49,17 +49,18 @@ stages:
       runOnce: 
         deploy:         
           steps:
-          - task: AzureCLI@2
-            inputs:
-              azureSubscription: $(ServiceConnectionName)
-              scriptType: 'bash'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                az deployment sub create \
-                  --name $(Build.BuildNumber)-public-kubenet \
-                  --location $(location) \
-                  --template-file bicep/aks/main.bicep \
-                  --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_pbk) KubenetOrCNINetworkPolicy=$(NetworkPlugin_kubenet) PublicOrPrivateCluster=$(aksPrivatePublic_pbl)
+            - checkout : self
+            - task: AzureCLI@2
+              inputs:
+                azureSubscription: $(ServiceConnectionName)
+                scriptType: 'bash'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  az deployment sub create \
+                    --name $(Build.BuildNumber)-public-kubenet \
+                    --location $(location) \
+                    --template-file bicep/aks/main.bicep \
+                    --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_pbk) KubenetOrCNINetworkPolicy=$(NetworkPlugin_kubenet) PublicOrPrivateCluster=$(aksPrivatePublic_pbl)
 
 - stage: Validate_KubenetPrivate
   dependsOn: Lint
@@ -89,19 +90,19 @@ stages:
       runOnce: 
         deploy:      
           steps:
-            
-          - task: AzureCLI@2
-            inputs:
-              azureSubscription: $(ServiceConnectionName)
-              
-              scriptType: 'bash'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                az deployment sub create \
-                  --name $(Build.BuildNumber)-private-kubenet \
-                  --location $(location) \
-                  --template-file bicep/aks/main.bicep \
-                  --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_prv) KubenetOrCNINetworkPolicy=$(NetworkPlugin_kubenet) PublicOrPrivateCluster=$(aksPrivatePublic_prv)
+            - checkout : self
+            - task: AzureCLI@2
+              inputs:
+                azureSubscription: $(ServiceConnectionName)
+                
+                scriptType: 'bash'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  az deployment sub create \
+                    --name $(Build.BuildNumber)-private-kubenet \
+                    --location $(location) \
+                    --template-file bicep/aks/main.bicep \
+                    --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_prv) KubenetOrCNINetworkPolicy=$(NetworkPlugin_kubenet) PublicOrPrivateCluster=$(aksPrivatePublic_prv)
 
 - stage: Validate_CNIPublic
   dependsOn: Lint
@@ -131,18 +132,18 @@ stages:
       runOnce: 
         deploy:      
           steps:
-
-          - task: AzureCLI@2
-            inputs:
-              azureSubscription: $(ServiceConnectionName)
-              scriptType: 'bash'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                az deployment sub create \
-                  --name $(Build.BuildNumber)-public-cni \
-                  --location $(location) \
-                  --template-file bicep/aks/main.bicep \
-                  --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpb) KubenetOrCNINetworkPolicy=$(NetworkPlugin_CNI) PublicOrPrivateCluster=$(aksPrivatePublic_pbl)
+            - checkout : self
+            - task: AzureCLI@2
+              inputs:
+                azureSubscription: $(ServiceConnectionName)
+                scriptType: 'bash'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  az deployment sub create \
+                    --name $(Build.BuildNumber)-public-cni \
+                    --location $(location) \
+                    --template-file bicep/aks/main.bicep \
+                    --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpb) KubenetOrCNINetworkPolicy=$(NetworkPlugin_CNI) PublicOrPrivateCluster=$(aksPrivatePublic_pbl)
 
 - stage: Validate_CNIPrivate
   dependsOn: Lint
@@ -172,15 +173,15 @@ stages:
       runOnce: 
         deploy:      
           steps:
-
-          - task: AzureCLI@2
-            inputs:
-              azureSubscription: $(ServiceConnectionName)
-              scriptType: 'bash'
-              scriptLocation: 'inlineScript'
-              inlineScript: |
-                az deployment sub create \
-                  --name $(Build.BuildNumber)-private-cni \
-                  --location $(location) \
-                  --template-file bicep/aks/main.bicep \
-                  --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpr) KubenetOrCNINetworkPolicy=$(NetworkPlugin_CNI) PublicOrPrivateCluster=$(aksPrivatePublic_prv)
+            - checkout : self
+            - task: AzureCLI@2
+              inputs:
+                azureSubscription: $(ServiceConnectionName)
+                scriptType: 'bash'
+                scriptLocation: 'inlineScript'
+                inlineScript: |
+                  az deployment sub create \
+                    --name $(Build.BuildNumber)-private-cni \
+                    --location $(location) \
+                    --template-file bicep/aks/main.bicep \
+                    --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_cpr) KubenetOrCNINetworkPolicy=$(NetworkPlugin_CNI) PublicOrPrivateCluster=$(aksPrivatePublic_prv)
