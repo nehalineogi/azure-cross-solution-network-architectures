@@ -11,6 +11,7 @@ trigger:
       - bicep/aks/scripts/*
 
 stages:
+
 - stage: Lint
   jobs: 
   - job: Lint
@@ -35,8 +36,9 @@ stages:
             --template-file bicep/aks/main.bicep \
             --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_pbk) KubenetOrCNINetworkPolicy=$(NetworkPlugin_kubenet) PublicOrPrivateCluster=$(aksPrivatePublic_pbl) 
             
-  - stage: Deploy-KubenetPublic
-    dependsOn: Validate-KubenetPublic
+- stage: Deploy-KubenetPublic
+  dependsOn: Validate-KubenetPublic
+  jobs:
   - job: 
     timeoutInMinutes: 120 
     steps:
@@ -53,9 +55,10 @@ stages:
             --template-file bicep/aks/main.bicep \
             --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_pbk) KubenetOrCNINetworkPolicy=$(NetworkPlugin_kubenet) PublicOrPrivateCluster=$(aksPrivatePublic_pbl)
 
-  - stage: Validate-KubenetPrivate
-    dependsOn: Lint
-  - job:
+- stage: Validate-KubenetPrivate
+  dependsOn: Lint
+  jobs:
+- job:
     steps:
     - task: AzureCLI@2
       inputs:
@@ -68,8 +71,9 @@ stages:
             --template-file bicep/aks/main.bicep \
             --parameters ADUserID=$(adUserId) ResourceGroupName=$(ResourceGroupName_prv) KubenetOrCNINetworkPolicy=$(NetworkPlugin_kubenet) PublicOrPrivateCluster=$(aksPrivatePublic_prv)       
 
-  - stage: Deploy-KubenetPrivate
-    dependsOn: Validate-KubenetPrivate
+- stage: Deploy-KubenetPrivate
+  dependsOn: Validate-KubenetPrivate
+  jobs:
   - job:
     timeoutInMinutes: 120
     steps:
