@@ -58,7 +58,7 @@ stages:
 - stage: Validate-KubenetPrivate
   dependsOn: Lint
   jobs:
-- job:
+  - job:
     steps:
     - task: AzureCLI@2
       inputs:
