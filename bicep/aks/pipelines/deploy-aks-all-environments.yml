@@ -15,6 +15,7 @@ stages:
 - stage: Lint
   jobs: 
   - job: Lint
+    displayName: Lint code
     steps:
       - script: |
           az bicep build --file bicep/aks/main.bicep
@@ -24,6 +25,7 @@ stages:
   dependsOn: Lint
   jobs:
   - job:
+    displayName: Validate Kubenet Public
     steps:
     - task: AzureCLI@2
       inputs:
@@ -40,6 +42,7 @@ stages:
   dependsOn: Validate_KubenetPublic
   jobs:
   - job: 
+    displayName: Deploy Kubenet Public
     timeoutInMinutes: 120 
     steps:
 
@@ -59,6 +62,7 @@ stages:
   dependsOn: Lint
   jobs:
   - job:
+    displayName: Validate Kubenet Private
     steps:
     - task: AzureCLI@2
       inputs:
@@ -75,6 +79,7 @@ stages:
   dependsOn: Validate_KubenetPrivate
   jobs:
   - job:
+    displayName: Deploy Kubenet Public
     timeoutInMinutes: 120
     steps:
       
@@ -95,6 +100,7 @@ stages:
   dependsOn: Lint
   jobs:
   - job:
+    displayName: Validate CNI Public
     steps:
     - task: AzureCLI@2
       inputs:
@@ -111,6 +117,7 @@ stages:
   dependsOn: Validate_CNIPublic
   jobs:
   - job:
+    displayName: Deploy CNI Public
     timeoutInMinutes: 120
     steps:
 
@@ -130,6 +137,7 @@ stages:
   dependsOn: Lint
   jobs:
   - job:
+    displayName: Validate CNI Private
     steps:
     - task: AzureCLI@2
       inputs:
@@ -146,6 +154,7 @@ stages:
   dependsOn: Validate_CNIPrivate
   jobs:
   - job:
+    displayName: Deploy CNI Private
     timeoutInMinutes: 120
     steps:
 
