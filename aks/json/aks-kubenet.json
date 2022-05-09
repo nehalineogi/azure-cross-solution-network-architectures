@@ -5,7 +5,7 @@
     "_generator": {
       "name": "bicep",
       "version": "0.5.6.12127",
-      "templateHash": "16895758301263120670"
+      "templateHash": "7453473607494504862"
     }
   },
   "parameters": {
@@ -81,12 +81,10 @@
     "aksPrivatePublic": "[parameters('PublicOrPrivateCluster')]",
     "networkPlugin": "[parameters('KubenetOrCNINetworkPolicy')]",
     "repoOwnerName": "nehalineogi",
-    "branchName": "aks",
+    "branchName": "pipefix",
     "githubPath": "[format('https://raw.githubusercontent.com/{0}/azure-cross-solution-network-architectures/{1}/bicep/aks/scripts/', variables('repoOwnerName'), variables('branchName'))]",
     "VmAdminUsername": "localadmin",
     "location": "[deployment().location]",
-    "hubVmName": "hubjump",
-    "spokeVmName": "spokejump",
     "onpremVPNVmName": "vpnvm",
     "publicIPAddressNameSuffix": "vpnpip",
     "hubDNSVmName": "hubdnsvm",
@@ -1477,8 +1475,8 @@
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]"
       ]
     },
     {
@@ -3142,9 +3140,9 @@
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]"
       ]
     },
     {
@@ -3432,11 +3430,11 @@
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubNSG')]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'onpremVpnVM')]",
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]"
       ]
     },
     {
