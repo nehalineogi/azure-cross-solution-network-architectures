@@ -63,4 +63,6 @@ There are Azure DevOps (ADO) pipelines available that will build all types of AK
 
 4. Define three variables using the ADO User Interface, these are for the mandatory parameter inputs ADUserID, location and ServiceConnectionName 
 
+5. Check the pipeline YAML trigger for branches include an existent branch on your repo. 
+
 5. Define an ADO Pipelines environment called "Production" and (optionally) set up an approval gate.
