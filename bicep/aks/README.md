@@ -57,10 +57,10 @@ There are Azure DevOps (ADO) pipelines available that will build all types of AK
 
 1. Fork the repository (or clone the repository to ADO) so that you are able to provision a pipeline from the YAML definition.
 
-1. Follow standard instructions to create a pipeline and reference the YAML files provided. 
+2. Follow standard instructions to create a pipeline and reference the YAML files provided. 
 
-2. Create a Service Connection to your subscription (the service connection will need to be able to create managed identities). 
+3. Create a Service Connection to your subscription (the service connection will need to be able to create managed identities). 
 
-3. Define three variables using the ADO User Interface, these are for the mandatory parameter inputs ADUserID, location and ServiceConnectionName 
+4. Define three variables using the ADO User Interface, these are for the mandatory parameter inputs ADUserID, location and ServiceConnectionName 
 
-4. Define an ADO Pipelines environment called "Production" and (optionally) set up an approval gate.
+5. Define an ADO Pipelines environment called "Production" and (optionally) set up an approval gate.
