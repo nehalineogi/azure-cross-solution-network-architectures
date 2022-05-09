@@ -8,8 +8,6 @@ For convenience you can also follow the quickstart deployment below to get start
 
 For configuration of Front Door for ingress, this is currently best done after deployment of the cluster by following the instructions [AKS Private Cluster with Azure Front Door](../../aks/README-private-cluster-with-AFD.md)
 
-There are also ADO pipelines available that will build all types of AKS cluster (public\private and kubenet\CNI) and they are found here: [ADO Build Pipelines](../aks/pipelines/)
-
 # Quickstart deployment
 
 ### Task 1: clone the repository and deploy
@@ -52,3 +50,17 @@ az ad signed-in-user show --query objectId -o tsv
 For further information on the deployment, setting up SSH to the hosts and advanced troubleshooting please refer to the docker series pages [here (kubenet)](../../aks/README-kubenet.md) and [here (cni)](../../aks/README-advanced.md).
 
 As an alternative you may wish to use your own device or an alternative VM to run the steps above, for this you will need to ensure all the tools are installed including az cli, git, az cli aks tools. There is a helpful powershell script that may aid you with this task - [Tool deployment script](./scripts/install_edge_and_azcli.ps1)
+
+# Pipeline Deployment
+
+There are Azure DevOps (ADO) pipelines available that will build all types of AKS cluster (public\private and kubenet\CNI) and they are found here: [ADO Build Pipelines](../aks/pipelines/). 
+
+1. Fork the repository (or clone the repository to ADO) so that you are able to provision a pipeline from the YAML definition.
+
+1. Follow standard instructions to create a pipeline and reference the YAML files provided. 
+
+2. Create a Service Connection to your subscription (the service connection will need to be able to create managed identities). 
+
+3. Define three variables using the ADO User Interface, these are for the mandatory parameter inputs ADUserID, location and ServiceConnectionName 
+
+4. Define an ADO Pipelines environment called "Production" and (optionally) set up an approval gate.
