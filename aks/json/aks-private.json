@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.5.6.12127",
-      "templateHash": "6719251653458613636"
+      "version": "0.6.1.6515",
+      "templateHash": "929311582645081559"
     }
   },
   "parameters": {
@@ -66,22 +66,25 @@
     }
   },
   "variables": {
+    "$fxv#0": "{\n    \"vnets\" : [\n    {\n      \"vnetName\": \"hubVnet\",\n      \"vnetAddressPrefix\": \"172.17.0.0/16\",\n        \"subnets\": [\n        {\n          \"name\": \"main\",\n          \"prefix\": \"172.17.1.0/24\",\n          \"customNsg\": false\n        },\n        {\n            \"name\": \"AzureBastionSubnet\",\n            \"prefix\": \"172.17.2.0/24\",\n            \"customNsg\": true\n        },\n        {\n            \"name\": \"GatewaySubnet\",\n            \"prefix\": \"172.17.3.0/24\",\n            \"customNsg\": true \n        }\n      ]\n    },\n    {\n        \"vnetName\": \"spoke-virtual-network\",\n        \"vnetAddressPrefix\": \"172.16.0.0/16\",\n          \"subnets\": [\n          {\n            \"name\": \"aks-node-subnet\",\n            \"prefix\": \"172.16.239.0/24\",\n            \"customNsg\": true\n          }\n        ]\n      },   \n       {\n        \"vnetName\": \"onpremises\",\n        \"vnetAddressPrefix\": \"192.168.0.0/16\",\n          \"subnets\": [\n          {\n            \"name\": \"main\",\n            \"prefix\": \"192.168.199.0/24\",\n            \"customNsg\": true\n          },\n          {\n              \"name\": \"AzureBastionSubnet\",\n              \"prefix\": \"192.168.200.0/24\",\n              \"customNsg\": true\n          }\n        ]\n      }\n ]\n}\n    ",
+    "$fxv#1": "{\n    \"vnets\" : [\n    {\n      \"vnetName\": \"hubVnet\",\n      \"vnetAddressPrefix\": \"172.17.0.0/16\",\n        \"subnets\": [\n        {\n          \"name\": \"main\",\n          \"prefix\": \"172.17.1.0/24\",\n          \"customNsg\": false\n        },\n        {\n            \"name\": \"AzureBastionSubnet\",\n            \"prefix\": \"172.17.2.0/24\",\n            \"customNsg\": true\n        },\n        {\n            \"name\": \"GatewaySubnet\",\n            \"prefix\": \"172.17.3.0/24\",\n            \"customNsg\": true\n        }\n      ]\n    },\n    {\n        \"vnetName\": \"spoke-virtual-network\",\n        \"vnetAddressPrefix\": \"172.16.0.0/16\",\n          \"subnets\": [\n          {\n            \"name\": \"aks-node-subnet\",\n            \"prefix\": \"172.16.240.0/24\",\n            \"customNsg\": true\n          }\n        ]\n      },   \n       {\n        \"vnetName\": \"onpremises\",\n        \"vnetAddressPrefix\": \"192.168.0.0/16\",\n          \"subnets\": [\n          {\n            \"name\": \"main\",\n            \"prefix\": \"192.168.199.0/24\",\n            \"customNsg\": true\n          },\n          {\n              \"name\": \"AzureBastionSubnet\",\n              \"prefix\": \"192.168.200.0/24\",\n              \"customNsg\": true\n          }\n        ]\n      }\n ]\n}\n    ",
+    "$fxv#2": "{\n    \"vnets\" : [\n    {\n      \"vnetName\": \"hubVnet\",\n      \"vnetAddressPrefix\": \"172.17.0.0/16\",\n        \"subnets\": [\n        {\n          \"name\": \"main\",\n          \"prefix\": \"172.17.1.0/24\",\n          \"customNsg\": false\n        },\n        {\n            \"name\": \"AzureBastionSubnet\",\n            \"prefix\": \"172.17.2.0/24\",\n            \"customNsg\": true\n        },\n        {\n            \"name\": \"GatewaySubnet\",\n            \"prefix\": \"172.17.3.0/24\",\n            \"customNsg\": true \n        }\n      ]\n    },\n    {\n        \"vnetName\": \"spoke-virtual-network\",\n        \"vnetAddressPrefix\": \"172.16.0.0/16\",\n          \"subnets\": [\n          {\n            \"name\": \"aks-node-subnet\",\n            \"prefix\": \"172.16.238.0/24\",\n            \"customNsg\": true\n          }\n        ]\n      },   \n       {\n        \"vnetName\": \"onpremises\",\n        \"vnetAddressPrefix\": \"192.168.0.0/16\",\n          \"subnets\": [\n          {\n            \"name\": \"main\",\n            \"prefix\": \"192.168.199.0/24\",\n            \"customNsg\": true\n          },\n          {\n              \"name\": \"AzureBastionSubnet\",\n              \"prefix\": \"192.168.200.0/24\",\n              \"customNsg\": true\n          }\n        ]\n      }\n ]\n}\n    ",
     "env": {
       "kubenet": {
-        "vnets": "[json('{\r\n    \"vnets\" : [\r\n    {\r\n      \"vnetName\": \"hubVnet\",\r\n      \"vnetAddressPrefix\": \"172.17.0.0/16\",\r\n        \"subnets\": [\r\n        {\r\n          \"name\": \"main\",\r\n          \"prefix\": \"172.17.1.0/24\",\r\n          \"customNsg\": false\r\n        },\r\n        {\r\n            \"name\": \"AzureBastionSubnet\",\r\n            \"prefix\": \"172.17.2.0/24\",\r\n            \"customNsg\": true\r\n        },\r\n        {\r\n            \"name\": \"GatewaySubnet\",\r\n            \"prefix\": \"172.17.3.0/24\",\r\n            \"customNsg\": true \r\n        }\r\n      ]\r\n    },\r\n    {\r\n        \"vnetName\": \"spoke-virtual-network\",\r\n        \"vnetAddressPrefix\": \"172.16.0.0/16\",\r\n          \"subnets\": [\r\n          {\r\n            \"name\": \"aks-node-subnet\",\r\n            \"prefix\": \"172.16.239.0/24\",\r\n            \"customNsg\": true\r\n          }\r\n        ]\r\n      },   \r\n       {\r\n        \"vnetName\": \"onpremises\",\r\n        \"vnetAddressPrefix\": \"192.168.0.0/16\",\r\n          \"subnets\": [\r\n          {\r\n            \"name\": \"main\",\r\n            \"prefix\": \"192.168.199.0/24\",\r\n            \"customNsg\": true\r\n          },\r\n          {\r\n              \"name\": \"AzureBastionSubnet\",\r\n              \"prefix\": \"192.168.200.0/24\",\r\n              \"customNsg\": true\r\n          }\r\n        ]\r\n      }\r\n ]\r\n}\r\n    ').vnets]"
+        "vnets": "[json(variables('$fxv#0')).vnets]"
       },
       "CNI": {
-        "vnets": "[json('{\r\n    \"vnets\" : [\r\n    {\r\n      \"vnetName\": \"hubVnet\",\r\n      \"vnetAddressPrefix\": \"172.17.0.0/16\",\r\n        \"subnets\": [\r\n        {\r\n          \"name\": \"main\",\r\n          \"prefix\": \"172.17.1.0/24\",\r\n          \"customNsg\": false\r\n        },\r\n        {\r\n            \"name\": \"AzureBastionSubnet\",\r\n            \"prefix\": \"172.17.2.0/24\",\r\n            \"customNsg\": true\r\n        },\r\n        {\r\n            \"name\": \"GatewaySubnet\",\r\n            \"prefix\": \"172.17.3.0/24\",\r\n            \"customNsg\": true\r\n        }\r\n      ]\r\n    },\r\n    {\r\n        \"vnetName\": \"spoke-virtual-network\",\r\n        \"vnetAddressPrefix\": \"172.16.0.0/16\",\r\n          \"subnets\": [\r\n          {\r\n            \"name\": \"aks-node-subnet\",\r\n            \"prefix\": \"172.16.240.0/24\",\r\n            \"customNsg\": true\r\n          }\r\n        ]\r\n      },   \r\n       {\r\n        \"vnetName\": \"onpremises\",\r\n        \"vnetAddressPrefix\": \"192.168.0.0/16\",\r\n          \"subnets\": [\r\n          {\r\n            \"name\": \"main\",\r\n            \"prefix\": \"192.168.199.0/24\",\r\n            \"customNsg\": true\r\n          },\r\n          {\r\n              \"name\": \"AzureBastionSubnet\",\r\n              \"prefix\": \"192.168.200.0/24\",\r\n              \"customNsg\": true\r\n          }\r\n        ]\r\n      }\r\n ]\r\n}\r\n    ').vnets]"
+        "vnets": "[json(variables('$fxv#1')).vnets]"
       },
       "private": {
-        "vnets": "[json('{\r\n    \"vnets\" : [\r\n    {\r\n      \"vnetName\": \"hubVnet\",\r\n      \"vnetAddressPrefix\": \"172.17.0.0/16\",\r\n        \"subnets\": [\r\n        {\r\n          \"name\": \"main\",\r\n          \"prefix\": \"172.17.1.0/24\",\r\n          \"customNsg\": false\r\n        },\r\n        {\r\n            \"name\": \"AzureBastionSubnet\",\r\n            \"prefix\": \"172.17.2.0/24\",\r\n            \"customNsg\": true\r\n        },\r\n        {\r\n            \"name\": \"GatewaySubnet\",\r\n            \"prefix\": \"172.17.3.0/24\",\r\n            \"customNsg\": true \r\n        }\r\n      ]\r\n    },\r\n    {\r\n        \"vnetName\": \"spoke-virtual-network\",\r\n        \"vnetAddressPrefix\": \"172.16.0.0/16\",\r\n          \"subnets\": [\r\n          {\r\n            \"name\": \"aks-node-subnet\",\r\n            \"prefix\": \"172.16.238.0/24\",\r\n            \"customNsg\": true\r\n          }\r\n        ]\r\n      },   \r\n       {\r\n        \"vnetName\": \"onpremises\",\r\n        \"vnetAddressPrefix\": \"192.168.0.0/16\",\r\n          \"subnets\": [\r\n          {\r\n            \"name\": \"main\",\r\n            \"prefix\": \"192.168.199.0/24\",\r\n            \"customNsg\": true\r\n          },\r\n          {\r\n              \"name\": \"AzureBastionSubnet\",\r\n              \"prefix\": \"192.168.200.0/24\",\r\n              \"customNsg\": true\r\n          }\r\n        ]\r\n      }\r\n ]\r\n}\r\n    ').vnets]"
+        "vnets": "[json(variables('$fxv#2')).vnets]"
       }
     },
     "HostVmSize": "[parameters('SupportingServersVMSize')]",
     "aksPrivatePublic": "[parameters('PublicOrPrivateCluster')]",
     "networkPlugin": "[parameters('KubenetOrCNINetworkPolicy')]",
     "repoOwnerName": "nehalineogi",
-    "branchName": "aks",
+    "branchName": "main",
     "githubPath": "[format('https://raw.githubusercontent.com/{0}/azure-cross-solution-network-architectures/{1}/bicep/aks/scripts/', variables('repoOwnerName'), variables('branchName'))]",
     "VmAdminUsername": "localadmin",
     "location": "[deployment().location]",
@@ -136,8 +139,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "17333198398361387868"
+              "version": "0.6.1.6515",
+              "templateHash": "5526200810855591775"
             }
           },
           "parameters": {
@@ -237,8 +240,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "8961229143450768164"
+              "version": "0.6.1.6515",
+              "templateHash": "2007729355841084764"
             }
           },
           "parameters": {
@@ -290,10 +293,10 @@
       "dependsOn": [
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubgw')]",
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]"
       ]
     },
     {
@@ -317,8 +320,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "2898377365681646193"
+              "version": "0.6.1.6515",
+              "templateHash": "8032052178704014589"
             }
           },
           "parameters": {
@@ -484,8 +487,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "6050571304658245974"
+              "version": "0.6.1.6515",
+              "templateHash": "10053343738595150007"
             }
           },
           "parameters": {
@@ -544,8 +547,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "7315693655668643126"
+              "version": "0.6.1.6515",
+              "templateHash": "6626894682152696057"
             }
           },
           "parameters": {
@@ -610,8 +613,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "15551583321460082648"
+              "version": "0.6.1.6515",
+              "templateHash": "4141946055025991895"
             }
           },
           "parameters": {
@@ -718,8 +721,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "17560667264369840117"
+              "version": "0.6.1.6515",
+              "templateHash": "799121709814147657"
             }
           },
           "parameters": {
@@ -799,8 +802,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "15757497971141002271"
+              "version": "0.6.1.6515",
+              "templateHash": "7346869076880472257"
             }
           },
           "parameters": {
@@ -881,8 +884,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "17126143793807709082"
+              "version": "0.6.1.6515",
+              "templateHash": "9201908940189022980"
             }
           },
           "parameters": {
@@ -1009,8 +1012,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "14143154583079709968"
+              "version": "0.6.1.6515",
+              "templateHash": "18306695275902865479"
             }
           },
           "parameters": {
@@ -1128,8 +1131,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "8143971422536912951"
+              "version": "0.6.1.6515",
+              "templateHash": "1838578037714083402"
             }
           },
           "parameters": {
@@ -1472,11 +1475,11 @@
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'kv')]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'psk')]",
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]"
       ]
     },
     {
@@ -1500,8 +1503,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "10878028552529758646"
+              "version": "0.6.1.6515",
+              "templateHash": "17574724435450788025"
             }
           },
           "parameters": {
@@ -1576,8 +1579,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "7315693655668643126"
+              "version": "0.6.1.6515",
+              "templateHash": "6626894682152696057"
             }
           },
           "parameters": {
@@ -1642,8 +1645,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "10906939223989797552"
+              "version": "0.6.1.6515",
+              "templateHash": "5497682158913239091"
             }
           },
           "parameters": {
@@ -1712,8 +1715,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "8989350677629220736"
+              "version": "0.6.1.6515",
+              "templateHash": "15659554745353570639"
             }
           },
           "parameters": {
@@ -1811,8 +1814,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "14174037933933891742"
+              "version": "0.6.1.6515",
+              "templateHash": "1567251143373884564"
             }
           },
           "parameters": {
@@ -1872,8 +1875,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "8732423744919940414"
+              "version": "0.6.1.6515",
+              "templateHash": "10015077308761957411"
             }
           },
           "parameters": {
@@ -1938,8 +1941,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "8732423744919940414"
+              "version": "0.6.1.6515",
+              "templateHash": "10015077308761957411"
             }
           },
           "parameters": {
@@ -2030,8 +2033,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "2000372972496922748"
+              "version": "0.6.1.6515",
+              "templateHash": "7249965905469351486"
             }
           },
           "parameters": {
@@ -2190,8 +2193,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "14143154583079709968"
+              "version": "0.6.1.6515",
+              "templateHash": "18306695275902865479"
             }
           },
           "parameters": {
@@ -2278,8 +2281,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "3157024444215989955"
+              "version": "0.6.1.6515",
+              "templateHash": "15718946981261093801"
             }
           },
           "parameters": {
@@ -2382,8 +2385,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "8143971422536912951"
+              "version": "0.6.1.6515",
+              "templateHash": "1838578037714083402"
             }
           },
           "parameters": {
@@ -2794,8 +2797,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "8143971422536912951"
+              "version": "0.6.1.6515",
+              "templateHash": "1838578037714083402"
             }
           },
           "parameters": {
@@ -3140,9 +3143,9 @@
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]"
       ]
     },
     {
@@ -3169,8 +3172,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "6075787944001141473"
+              "version": "0.6.1.6515",
+              "templateHash": "2324611471089964913"
             }
           },
           "parameters": {
@@ -3263,8 +3266,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "7315693655668643126"
+              "version": "0.6.1.6515",
+              "templateHash": "6626894682152696057"
             }
           },
           "parameters": {
@@ -3347,8 +3350,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "13251335738994457530"
+              "version": "0.6.1.6515",
+              "templateHash": "10451155419553237052"
             }
           },
           "parameters": {
@@ -3431,10 +3434,10 @@
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'onpremVpnVM')]",
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]"
       ]
     },
     {
@@ -3467,8 +3470,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.5.6.12127",
-              "templateHash": "7315693655668643126"
+              "version": "0.6.1.6515",
+              "templateHash": "6626894682152696057"
             }
           },
           "parameters": {
