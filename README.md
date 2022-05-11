@@ -132,8 +132,8 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
 Special thank you to my colleagues
 
-- [David O'Keefe](https://www.linkedin.com/in/david-o-keefe/)
 - [Shaun Croucher](https://github.com/shcrouch)
+- [David O'Keefe](https://www.linkedin.com/in/david-o-keefe/)
 - [Xavier Elizondo](https://github.com/xelizondo)
 - [Heather Tze](https://github.com/hsze)
 - [Daniel Mauser](https://github.com/dmauser)
