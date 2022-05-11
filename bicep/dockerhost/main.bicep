@@ -19,9 +19,9 @@ var location = deployment().location // linting warning here, but for this deplo
                                 
 
 var VnetName           = 'dockervnet'
-var subnetname        = 'dockersubnet'
+var subnetname         = 'dockersubnet'
 var VnetAddressPrefix  = '172.16.0.0/16'
-var subnetprefix      = '172.16.24.0/24'
+var subnetprefix       = '172.16.24.0/24'
 var bastionSubnet      = '172.16.1.0/24'
 var bastionNetworkName = 'AzureBastionSubnet'
 var subnet1ref         = '${dockernetwork.outputs.vnid}/subnets/${dockernetwork.outputs.subnetname}'
@@ -29,7 +29,10 @@ var bastionNetworkref  = '${dockernetwork.outputs.vnid}/subnets/${dockernetwork.
 var VmHostnamePrefix   = 'docker-host-'
 var VmAdminUsername    = 'localadmin'
 var numberOfHosts      = 2
-var githubPath         = 'https://raw.githubusercontent.com/nehalineogi/azure-cross-solution-network-architectures/main/bicep/dockerhost/scripts/'
+
+var repoName           = 'nehalineogi'
+var branchName         = 'aks'
+var githubPath         = 'https://raw.githubusercontent.com/${repoName}/azure-cross-solution-network-architectures/${branchName}/bicep/dockerhost/scripts/'
   
 resource rg 'Microsoft.Resources/resourceGroups@2020-10-01' = {
   name: ResourceGroupName

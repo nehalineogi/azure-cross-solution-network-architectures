@@ -25,26 +25,29 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - Cluster Networking - [IPVLAN, MACVLAN, TUN/TAP drivers](https://kubernetes.io/docs/concepts/cluster-administration/networking/)
 - [Bicep automated deployment](bicep/linuxhost)
 
-### [Azure Kubernetes Services (AKS) Networking Series](aks/README-advanced.md)
+### Azure Kubernetes Services (AKS) Networking Series
 
 - Download [Multi-tab Visio](aks/aks-all-reference-architectures-visio.vsdx) and [PDF](aks/aks-all-reference-architectures-PDF.pdf)
-- [Docker Networking](aks/README-docker-multihost.md)
+- Docker Networking
   - [Single Host](aks/README-docker-singlehost.md)
   - [Multi Host](aks/README-docker-multihost.md)
   - kind Cluster (Kubernetes In Docker)
   - [Bicep automated deployment](bicep/dockerhost)
-- [Basic/Kubenet Networking](aks/README-kubenet.md)
-- [Advanced/Azure CNI Networking](aks/README-advanced.md)
-- [AKS Private Cluster](aks/README-private-cluster.md)
+- AKS Cluster
+  - [Basic/Kubenet Networking](aks/README-kubenet.md)
+  - [Advanced/Azure CNI Networking](aks/README-advanced.md)
+  - [AKS Private Cluster](aks/README-private-cluster.md)
   - [AKS Private Cluster with Azure Front Door](aks/README-private-cluster-with-AFD.md)
-- [Ingress Controllers](aks/README-ingress-appgw.md)
+  - [Bicep automated deployment](bicep/aks)
+- Ingress and Egress Control
   - [AKS Application Gateway Ingress Controller (AGIC)](aks/README-ingress-appgw.md)
   - [Nginx Ingress controller](aks/README-ingress-nginx.md)
-- [AKS Egress with Azure firewall/NVA](aks/README-aks-egress.md)
-- [AKS Multiple Nodepool Design](aks/README-multinode.md)
-- Core DNS and Azure DNS Integrations
-- Kubernetes Network Model - Multus, Flannel,Weave, Calico, Cilium
-- Kubernetes Service Mesh (Istio, Linkerd and Consul)
+  - [AKS Egress with Azure firewall/NVA](aks/README-aks-egress.md)
+- Design Extras
+  - [AKS Multiple Nodepool Design](aks/README-multinode.md)
+  - Core DNS and Azure DNS Integrations
+  - Kubernetes Network Model - Multus, Flannel,Weave, Calico, Cilium
+  - Kubernetes Service Mesh (Istio, Linkerd and Consul)
 
 ### Azure Database Services
 
@@ -129,8 +132,8 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 
 Special thank you to my colleagues
 
-- [David O'Keefe](https://www.linkedin.com/in/david-o-keefe/)
 - [Shaun Croucher](https://github.com/shcrouch)
+- [David O'Keefe](https://www.linkedin.com/in/david-o-keefe/)
 - [Xavier Elizondo](https://github.com/xelizondo)
 - [Heather Tze](https://github.com/hsze)
 - [Daniel Mauser](https://github.com/dmauser)

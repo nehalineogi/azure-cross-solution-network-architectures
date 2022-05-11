@@ -10,6 +10,37 @@ This architecture uses the for AKS Basic/Kubenet Network Model. Observe that the
 
 Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF](aks-all-reference-architectures-PDF.pdf)
 
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Faks-kubenet.json)
+
+# Quickstart deployment
+### Task 1: Start Deployment
+
+1. Click Deploy to Azure button above and supply the signed-in user ID from step 2. Leave all defaults and deploy.
+
+2. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
+
+```
+az ad signed-in-user show --query objectId -o tsv
+```
+
+3. You can log in to the supporting VMs (DC, hub DNS, VPN VM) using the username `localadmin` and passwords from the deployed keyvault.
+
+4. You can log into the AKS cluster by using kubectl from cloud shell. Follow the challenges below. 
+
+### Task 2 (optional): SSH to the supporting VMs.
+
+1. Locate the Network Security Group (NSG) called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
+
+2. Retrieve the public IP address (or DNS label) for each VM
+
+3. Retrieve the VM passwords from the keyvault.
+
+4. SSH to your VMs
+
+```
+ssh localadmin@[VM Public IP or DNS]
+```
+
 ## Azure Documentation links
 
 1. [Choosing a network model](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#choose-a-network-model-to-use)
@@ -24,7 +55,12 @@ Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF]
 
 ### [Design Considerations](https://docs.microsoft.com/en-us/azure/aks/concepts-network#kubenet-basic-networking)
 
-The kubenet networking option is the default configuration for AKS cluster creation.Some design considerations for Kubenet
+The kubenet networking option is the default configuration for AKS cluster creation. 
+Components with blue dotted lines in the diagram above are automatically deployed and a three node AKS cluster is deployed in kubenet mode by default. 
+
+The Node CIDR is 172.16.239.0/24 (aks-node-subnet) and POD CIDR is 10.244.0.0/16.
+
+Some design considerations for Kubenet
 
 - Nodes receive an IP address from the Azure subnet (NODE CIDR). You can deploy these nodes in existing Azure VNET or a new VNET.
 - Pods receive an IP address from a POD CIDR which is logically different address space than the NODE CIDR. Direct pod addressing isn't supported for kubenet due to kubenet design.
@@ -58,7 +94,6 @@ nehali@nehali-laptop:~$ curl  172.16.239.7:8080
 red
 
 ```
-
 ### DNS Design
 
 Azure Subnet can use custom DNS or Azure Default DNS. Core DNS can be used along with Azure DNS.
@@ -75,58 +110,57 @@ Diagram showing Load Balancer traffic flow in an AKS cluster
 
 Outbound traffic from the pods to the Internet flows via Azure External load Balancer (Separate article showing the outbound via Azure firwall/NVA/NAT)
 
-## Deployment and Validations
+## Deployment Validations
 
-**1. Deploy Cluster**
+These steps will deploy a single test pod and delete it.
 
-The cluster was created using this command line. Note the Node CIDR is 172.16.239.0/24 (AKS-kubenet-Subnet) and POD CIDR is 10.244.0.0/16
+1. Obtain the cluster credentials to log in to kubectl (if you did not use the default, replace resource-group with your specified resource group name). 
+
+```az aks get-credentials --resource-group aks --name myAKSCluster```
+
+2. Open Cloud Shell and clone the reposity
+
+```git clone https://github.com/nehalineogi/azure-cross-solution-network-architectures```
+
+3. Navigate to the dnsutils directory 
+
+```cd azure-cross-solution-network-architectures/aks/yaml/dns```
+
+4. Deploy a simple pod
+
+```kubectl apply -f dnsutils.yaml```
+
+5. Check pod is running successfully 
+
+```kubectl get pods -o wide```
+
+6. Delete pod (cleanup)
+
+```kubectl delete pod dnsutils```
+
+**1. Verify nodes**
 
 ```
-az aks create \
-    --resource-group $RG \
-    --name $AKSCLUSTER \
-    --node-count 3 \
-    --generate-ssh-keys \
-    --enable-addons monitoring  \
-    --dns-name-prefix $AKSDNS \
-    --network-plugin $PLUGIN \
-    --service-cidr 10.101.0.0/16 \
-    --dns-service-ip 10.101.0.10 \
-    --pod-cidr 10.244.0.0/16 \
-    --docker-bridge-address 172.20.0.1/16 \
-    --vnet-subnet-id $SUBNET_ID \
-    --enable-managed-identity \
-    --attach-acr $MYACR \
-    --max-pods 30 \
-    --verbose
 
-Deploy single test pod
-k apply -f dnsutils.yaml
-```
-
-**Verify nodes**
-
-```
-
-k get nodes -o wide
+kubectl get nodes -o wide
 NAME STATUS ROLES AGE VERSION INTERNAL-IP EXTERNAL-IP OS-IMAGE KERNEL-VERSION CONTAINER-RUNTIME
 node/aks-nodepool1-62766439-vmss000000 Ready agent 7h8m v1.19.11 172.16.239.4 <none> Ubuntu 18.04.5 LTS 5.4.0-1049-azure containerd://1.4.4+azure
 node/aks-nodepool1-62766439-vmss000001 Ready agent 7h8m v1.19.11 172.16.239.5 <none> Ubuntu 18.04.5 LTS 5.4.0-1049-azure containerd://1.4.4+azure
 node/aks-nodepool1-62766439-vmss000002 Ready agent 7h8m v1.19.11 172.16.239.6 <none> Ubuntu 18.04.5 LTS 5.4.0-1049-azure containerd://1.4.4+azure
 
-k get pods -o wide
+kubectl get pods -o wide
 ```
 
 **2. Deploy Pods and Internal Service**
 
 ```
-k create ns colors-ns
+kubectl create ns colors-ns
 cd yaml/colors-ns
-k apply -f red-internal-service.yaml
-k get pods,services -o wide -n colors-ns
-k describe service red-service-internal -n colors-ns
+kubectl apply -f red-internal-service.yaml
+kubectl get pods,services -o wide -n colors-ns
+kubectl describe service red-service-internal -n colors-ns
 
-k get pods,services -o wide -n colors-ns
+kubectl get pods,services -o wide -n colors-ns
 NAME                                  READY   STATUS    RESTARTS   AGE   IP            NODE                                NOMINATED NODE   READINESS GATES
 pod/red-deployment-5f589f64c6-fslc8   1/1     Running   0          28s   10.244.2.21   aks-nodepool1-62766439-vmss000000   <none>           <none>
 pod/red-deployment-5f589f64c6-jbrzp   1/1     Running   0          28s   10.244.1.19   aks-nodepool1-62766439-vmss000002   <none>           <none>
@@ -134,7 +168,7 @@ pod/red-deployment-5f589f64c6-pzwzs   1/1     Running   0          28s   10.244.
 
 NAME                           TYPE           CLUSTER-IP       EXTERNAL-IP    PORT(S)          AGE     SELECTOR
 service/red-service-internal   LoadBalancer   10.101.202.203   172.16.239.7   8080:32164/TCP   8m20s   app=red
- k describe service red-service-internal -n colors-ns
+ kubectl describe service red-service-internal -n colors-ns
 Name:                     red-service-internal
 Namespace:                colors-ns
 Labels:                   <none>
@@ -167,12 +201,12 @@ red
 **2. Deploy Pods and External Service**
 
 ```
-k create ns colors-ns
-k apply -f red-external-lb.yaml
-k get pods,services -o wide -n colors-ns
-k describe service red-service-external -n colors-ns
+kubectl create ns colors-ns
+kubectl apply -f red-external-lb.yaml
+kubectl get pods,services -o wide -n colors-ns
+kubectl describe service red-service-external -n colors-ns
 
-k get pods,services -o wide -n colors-ns
+kubectl get pods,services -o wide -n colors-ns
 NAME                                  READY   STATUS    RESTARTS   AGE   IP            NODE                                NOMINATED NODE   READINESS GATES
 pod/red-deployment-5f589f64c6-fslc8   1/1     Running   0          22m   10.244.2.21   aks-nodepool1-62766439-vmss000000   <none>           <none>
 pod/red-deployment-5f589f64c6-jbrzp   1/1     Running   0          22m   10.244.1.19   aks-nodepool1-62766439-vmss000002   <none>           <none>
@@ -282,11 +316,11 @@ cbr0            8000.aed6453d6fec       no              veth482424ea
 The curl output showing the egress from POD to Internet via load balancer IP.
 
 ```
-k get pods -o wide
+kubectl get pods -o wide
 NAME       READY   STATUS    RESTARTS   AGE   IP           NODE                                NOMINATED NODE   READINESS GATES
 dnsutils   1/1     Running   0          10m   10.244.1.5   aks-nodepool1-62766439-vmss000002   <none>           <none>
 
-k exec -it dnsutils sh
+kubectl exec -it dnsutils sh
 kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
 
 / # ip add
@@ -321,15 +355,15 @@ Initiate Outbound traffic from AKS to On-Premises. Note that On-Premise sees the
 
 Source AKS:
 Exec into AKS Pod
-k get pods -o wide
+kubectl get pods -o wide
 NAME       READY   STATUS    RESTARTS   AGE     IP           NODE                                NOMINATED NODE   READINESS GATES
 dnsutils   1/1     Running   6          6h55m   10.244.1.5   aks-nodepool1-62766439-vmss000002   <none>           <none>
- k get nodes -o wide
+ kubectl get nodes -o wide
 NAME                                STATUS   ROLES   AGE     VERSION    INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
 aks-nodepool1-62766439-vmss000000   Ready    agent   7h21m   v1.19.11   172.16.239.4   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
 aks-nodepool1-62766439-vmss000001   Ready    agent   7h22m   v1.19.11   172.16.239.5   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
 aks-nodepool1-62766439-vmss000002   Ready    agent   7h22m   v1.19.11   172.16.239.6   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
- k exec -it dnsutils -- sh
+ kubectl exec -it dnsutils -- sh
 / # wget 192.168.199.130:8000
 Connecting to 192.168.199.130:8000 (192.168.199.130:8000)
 index.html           100% |*********************************************************************************************************************|   854   0:00:00 ETA
@@ -379,13 +413,13 @@ data:
 Apply the configuration
 
 ```
-k apply -f coredns-custom-domain.yaml
+kubectl apply -f coredns-custom-domain.yaml
 restart core-dns pod
 kubectl delete pod --namespace kube-system --selector k8s-app=kube-dns
 
 
 validate nnlab.local resolution from dnsutils pod
-k exec -it dnsutils sh
+kubectl exec -it dnsutils sh
 
 
 / # nslookup store1.nnlab.local
@@ -406,7 +440,7 @@ Address:        10.101.0.10#53
 Make sure there is a VNET link from the AKS-VNET to the private DNS Zone in question.
 
 ```
-k exec -it dnsutils sh
+kubectl exec -it dnsutils sh
  # nslookup nnnetworklogs.blob.core.windows.net
 Server:         10.101.0.10
 Address:        10.101.0.10#53
@@ -419,7 +453,7 @@ Address: 172.16.1.7
 
 ## Cleanup
 
-k delete ns colors-ns
+kubectl delete ns colors-ns
 
 ## TODO
 

@@ -10,6 +10,37 @@ This architecture demonstrates the connectivity architecture and traffic flows f
 
 Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF](aks-all-reference-architectures-PDF.pdf)
 
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Faks-private.json)
+
+# Quickstart deployment
+### Task 1: Start Deployment
+
+1. Click Deploy to Azure button above and supply the signed-in user ID from step 2. Leave all defaults and deploy.
+
+2. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
+
+```
+az ad signed-in-user show --query objectId -o tsv
+```
+
+3. You can log in to the supporting VMs (DC, hub DNS, VPN VM) using the username `localadmin` and passwords from the deployed keyvault.
+
+4. You can log into the AKS cluster by using kubectl from cloud shell. Follow the challenges below. 
+
+### Task 2 (optional): SSH to the supporting VMs.
+
+1. Locate the Network Security Group (NSG) called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
+
+2. Retrieve the public IP address (or DNS label) for each VM
+
+3. Retrieve the VM passwords from the keyvault.
+
+4. SSH to your VMs
+
+```
+ssh localadmin@[VM Public IP or DNS]
+```
+
 ## Azure Documentation links
 
 1. [AKS Baseline architecture](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks/secure-baseline-aks)
@@ -46,96 +77,6 @@ Unable to connect to the server: dial tcp: i/o timeout
 From Azure Portal. You need to be connected to Azure VNET or have VPN/Private connectivity in place.
 ![AKS Advanced Networking](images/aks-private-cluster-error.png)
 
-## Quickstart
-
-### Azure CNI (New VNET)
-
-az aks create --resource-group aks-private-rg --name aks-private-cluster --load-balancer-sku standard --enable-private-cluster --network-plugin azure --verbose
-
-### Kubenet (New VNET)
-
-az aks create --resource-group aks-private-rg --name aks-private-cluster --load-balancer-sku standard --enable-private-cluster --verbose
-
-## Private Cluster ( Azure CNI in Existing VNET)
-
-1. Set the variables for existing resources
-
-```
-#
-# Set variables (for existing resources)
-#
-MYACR=nnacr101
-VNETRG=nn-rg-east
-VNET=nn-hub-vnet-east
-SUBNET=aks-private-cluster-subnet
-USERIDENTITY=aks-user-managed-identity
-
-
-
-```
-
-2. Set the variable for new resources
-
-```
-#
-# Variables for new resources
-#
-RG=aks-private-cluster-rg
-AKSCLUSTER=nnaks-private
-AKSDNS=nnaks-private
-LOC="eastus"
-PLUGIN=azure
-
-```
-
-3. Create ACR and User Identity
-
-```
-#
-# create ACR and User Idenity
-#
-az group create --name $RG --location $LOC
-az identity create --name $USERIDENTITY --resource-group $RG
-az acr create -n $MYACR -g $RG --sku basic
-
-
-
-USERIDENTITY_ID=$(az identity show --resource-group $RG --name $USERIDENTITY --query id -o tsv)
-echo $USERIDENTITY_ID
-
-SUBNET_ID=$(az network vnet subnet show --resource-group $VNETRG --vnet-name $VNET --name $SUBNET --query id -o tsv)
-echo $SUBNET_ID
-
-```
-
-4. Create a more AKS Private Cluster
-
-```
-az identity create --name $USERIDENTITY --resource-group $RG
-az identity list --query "[].{Name:name, Id:id, Location:location}" -o table
-USERIDENTITY_ID=$(az identity show --resource-group $RG --name $USERIDENTITY --query id -o tsv)
-echo $USERIDENTITY_ID
-
-az aks create \
- --resource-group $RG \
- --name $AKSCLUSTER \
- --node-count 3 \
- --generate-ssh-keys \
- --enable-private-cluster \
- --enable-addons monitoring \
- --dns-name-prefix $AKSDNS \
- --network-plugin $PLUGIN \
- --service-cidr 10.101.0.0/16 \
- --dns-service-ip 10.101.0.10 \
- --docker-bridge-address 172.20.0.1/16 \
- --vnet-subnet-id $SUBNET_ID \
- --assign-identity $USERIDENTITY_ID \
- --attach-acr $MYACR \
- --max-pods 30 \
- --verbose
-
-```
-
 ## Kube API Access
 
 With the above command AKS Private DNS Zone and Private endpoint gets created.
@@ -144,10 +85,12 @@ With the above command AKS Private DNS Zone and Private endpoint gets created.
 
 ## On-Premises to Kube API server connectivity
 
-Note the kubeAPI / cluster IP resolves to privatelink.eastus.azmk8s.io (private endpoint IP)
+Note the kubeAPI / cluster IP will resolve differently in your deployment based on the clustername and the location you deploy to. The references below are specifically for the deployment used for this demo series, you will need to replace the environment specific references to match your own deployment. 
+
+The form will be [clustername].privatelink.[location].azmk8s.io (private endpoint IP)
 
 ```
-k cluster-info
+kubectlcluster-info
 Kubernetes control plane is running at https://nnaks-private-b8afe38a.abc8bcf2-73d8-4d97-83d5-0ae74d9aa974.privatelink.eastus.azmk8s.io:443
 healthmodel-replicaset-service is running at https://nnaks-private-b8afe38a.abc8bcf2-73d8-4d97-83d5-0ae74d9aa974.privatelink.eastus.azmk8s.io:443/api/v1/namespaces/kube-system/services/healthmodel-replicaset-service/proxy
 CoreDNS is running at https://nnaks-private-b8afe38a.abc8bcf2-73d8-4d97-83d5-0ae74d9aa974.privatelink.eastus.azmk8s.io:443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
@@ -164,13 +107,58 @@ nehali@nehali-laptop:/mnt/c/Users/neneogi/Documents/repos/k8s/aks-azcli$ more /e
 172.16.238.4 nnaks-private-b8afe38a.abc8bcf2-73d8-4d97-83d5-0ae74d9aa974.privatelink.eastus.azmk8s.io
 
 ```
+## Deployment Validations
+
+These steps will deploy a single test pod and delete it. This deployment type is 'Private' so you can run these commands from a VM connected to any VNet, but not from outside of the deployed environment. The VM called dc1 can be used for this purpose. 
+
+1. Install the following tools on dc1 or other VM:
+
+- az cli tools
+- git client
+- Microsoft Edge (optional, easy authentication for az cli and git). 
+
+A powershell script has been made available for convenience that will auto download and install the tools on Windows - [Tool deployment script](../bicep/aks/scripts/install_edge_and_azcli.ps1). 
+
+Note: Alternatively you may be able use Cloud Shell from dc1 (dependant on Conditional Access etc) in which case you can skip this step and steps 2 and use a Cloud Shell session instead. 
+
+2. Authenticate to your tenant 
+
+``` az login ```
+
+3. Install az cli aks (kubetcl) and follow on screen instructions to add the executables to your environment variables path.
+
+``` az aks install-cli ```
+
+4. Obtain the cluster credentials to log in to kubectl (if you did not use the default, replace resource-group with your specified resource group name). 
+
+```az aks get-credentials --resource-group aks --name myAKSCluster```
+
+5. Clone the reposity
+
+```git clone https://github.com/nehalineogi/azure-cross-solution-network-architectures```
+
+6. Navigate to the dnsutils directory 
+
+```cd azure-cross-solution-network-architectures/aks/yaml/dns```
+
+7. Deploy a simple pod
+
+```kubectl apply -f dnsutils.yaml```
+
+8. Check pod is running successfully 
+
+```kubectl get pods -o wide```
+
+9. Delete pod (cleanup)
+
+```kubectl delete pod dnsutils```
 
 ## IP Address Assignment
 
 This deployment is using Azure CNI so the node and pod IPs are in the same subnet
 
 ```
-k get nodes,pods,service -o wide -n colors-ns
+kubectl get nodes,pods,service -o wide -n colors-ns
 NAME                                     STATUS   ROLES   AGE   VERSION    INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
 node/aks-nodepool1-40840556-vmss000000   Ready    agent   9h    v1.19.11   172.16.238.5    <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
 node/aks-nodepool1-40840556-vmss000001   Ready    agent   9h    v1.19.11   172.16.238.36   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
@@ -194,7 +182,7 @@ service/red-service-internal   LoadBalancer   10.101.218.208   172.16.238.98   8
 Note the Node inherits the DNS from VNET DNS setting and egress for the node via Azure External load balancer (NVA/Firewall options available)
 
 ```
- k get pods -o wide
+ kubectl get pods -o wide
 NAME       READY   STATUS    RESTARTS   AGE   IP              NODE                                NOMINATED NODE   READINESS GATES
 dnsutils   1/1     Running   0          21m   172.16.238.27   aks-nodepool1-40840556-vmss000000   <none>           <none>
 ../kubectl-node_shell aks-nodepool1-40840556-vmss000000
@@ -267,7 +255,7 @@ root@aks-nodepool1-40840556-vmss000000:/# curl ifconfig.me
 Pod Inherits DNS from the Node and egress via external LB.
 
 ```
- k exec -it dnsutils -- sh
+ kubectl exec -it dnsutils -- sh
 / # ip add
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -330,7 +318,7 @@ red
 This is supported in Azure CNI mode only. For details see the application gateway ingress controller document [here](README-ingress-controllers.md)
 
 ```
-k get nodes,pods,service,ingress  -n colors-ns -o wide
+kubectl get nodes,pods,service,ingress  -n colors-ns -o wide
 Warning: extensions/v1beta1 Ingress is deprecated in v1.14+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
 NAME                                     STATUS   ROLES   AGE   VERSION    INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
 node/aks-nodepool1-40840556-vmss000000   Ready    agent   13d   v1.19.11   172.16.238.5    <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
@@ -368,7 +356,7 @@ https://docs.microsoft.com/en-us/azure/aks/private-clusters#use-aks-run-command
 Quick way to run kubectl commands using AKS run:
 
 ```
- k get pods -o wide
+ kubectl get pods -o wide
  Unable to connect to the server: dial tcp: i/o timeout
 
 

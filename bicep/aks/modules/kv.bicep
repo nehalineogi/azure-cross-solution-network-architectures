@@ -1,6 +1,6 @@
 param location string = resourceGroup().location
 param tenantId string = subscription().tenantId
-param keyvaultname string = '${resourceGroup().name}-${uniqueString(resourceGroup().id)}' // to help create globally unique string for the Keyvault
+param keyvaultname string = '${substring(resourceGroup().name,0,3)}-${uniqueString(resourceGroup().id)}' // to help create globally unique string for the Keyvault
 param adUserId string
 
 resource keyvaultname_resource 'Microsoft.KeyVault/vaults@2019-09-01' = {
