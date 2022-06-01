@@ -20,7 +20,7 @@ Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF]
 2. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
 
 ```
-az ad signed-in-user show --query objectId -o tsv
+az ad signed-in-user show --query id -o tsv
 ```
 
 3. You can log in to the supporting VMs (DC, hub DNS, VPN VM) using the username `localadmin` and passwords from the deployed keyvault.

@@ -25,7 +25,7 @@ cd azure-cross-solution-network-architectures/bicep/dockerhost/
 3. Retrieve your signed-in user ID below (this is used to apply access to Keyvault).
 
 ```
-az ad signed-in-user show --query objectId -o tsv
+az ad signed-in-user show --query id -o tsv
 ```
 
 4. (optional) If you wish to customise or change the main.bicep or related module code, you can do this now and save your changes locally.  

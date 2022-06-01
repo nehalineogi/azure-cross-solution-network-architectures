@@ -27,7 +27,7 @@ The passwords are stored in a keyvault deployed to the same resource group.
 2. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
 
 ```
-az ad signed-in-user show --query objectId -o tsv
+az ad signed-in-user show --query id -o tsv
 ```
 
 3. Using Azure Bastion, log in to the VMs using the username `localadmin` and passwords from keyvault.
@@ -856,7 +856,7 @@ Azure CLI or Cloud Shell
 
 ```
 
-az ad signed-in-user show --query objectId -o tsv
+az ad signed-in-user show --query id -o tsv
 
 ```
 
