@@ -47,7 +47,7 @@ ssh localadmin@[VM Public IP or DNS]
 # Design Components
 
 1. Two Ubuntu linux VMs in a subnet with eth0 interface (deployed via "Deploy to Azure" button)
-2. VXLAN-demo interface acting as the VTEP and creating the overlay(layer2 over layer3)
+2. VXLAN-demo interface acting as the VTEP and creating the overlay (layer2 over layer3)
 3. Packet captures showing VXLAN encapsulated ICMP packets
 
 # VXLAN between two linux hosts (As good as it gets!)
