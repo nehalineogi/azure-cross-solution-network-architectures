@@ -4,8 +4,8 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.6.1.6515",
-      "templateHash": "11279362574706584146"
+      "version": "0.6.18.56646",
+      "templateHash": "9290222788004865569"
     }
   },
   "parameters": {
@@ -84,7 +84,7 @@
     "aksPrivatePublic": "[parameters('PublicOrPrivateCluster')]",
     "networkPlugin": "[parameters('KubenetOrCNINetworkPolicy')]",
     "repoOwnerName": "nehalineogi",
-    "branchName": "main",
+    "branchName": "updaterepo",
     "githubPath": "[format('https://raw.githubusercontent.com/{0}/azure-cross-solution-network-architectures/{1}/bicep/aks/scripts/', variables('repoOwnerName'), variables('branchName'))]",
     "VmAdminUsername": "localadmin",
     "location": "[deployment().location]",
@@ -139,8 +139,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "5526200810855591775"
+              "version": "0.6.18.56646",
+              "templateHash": "5753543045224616099"
             }
           },
           "parameters": {
@@ -240,8 +240,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "2007729355841084764"
+              "version": "0.6.18.56646",
+              "templateHash": "10798899040796013046"
             }
           },
           "parameters": {
@@ -293,10 +293,10 @@
       "dependsOn": [
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubgw')]",
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]"
       ]
     },
     {
@@ -320,8 +320,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "8032052178704014589"
+              "version": "0.6.18.56646",
+              "templateHash": "11539219213836595884"
             }
           },
           "parameters": {
@@ -487,8 +487,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "10053343738595150007"
+              "version": "0.6.18.56646",
+              "templateHash": "2215729185500223360"
             }
           },
           "parameters": {
@@ -547,8 +547,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "6626894682152696057"
+              "version": "0.6.18.56646",
+              "templateHash": "18442145850760487637"
             }
           },
           "parameters": {
@@ -613,8 +613,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "4141946055025991895"
+              "version": "0.6.18.56646",
+              "templateHash": "8909459240945598780"
             }
           },
           "parameters": {
@@ -721,8 +721,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "799121709814147657"
+              "version": "0.6.18.56646",
+              "templateHash": "8200432103064771903"
             }
           },
           "parameters": {
@@ -802,8 +802,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "7346869076880472257"
+              "version": "0.6.18.56646",
+              "templateHash": "10790984955083811513"
             }
           },
           "parameters": {
@@ -884,8 +884,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "9201908940189022980"
+              "version": "0.6.18.56646",
+              "templateHash": "6604354719076478904"
             }
           },
           "parameters": {
@@ -1012,8 +1012,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "18306695275902865479"
+              "version": "0.6.18.56646",
+              "templateHash": "14707755523415851166"
             }
           },
           "parameters": {
@@ -1131,8 +1131,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "1838578037714083402"
+              "version": "0.6.18.56646",
+              "templateHash": "6125059829993949609"
             }
           },
           "parameters": {
@@ -1476,10 +1476,10 @@
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'psk')]",
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]"
       ]
     },
     {
@@ -1503,8 +1503,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "17574724435450788025"
+              "version": "0.6.18.56646",
+              "templateHash": "10939506485485057389"
             }
           },
           "parameters": {
@@ -1579,8 +1579,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "6626894682152696057"
+              "version": "0.6.18.56646",
+              "templateHash": "18442145850760487637"
             }
           },
           "parameters": {
@@ -1645,8 +1645,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "5497682158913239091"
+              "version": "0.6.18.56646",
+              "templateHash": "5053401051570864844"
             }
           },
           "parameters": {
@@ -1715,8 +1715,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "15659554745353570639"
+              "version": "0.6.18.56646",
+              "templateHash": "7455422579256098524"
             }
           },
           "parameters": {
@@ -1814,8 +1814,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "1567251143373884564"
+              "version": "0.6.18.56646",
+              "templateHash": "7655638119101232557"
             }
           },
           "parameters": {
@@ -1875,8 +1875,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "10015077308761957411"
+              "version": "0.6.18.56646",
+              "templateHash": "14658042611851144323"
             }
           },
           "parameters": {
@@ -1941,8 +1941,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "10015077308761957411"
+              "version": "0.6.18.56646",
+              "templateHash": "14658042611851144323"
             }
           },
           "parameters": {
@@ -2033,8 +2033,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "17270247041997572735"
+              "version": "0.6.18.56646",
+              "templateHash": "17492230371425351808"
             }
           },
           "parameters": {
@@ -2193,8 +2193,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "18306695275902865479"
+              "version": "0.6.18.56646",
+              "templateHash": "14707755523415851166"
             }
           },
           "parameters": {
@@ -2281,8 +2281,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "15718946981261093801"
+              "version": "0.6.18.56646",
+              "templateHash": "5173335374356178932"
             }
           },
           "parameters": {
@@ -2385,8 +2385,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "1838578037714083402"
+              "version": "0.6.18.56646",
+              "templateHash": "6125059829993949609"
             }
           },
           "parameters": {
@@ -2797,8 +2797,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "1838578037714083402"
+              "version": "0.6.18.56646",
+              "templateHash": "6125059829993949609"
             }
           },
           "parameters": {
@@ -3141,11 +3141,11 @@
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'kv')]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'psk')]",
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]"
       ]
     },
     {
@@ -3172,8 +3172,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "2324611471089964913"
+              "version": "0.6.18.56646",
+              "templateHash": "7888930130975504912"
             }
           },
           "parameters": {
@@ -3266,8 +3266,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "6626894682152696057"
+              "version": "0.6.18.56646",
+              "templateHash": "18442145850760487637"
             }
           },
           "parameters": {
@@ -3350,8 +3350,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "10451155419553237052"
+              "version": "0.6.18.56646",
+              "templateHash": "16569982763254063679"
             }
           },
           "parameters": {
@@ -3433,11 +3433,11 @@
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubNSG')]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'onpremVpnVM')]",
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]"
       ]
     },
     {
@@ -3470,8 +3470,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.1.6515",
-              "templateHash": "6626894682152696057"
+              "version": "0.6.18.56646",
+              "templateHash": "18442145850760487637"
             }
           },
           "parameters": {
