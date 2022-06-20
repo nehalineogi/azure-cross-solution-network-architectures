@@ -33,6 +33,8 @@ az ad signed-in-user show --query id -o tsv
 
 3. Using Azure Bastion, log in to the VMs using the username `localadmin` and passwords from keyvault.
 
+4. log in as root with command ```sudo su```
+
 ### Task 2 (optional): SSH to the docker VMs.
 
 1. Locate the Network Security Group (NSG) called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
@@ -42,6 +44,8 @@ az ad signed-in-user show --query id -o tsv
 3. Retrieve the VM passwords from the keyvault.
 
 4. SSH to your VMs
+
+5. log in as root with command ```sudo su```
 
 ```
 ssh localadmin@[VM Public IP or DNS]
