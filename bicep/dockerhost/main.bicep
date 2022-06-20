@@ -31,7 +31,7 @@ var VmAdminUsername    = 'localadmin'
 var numberOfHosts      = 2
 
 var repoName           = 'nehalineogi'
-var branchName         = 'aks'
+var branchName         = 'main'
 var githubPath         = 'https://raw.githubusercontent.com/${repoName}/azure-cross-solution-network-architectures/${branchName}/bicep/dockerhost/scripts/'
   
 resource rg 'Microsoft.Resources/resourceGroups@2020-10-01' = {

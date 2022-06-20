@@ -49,7 +49,7 @@
     "VmAdminUsername": "localadmin",
     "numberOfHosts": 2,
     "repoName": "nehalineogi",
-    "branchName": "aks",
+    "branchName": "main",
     "githubPath": "[format('https://raw.githubusercontent.com/{0}/azure-cross-solution-network-architectures/{1}/bicep/dockerhost/scripts/', variables('repoName'), variables('branchName'))]"
   },
   "resources": [
