@@ -2,6 +2,8 @@
 
 This architecture demonstrates VXLAN network overlay between two linux host in it's simplest form. This is the fundamental principal behind cluster networking.
 
+The quickstart deployment will provision two linux Azure VMs, each has an out-the-box installation. Azure bastion is also deployed and enabled for the VMs and you can connect to the linux VMs using this method immediately. For direct SSH connection, please see quickstart guide below.
+
 # Reference Architecture
 
 ![Docker Swarm Cluster](images/linux-vxlan.png)
