@@ -499,7 +499,7 @@ Azure Powershell
 
 ## How are OS level application automatically installed on the VMs?
 
-OS level configuration is applied via a VM custom script extension, for reference the commands used are found in the following script folder - [cse.sh](/bicep/aks/scripts)
+OS level configuration is applied via a VM custom script extension, for reference the commands used are found in the following script folder - [Scripts](/bicep/aks/scripts)
 
 The scripts are called automatically by the [aks-kubenet.json](json/aks-kubenet.json) ARM template on deployment.
 ## Are there any commands I can use to get the host's DNS, passwords and to change the Network Security Group (NSG) rule, instead of using the portal? 
@@ -510,19 +510,20 @@ Yes, below are commands that can be used to more quickly retieve this informatio
 
 If you wish to retieve passwords for a different hostname, simply change the name property to match.
 
-``` az keyvault secret show --name "docker-host-1-admin-password" --vault-name $(az keyvault list -g dockerhost --query "[].name" -o tsv) --query "value" -o tsv ```
+``` az keyvault secret show --name "hubdnsvm-admin-password" --vault-name $(az keyvault list -g aks-KUBENET --query "[].name" -o tsv) --query "value" -o tsv ```
 
 If you receive an error on this command relating to a timeout and you are using Windows Subsystem for Linux and referencing the Windows based az, you should reference this github issue - https://github.com/Azure/azure-cli/issues/13573. Use powershell or cloud shell instead to mitigate this known bug.
 
 <b> Obtain DNS label for public IP of host (example for docker-host-1 in default resource group) </b>
 
-``` az network public-ip show -g dockerhost -n docker-host-1-nic-pip --query "dnsSettings.fqdn" -o tsv ```
+``` az network public-ip show -g aks-KUBENET -n hubdnsvm-nic-pip --query "dnsSettings.fqdn" -o tsv ```
 
 <b> Change Network Security Rule (NSG) to allow SSH inbound from a specific public IP address </b>
 
 You should change a.a.a.a to match your public IP address
 
-``` az network nsg rule update -g dockerhost --nsg-name Allow-tunnel-traffic -n allow-ssh-inbound  --access allow --source-address-prefix "a.a.a.a" ```
+``` az network nsg rule update -g aks-KUBENET --nsg-name Allow-tunnel-traffic -n allow-ssh-inbound  --access allow --source-address-prefix "a.a.a.a" ```
+
 ## TODO
 
 1. Reference link to egress via firewall/NAT gateway

@@ -741,7 +741,7 @@ Azure Powershell
 
 ## How is docker installed on the host?
 
-Docker is installed via a VM custom script extension, for reference the commands used are found in the following script - [cse.sh](scripts/cse.sh)
+Docker is installed via a VM custom script extension, for reference the commands used are found in the following script - [cse.sh](/bicep/dockerhost/scripts/cse.sh)
 
 This script is called automatically by the [dockerhost.json](json/dockerhost.json) ARM template on deployment.
 ## Are there any commands I can use to get the host's DNS, passwords and to change the Network Security Group (NSG) rule, instead of using the portal? 
