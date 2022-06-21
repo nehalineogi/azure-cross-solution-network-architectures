@@ -76,7 +76,9 @@ Docker0 is already created by docker installation. Docker0 bridge has a layer3 I
 
 Docker Host default configuration.
 
-List the default networks. Bridge Network: Layer2 broadcast domain. All containers connected to the bridge can talk to each other. All docker installations come with the default docker bridge - docker0
+You will run commands below to show that there are no running containers (```docker ps```), list out the docker networks (```docker network ls```) and show the Eternet bridge (```brctl show```).
+
+List the default networks. Bridge Network: Layer2 broadcast domain. All containers connected to the bridge can talk to each other. All docker installations come with the default docker bridge - docker0. 
 
 ```
 root@docker-host-1:/home/localadmin# docker ps
@@ -95,11 +97,6 @@ root@docker-host-1:/home/localadmin#
 ## Task 2: Create a container on the default bridge network (docker0)
 
 ```
-#
-# Run all commands as root user
-#
-localadmin@docker-host-1:~$ sudo -s
-root@docker-host-1:/home/localadmin#
 #
 # Run nginx container
 #
@@ -727,6 +724,8 @@ No. The passwords are generated deterministically and therefore should be change
 ## I cannot run the deployment - what is the ADuserID?
 
 In order for the deployment to provision your signed-in user account access to the keyvault, you will need to provide your Azure Active Directory (AAD) signed-in user ObjectID. In order to retrieve this there are serveral methods. The Azure CLI and Azure Powershell methods are provided below. You can use the cloud shell to run the Azure CLI method, but for powershell you must run this from your own device using Azure Powershell module.
+
+Note that older versions of az cli you may need to run the command with ```--query Objectid``` instead of ```--query id```
 
 Azure CLI or Cloud Shell
 

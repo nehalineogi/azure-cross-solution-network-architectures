@@ -220,6 +220,8 @@ No. The passwords are generated deterministically and therefore should be change
 
 In order for the deployment to provision your signed-in user account access to the keyvault, you will need to provide your Azure Active Directory (AAD) signed-in user ObjectID. In order to retrieve this there are serveral methods. The Azure CLI and Azure Powershell methods are provided below. You can use the cloud shell to run the Azure CLI method, but for powershell you must run this from your own device using Azure Powershell module.
 
+Note that older versions of az cli you may need to run the command with ```--query Objectid``` instead of ```--query id```
+
 Azure CLI or Cloud Shell
 
 ```
