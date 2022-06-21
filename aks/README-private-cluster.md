@@ -387,3 +387,71 @@ nginx-deployment-6c46465cc6-2nhqq   1/1     Running   0          26s   172.16.23
 nginx-deployment-6c46465cc6-kk284   1/1     Running   0          26s   172.16.238.97   aks-nodepool1-40840556-vmss000002   <none>           <none>
 nginx-deployment-6c46465cc6-txs5j   1/1     Running   0          26s   172.16.238.45   aks-nodepool1-40840556-vmss000001   <none>           <none>
 ```
+# FAQ/Troubleshooting
+
+## I am unable to SSH to hosts, what do I need to do?
+
+The automated deployment deploys Azure Bastion so you can connect to the VMs via the portal using Bastion. Alternatively the subnet hosting the VMs has a Network Security Group (NSG) attached called "Allow-tunnel-traffic" with a rule called 'allow-ssh-inbound' which is set to Deny by default. If you wish to allow SSH direct to the hosts, you can edit this rule and change the Source from 127.0.0.1 to your current public IP address. Afterwards, Remember to set the rule from Deny to Allow.
+
+## I have followed the steps suggested above, but I still cannot log in over SSH? 
+
+Ensure that you have correctly edited the Network Security Group (NSG) to allow access for port 22. The rule will need your current public IP address and the rule needs to be amended to <b>'allow' rather than 'deny' </b> traffic. 
+
+If you are using a Virtual Private Network (VPN) for outbound internet access, the public IP address you are assigned may differ from the public IP address that is used to connect on the internet, VPN services sometimes use public to public IP address NAT for outbound internet access for efficient use of their public IP addresses. This can be tricky to determine, and will mean that entering your public IP addresss on the NSG will not work. You may wish to open the rule to a 'range' of public IP addresses provided by the VPN service (for instance a.a.a.a/24). You should consider that this does mean that your service will become network reachable to any other VPN customers who are currently assigned an IP address in that range. 
+
+Alternatively, you can check on the destination side (host in Azure) exactly what public IP address is connecting by running this iptables command and then viewing /var/log/syslog. You can use bastion to connect to the host.
+
+``` iptables -I INPUT -p tcp -m tcp --dport 22 -m state --state NEW  -j LOG --log-level 1 --log-prefix "SSH Log" ```
+
+## What are the logins for the VMs?
+
+The credentials for the VMs are stored in an Azure keyvault.
+
+## Are the passwords used cyptographically secure?
+
+No. The passwords are generated deterministically and therefore should be changed on the VMs post deployment, to maximise security. They are auto generated in this way for convenience and are intended to support this environment as a 'Proof of Concept' or learning experience only and are not intended for production use.
+
+## I cannot run the deployment - what is the ADuserID?
+
+In order for the deployment to provision your signed-in user account access to the keyvault, you will need to provide your Azure Active Directory (AAD) signed-in user ObjectID. In order to retrieve this there are serveral methods. The Azure CLI and Azure Powershell methods are provided below. You can use the cloud shell to run the Azure CLI method, but for powershell you must run this from your own device using Azure Powershell module.
+
+Note that older versions of az cli you may need to run the command with ```--query Objectid``` instead of ```--query id```
+
+Azure CLI or Cloud Shell
+
+```
+az ad signed-in-user show --query id -o tsv
+```
+
+Azure Powershell
+
+```
+(Get-AzContext).Account.ExtendedProperties.HomeAccountId.Split('.')[0]
+```
+
+## How are OS level application automatically installed on the VMs?
+
+OS level configuration is applied via a VM custom script extension, for reference the commands used are found in the following folder - [Scripts](/bicep/aks/scripts)
+
+The scripts are called automatically by the [aks-private.json](json/aks-private.json) ARM template on deployment.
+## Are there any commands I can use to get the host's DNS, passwords and to change the Network Security Group (NSG) rule, instead of using the portal? 
+
+Yes, below are commands that can be used to more quickly retieve this information. 
+
+<b> Obtain password from keyvault (example for docker-host-1 host in default resource group) </b>
+
+If you wish to retieve passwords for a different hostname, simply change the name property to match.
+
+``` az keyvault secret show --name "hubdnsvm-admin-password" --vault-name $(az keyvault list -g nnaks-private-rg --query "[].name" -o tsv) --query "value" -o tsv ```
+
+If you receive an error on this command relating to a timeout and you are using Windows Subsystem for Linux and referencing the Windows based az, you should reference this github issue - https://github.com/Azure/azure-cli/issues/13573. Use powershell or cloud shell instead to mitigate this known bug.
+
+<b> Obtain DNS label for public IP of host (example for docker-host-1 in default resource group) </b>
+
+``` az network public-ip show -g nnaks-private-rg -n hubdnsvm-nic-pip --query "dnsSettings.fqdn" -o tsv ```
+
+<b> Change Network Security Rule (NSG) to allow SSH inbound from a specific public IP address </b>
+
+You should change a.a.a.a to match your public IP address
+
+``` az network nsg rule update -g nnaks-private-rg --nsg-name Allow-tunnel-traffic -n allow-ssh-inbound  --access allow --source-address-prefix "a.a.a.a" ```
