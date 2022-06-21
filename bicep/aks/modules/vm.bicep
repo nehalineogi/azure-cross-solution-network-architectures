@@ -225,7 +225,7 @@ resource csedc 'Microsoft.Compute/virtualMachines/extensions@2021-03-01' = if (d
   properties: {
     publisher: 'Microsoft.Powershell'
     type: 'DSC'
-    typeHandlerVersion: '2.83'
+    typeHandlerVersion: '2.19'
     autoUpgradeMinorVersion: true
     settings: {
       ModulesUrl: uri(githubPath, 'CreateADPDC.zip')
