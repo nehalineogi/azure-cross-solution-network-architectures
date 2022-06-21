@@ -468,9 +468,9 @@ Azure Powershell
 
 ## How are OS level application automatically installed on the VMs?
 
-OS level configuration is applied via a VM custom script extension, for reference the commands used are found in the following script folder - [Scripts](/bicep/aks/scripts)
+OS level configuration is applied via a VM custom script extension, for reference the commands used are found in the following folder - [Scripts](/bicep/aks/scripts)
 
-The scripts are called automatically by the [aks-kubenet.json](json/aks-cni.json) ARM template on deployment.
+The scripts are called automatically by the [aks-CNI.json](json/aks-cni.json) ARM template on deployment.
 ## Are there any commands I can use to get the host's DNS, passwords and to change the Network Security Group (NSG) rule, instead of using the portal? 
 
 Yes, below are commands that can be used to more quickly retieve this information. 
