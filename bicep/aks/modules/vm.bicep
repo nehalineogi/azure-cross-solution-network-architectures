@@ -129,7 +129,7 @@ resource VM 'Microsoft.Compute/virtualMachines@2020-06-01' = {
         publisher: windowsVM ? 'MicrosoftWindowsServer': 'canonical'
         offer    : windowsVM ? 'WindowsServer' : '0001-com-ubuntu-server-focal'
         sku      : windowsVM ? '2019-Datacenter' : '20_04-lts'
-        version  : windowsVM ? '17763.3131.220505' : 'latest'
+        version  : windowsVM ? '17763.3131.220505' : '20.04.202206150'
       }
       osDisk: {
         createOption: 'FromImage'
