@@ -2,7 +2,7 @@ trigger:
   batch: true
   branches:
     include:
-      - testpin
+      - main
 
   paths:
     include:
