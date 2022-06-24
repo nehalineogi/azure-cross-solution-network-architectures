@@ -159,7 +159,7 @@ root@docker-host-1:/home/localadmin# curl ifconfig.me
 #
 # Create a second container on the default docker0 bridge
 #
-root@docker-host-1:~# docker run -dit --name blue-c2 nginxdemos/helloinxdemos/hello
+root@docker-host-1:~# docker run -dit --name blue-c2 nginxdemos/hello
 8dc5a6354f1e0a672d4c62dc9ffa8cd6f448ec763224cafe2d7a2fdd889ea7d1
 
 root@docker-host-1:/home/localadmin# docker exec -it blue-c2 sh
