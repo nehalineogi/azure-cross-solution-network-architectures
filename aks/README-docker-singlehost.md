@@ -507,7 +507,7 @@ Observations:
 # Run a new container named "web" and port forward 8080
 # on docker-host-1 to 80 on the nginx container named web
 #
-docker run -dit -p 8080:80 --name web nginxdemos/hello
+root@docker-host-1:/home/localadmin# docker run -dit -p 8080:80 --name web nginxdemos/hello
 064c04a43c0138d29eadb04adc18556a9ade83b4f58d98222da1401275d99819
 root@docker-host-1:/home/localadmin# docker ps | grep web
 064c04a43c01   nginxdemos/hello   "/docker-entrypoint.…"   11 seconds ago   Up 10 seconds   0.0.0.0:8080->80/tcp, :::8080->80/tcp   web
@@ -522,7 +522,7 @@ Cache-Control: no-cache
 
 
 #
-# update NSG to allow tcp/8080 and then access from outside using
+# update the "Allow-tunnel-traffic" NSG to allow tcp/8080 on docker-host-1 and then access from outside using
 # public IP address of docker-host-1
 #
 
