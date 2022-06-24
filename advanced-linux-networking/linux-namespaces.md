@@ -147,7 +147,7 @@ Address                  HWtype  HWaddress           Flags Mask            Iface
 
 ```
 
-# Challenge#5 (Default gateway - For Outbound Connectivity)
+# Challenge#4 (Default gateway - For Outbound Connectivity)
 
 ```
 ip add add 192.168.24.1/24 dev linux-bridge
@@ -174,7 +174,7 @@ PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
 64 bytes from 8.8.8.8: icmp_seq=3 ttl=55 time=1.54 ms
 ```
 
-# Challenge#6 (Inbound Connectivity - Port fowarding)
+# Challenge#5 (Inbound Connectivity - Port fowarding)
 
 ```
 iptables -t nat -A PREROUTING -p tcp --dport 8080 -j DNAT --to-destination 192.168.24.10:80
