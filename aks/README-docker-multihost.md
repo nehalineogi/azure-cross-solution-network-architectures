@@ -150,8 +150,8 @@ root@docker-host-1:~# docker network inspect docker_gwbridge
             "Options": null,
             "Config": [
                 {
-                    "Subnet": "172.22.0.0/16",
-                    "Gateway": "172.22.0.1"
+                    "Subnet": "172.18.0.0/16",
+                    "Gateway": "172.18.0.1"
                 }
             ]
         },
@@ -163,18 +163,11 @@ root@docker-host-1:~# docker network inspect docker_gwbridge
         },
         "ConfigOnly": false,
         "Containers": {
-            "930c47519b4cc4b1b9a3e57fa41cbe2553efd87e41ed68414a5909f539470daf": {
-                "Name": "gateway_6544aa12aef6",
-                "EndpointID": "131e17b98e242286d0e86817f7850b461ed7f801bfc20a285ba0b884777734cd",
-                "MacAddress": "02:42:ac:16:00:03",
-                "IPv4Address": "172.22.0.3/16",
-                "IPv6Address": ""
-            },
             "ingress-sbox": {
                 "Name": "gateway_ingress-sbox",
                 "EndpointID": "b21f423d1daf361ac1c2edeb3dc23eb90fdf32c3e28983c018fa1c8761dd1c7c",
                 "MacAddress": "02:42:ac:16:00:02",
-                "IPv4Address": "172.22.0.2/16",
+                "IPv4Address": "172.18.0.2/16",
                 "IPv6Address": ""
             }
         },
@@ -656,14 +649,14 @@ inet 10.0.1.4/24 brd 10.0.1.255 scope global eth0
 valid_lft forever preferred_lft forever
 77: eth1@if78: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP
 link/ether 02:42:ac:16:00:03 brd ff:ff:ff:ff:ff:ff
-inet 172.22.0.3/16 brd 172.22.255.255 scope global eth1
+inet 172.18.0.3/16 brd 172.22.255.255 scope global eth1
 valid_lft forever preferred_lft forever
 / # route -n
 Kernel IP routing table
 Destination Gateway Genmask Flags Metric Ref Use Iface
-0.0.0.0 172.22.0.1 0.0.0.0 UG 0 0 0 eth1
+0.0.0.0 172.18.0.1 0.0.0.0 UG 0 0 0 eth1
 10.0.1.0 0.0.0.0 255.255.255.0 U 0 0 0 eth0
-172.22.0.0 0.0.0.0 255.255.0.0 U 0 0 0 eth1
+172.18.0.0 0.0.0.0 255.255.0.0 U 0 0 0 eth1
 / #
 / # ping web-service.1.4j5g6tq92nlqwja2aovsghnpm
 PING web-service.1.4j5g6tq92nlqwja2aovsghnpm (10.0.1.3): 56 data bytes
@@ -722,7 +715,7 @@ inet 10.0.1.4/24 brd 10.0.1.255 scope global eth0
 valid_lft forever preferred_lft forever
 77: eth1@if78: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP
 link/ether 02:42:ac:16:00:03 brd ff:ff:ff:ff:ff:ff
-inet 172.22.0.3/16 brd 172.22.255.255 scope global eth1
+inet 172.18.0.3/16 brd 172.22.255.255 scope global eth1
 valid_lft forever preferred_lft forever
 / # ping 10.0.1.3
 PING 10.0.1.3 (10.0.1.3): 56 data bytes
