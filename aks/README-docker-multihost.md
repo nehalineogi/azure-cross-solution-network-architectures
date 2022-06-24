@@ -349,7 +349,7 @@ Observations:
 
 1. What is the vxlan ID of the red-overlay and green-overlay networks?
 2. What is the ip address space of the overlay networks?
-3. Do the new overlay network appear on both hosts?
+3. Do the new overlay networks appear on both hosts?
 
 # Challenge 3: Create docker service with 2 replicas on the red-overlay network
 
@@ -504,9 +504,14 @@ root@docker-host-1:/home/localadmin# docker inspect service web-service
 
 ```
 #
-# On docker-host-1 ssh into the container
+# On docker-host-1 ssh into the container. Use the 'docker ps' command to retrieve the container ID and then 'docker exec -it' command to open a shell.
 #
-root@docker-host-1:/home/localadmin# docker exec -it c4 sh
+root@docker-host-1:/home/localadmin# docker ps 
+
+CONTAINER ID   IMAGE                     COMMAND                  CREATED         STATUS         PORTS     NAMES
+c036ec2f1a57   nginxdemos/hello:latest   "/docker-entrypoint.…"   8 minutes ago   Up 8 minutes   80/tcp    web-service.2.psorwwx2zs5fba9dnl11fi3fy
+
+root@docker-host-1:/home/localadmin# docker exec -it c036ec2f1a57 sh
 / # ifconfig
 eth0      Link encap:Ethernet  HWaddr 02:42:0A:00:00:09
           inet addr:10.0.0.9  Bcast:10.0.0.255  Mask:255.255.255.0
@@ -576,7 +581,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 oot@docker-host-2:/home/localadmin# docker ps
 CONTAINER ID   IMAGE                     COMMAND                  CREATED          STATUS          PORTS     NAMES
 29eab7a74545   nginxdemos/hello:latest   "/docker-entrypoint.…"   17 minutes ago   Up 17 minutes   80/tcp    web-service.1.rbhms3k74l35jrfc6eq2wh28u
-root@docker-host-2:/home/localadmin# docker exec -it 29 sh
+root@docker-host-2:/home/localadmin# docker exec -it 29eab7a74545 sh
 / # ip add
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
