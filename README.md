@@ -89,7 +89,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 ### DevOps and Automation
 
 - [Automated deployments architecture](automated-deployment-architecture/automation-process.md)
-- Azure DevOps
+- [Azure DevOps CI/CD pipelines](/automated-deployment-architecture/pipelines.md)
 - GitOps for Application deployment
 - CI/CD pipelines using Github Actions
 # Tools of Trade (Work in progress)
