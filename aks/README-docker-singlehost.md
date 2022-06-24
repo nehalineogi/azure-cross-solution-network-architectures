@@ -495,6 +495,11 @@ PING 172.21.0.3 (172.21.0.3): 56 data bytes
 / #
 ```
 
+Observations:
+
+1. Can red-c1 ping red-c2 using hostname and IP. Does it work?
+2. Can red-c1 ping blue-c1 using hostname or IP?
+
 # Challenge 5: Expose the Container to the outside world
 
 ```
