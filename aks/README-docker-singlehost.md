@@ -45,11 +45,12 @@ az ad signed-in-user show --query id -o tsv
 
 4. SSH to your VMs
 
-5. log in as root with command ```sudo su```
-
 ```
 ssh localadmin@[VM Public IP or DNS]
 ```
+
+5. log in as root with command ```sudo su```
+
 
 # Design Components
 
