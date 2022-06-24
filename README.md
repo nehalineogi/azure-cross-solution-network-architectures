@@ -9,13 +9,9 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - [Linux bridge ](advanced-linux-networking/linux-bridge.md)
 - [Linux namespaces](advanced-linux-networking/linux-namespaces.md)
 - [Linux firewall with iptables](advanced-linux-networking/linux-firewall.md)
-- Dynamic Routing (Zebra,Quagga,BIRD - BGP Routing on linux)
-- Openswan VPN (IPsec Tunnels)
-- Macsec encryption on Linux
-- The perfect NVA with linux
-- IPtables and eBPF
-- Cluster Networking - [IPVLAN, MACVLAN, TUN/TAP drivers](https://kubernetes.io/docs/concepts/cluster-administration/networking/)
+- [Future topics (coming soon)](/advanced-linux-networking/comingsoon.md)
 - [Bicep automated deployment](bicep/linuxhost)
+
 
 ### Azure Kubernetes Services (AKS) Networking Series
 
@@ -36,10 +32,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
   - [AKS Egress with Azure firewall/NVA](aks/README-aks-egress.md)
 - Design Extras
   - [AKS Multiple Nodepool Design](aks/README-multinode.md)
-  - kind Cluster (Kubernetes In Docker)
-  - Core DNS and Azure DNS Integrations
-  - Kubernetes Network Model - Multus, Flannel,Weave, Calico, Cilium
-  - Kubernetes Service Mesh (Istio, Linkerd and Consul)
+  - [Future topics (coming soon)](/aks/comingsoon.md)
 
 ### Azure Database Services
 
@@ -58,7 +51,7 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - Azure Synapse
 - OSS databases - mysql and postgres
 
-### [Azure API Management(APIM) Networking Series](apim/README.md)
+### Azure API Management(APIM) Networking Series
 
 - [APIM Big Picture view](apim/README-common.md)
 - [Default mode](apim/README-default.md)
