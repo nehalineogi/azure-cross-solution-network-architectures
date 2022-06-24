@@ -17,7 +17,7 @@ param location string = resourceGroup().location
 param publicIPAddressNameSuffix string = 'pip'
 var dnsLabelPrefix = 'dns-${uniqueString(resourceGroup().id, vmname)}-${publicIPAddressNameSuffix}'
 
-var storageAccountName = '${uniqueString(resourceGroup().id, vmname)}'
+var storageAccountName = uniqueString(resourceGroup().id, vmname)
 var nicName = '${vmname}-nic'
 
 resource pip 'Microsoft.Network/publicIPAddresses@2020-06-01' = {
@@ -81,7 +81,7 @@ resource VM 'Microsoft.Compute/virtualMachines@2020-06-01' = {
         publisher: 'canonical'
         offer: '0001-com-ubuntu-server-focal'
         sku: '20_04-lts'
-        version: 'latest'
+        version: '20.04.202206150'
       }
       osDisk: {
         createOption: 'FromImage'

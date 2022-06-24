@@ -28,7 +28,6 @@ var subnet1ref         = '${dockernetwork.outputs.vnid}/subnets/${dockernetwork.
 var bastionNetworkref  = '${dockernetwork.outputs.vnid}/subnets/${dockernetwork.outputs.bastionSubnetName}'
 var VmHostnamePrefix   = 'docker-host-'
 var VmAdminUsername    = 'localadmin'
-var numberOfHosts      = 2
 
 var repoName           = 'nehalineogi'
 var branchName         = 'main'
@@ -46,20 +45,39 @@ module kv './modules/kv.bicep' = {
   name: 'kv'
   scope: rg
 }
-module dockerhost './modules/vm.bicep' =[for i in range (1,numberOfHosts): {
+module dockerhost1 './modules/vm.bicep' = {
   params: {
     location     : location
     adminusername: VmAdminUsername
     keyvault_name: kv.outputs.keyvaultname
-    vmname       : '${VmHostnamePrefix}${i}'
+    vmname       : '${VmHostnamePrefix}1'
     subnet1ref   : subnet1ref
     vmSize       : HostVmSize
     githubPath   : githubPath
     adUserId     : adUserId
   }
-  name: '${VmHostnamePrefix}${i}'
+  name: '${VmHostnamePrefix}1'
   scope: rg
-} ]
+} 
+
+module dockerhost2 './modules/vm.bicep' = {
+  params: {
+    location     : location
+    adminusername: VmAdminUsername
+    keyvault_name: kv.outputs.keyvaultname
+    vmname       : '${VmHostnamePrefix}2'
+    subnet1ref   : subnet1ref
+    vmSize       : HostVmSize
+    githubPath   : githubPath
+    adUserId     : adUserId
+  }
+  name: '${VmHostnamePrefix}2'
+  scope: rg
+  dependsOn: [
+    dockerhost1
+  ]
+} 
+
 module dockernetwork './modules/network.bicep' = {
   params: {
     addressPrefix     : VnetAddressPrefix
