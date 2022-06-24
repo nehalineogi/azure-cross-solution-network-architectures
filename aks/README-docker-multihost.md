@@ -229,7 +229,7 @@ root@docker-host-2:~# docker network inspect docker_gwbridge
 
 ```
 
-# Challenge 2: Create new custom overlay networks
+# Challenge 2: Create new custom overlay networks on docker-host-1
 
 Note: These overlay networks are scoped as "swarm"
 
@@ -339,7 +339,7 @@ root@docker-host-1:/home/localadmin# docker network inspect docker_gwbridge | gr
                     "Gateway": "172.18.0.1"
                 }
 
-docker network inspect ingress | grep -A 2 -i subnet
+root@docker-host-1:/home/localadmin# docker network inspect ingress | grep -A 2 -i subnet
                     "Subnet": "10.0.0.0/24",
                     "Gateway": "10.0.0.1"
                 }
@@ -347,7 +347,7 @@ docker network inspect ingress | grep -A 2 -i subnet
 
 Observations:
 
-1. What is the vxlan ID of the red-overaly and green-overlay networks?
+1. What is the vxlan ID of the red-overlay and green-overlay networks?
 2. What is the ip address space of the overlay networks?
 3. Do the new overlay network appear on both hosts?
 
