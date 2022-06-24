@@ -3,14 +3,6 @@
 This is a repo of cross solution network connectivity designs with Azure PaaS services, Azure Kubernetes Services(AKS) and on-premise connectivity. These designs are based on real world experiences working with partners,customers and cross solution Cloud Solution Architects (CSAs) in various Azure Design Sessions (ADS). This repo will contain downloadable artifacts including bicep automated deployments, architecture diagrams, postman collections and tools to test applications for various designs. Learn about tools of trades from various Subject Matter Expert (SME) CSAs to validate designs,connectivity, view application and traffic flows.
 
 # Design Areas
-
-### DevOps and Automation
-
-- [Automated deployments architecture](automated-deployment-architecture/automation-process.md)
-- Azure DevOps
-- GitOps for Application deployment
-- CI/CD pipelines using Github Actions
-
 ### Advanced Linux Networking
 
 - [VXLAN with two linux hosts (As good as it gets!)](advanced-linux-networking/linux-vxlan.md)
@@ -94,6 +86,12 @@ This is a repo of cross solution network connectivity designs with Azure PaaS se
 - APP Services with Custom Domain and Private Endpoints
 - Azure App-Service with firewall for outbound traffic filtering
 
+### DevOps and Automation
+
+- [Automated deployments architecture](automated-deployment-architecture/automation-process.md)
+- Azure DevOps
+- GitOps for Application deployment
+- CI/CD pipelines using Github Actions
 # Tools of Trade (Work in progress)
 
 0. VSCode Extentions
