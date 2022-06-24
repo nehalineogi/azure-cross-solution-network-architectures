@@ -261,13 +261,13 @@ root@docker-host-1:~#
 #
 # Create a red-bridge
 #
-root@docker-host-1:/home/localadmin# docker network create --driver bridge red-bridge
+root@docker-host-1:/home/localadmin# docker network create --driver bridge --subnet=172.20.0.0/16 --gateway=172.20.0.1 red-bridge
 c0a6223216a2a70fc29dd981e338f66df95583325ed7799791f9c5ee893bd11b
 
 #
 # create a green bridge
 #
-root@docker-host-1:/home/localadmin# docker network create --driver bridge green-bridge
+root@docker-host-1:/home/localadmin# docker network create --driver bridge --subnet=172.21.0.0/16 --gateway=172.21.0.1 green-bridge
 7403cd79f06afcf7db60bd4db792ea5511731043ecd2fa4f859ee5b94f01c438
 #
 # list bridge
@@ -349,7 +349,7 @@ Observations:
 
 ## Task 1: DNS Resolution within -Default Docker0 Bridge
 
-Docker container inherits the DNS configuration from the Docker host. Containers cannot reference each other by names.
+Docker container inherits the DNS configuration from the Docker host. Containers cannot reference each other by name.
 
 ```
 root@docker-host-1:/home/localadmin# docker exec -it blue-c1 sh
@@ -376,6 +376,8 @@ ping: bad address 'blue-c2'
 ```
 
 ## Task 2: In Custom bridge you can ping green-c2 using the hostname.
+
+User-defined bridges provide automatic DNS resolution between containers.  Containers can reference each other by name.
 
 ```
 root@docker-host-1:/home/localadmin# docker exec -it green-c1 sh
