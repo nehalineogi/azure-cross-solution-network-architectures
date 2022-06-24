@@ -621,6 +621,9 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 172.17.0.0      0.0.0.0         255.255.0.0     U     0      0        0 docker0
 172.20.0.0      0.0.0.0         255.255.0.0     U     0      0        0 br-c0a6223216a2
 172.21.0.0      0.0.0.0         255.255.0.0     U     0      0        0 br-7403cd79f06a
+
+# Check iptables on docker host
+
 root@docker-host-1:/home/localadmin# iptables -L -n
 Chain INPUT (policy ACCEPT)
 target     prot opt source               destination
