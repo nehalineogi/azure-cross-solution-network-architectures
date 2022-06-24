@@ -522,10 +522,12 @@ Cache-Control: no-cache
 
 
 #
-# update the "Allow-tunnel-traffic" NSG to allow tcp/8080 on docker-host-1 and then access from outside using
+# update the "Allow-tunnel-traffic" NSG to allow tcp/8080 to docker-host-1 and then access from outside using
 # public IP address of docker-host-1
 #
 
+# From your laptop attempt to curl using the public IP, or use a browser to the public IP or hostname on port 8080. 
+ 
 nehali@nehali-laptop:~$ curl -I 20.127.137.145:8080
 HTTP/1.1 200 OK
 Server: nginx/1.21.6
