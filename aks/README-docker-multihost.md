@@ -32,6 +32,8 @@ az ad signed-in-user show --query id -o tsv
 
 3. Using Azure Bastion, log in to the VMs using the username `localadmin` and passwords from keyvault.
 
+4. log in as root with command ```sudo su```
+
 ### Task 2 (optional): SSH to the docker VMs.
 
 1. Locate the Network Security Group (NSG) called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
@@ -41,6 +43,8 @@ az ad signed-in-user show --query id -o tsv
 3. Retrieve the VM passwords from the keyvault.
 
 4. SSH to your VMs
+
+5. log in as root with command ```sudo su```
 
 ```
 ssh localadmin@[VM Public IP or DNS]
@@ -52,7 +56,7 @@ ssh localadmin@[VM Public IP or DNS]
 - Enable Swarm Mode to create a multihost cluster
 - Custom Overlay Networks (red-overlay and green-overlay)
 - docker_gwbridge is the default bridge for swarm cluster
-- Overlay networks span multiple nodes and he Docker overlay network uses VXLAN extend the layer-2 broadcast domain to multiple nodes
+- Overlay networks span multiple nodes and the Docker overlay network uses VXLAN to extend the layer-2 broadcast domain to multiple nodes
 - ![Overlay packets](images/vxlan-packets.png)
 - Encryption can be enabled on overlay networks
 - Ingress into the swarm cluster via ingress overlay. Layer 4 load balancing using service VIP. Cloud providers provide L4 load balancer in front of the nodes. Nginx or HA proxy can be used to load balanced the docker nodes.
