@@ -181,6 +181,7 @@ root@docker-host-1:~# docker network inspect docker_gwbridge
 ]
 root@docker-host-1:~#
 
+# Repeat the activity on docker-host-2
 
 root@docker-host-2:~# docker network inspect docker_gwbridge
 [
@@ -196,8 +197,8 @@ root@docker-host-2:~# docker network inspect docker_gwbridge
             "Options": null,
             "Config": [
                 {
-                    "Subnet": "172.20.0.0/16",
-                    "Gateway": "172.20.0.1"
+                    "Subnet": "172.18.0.0/16",
+                    "Gateway": "172.18.0.1"
                 }
             ]
         },
@@ -209,18 +210,11 @@ root@docker-host-2:~# docker network inspect docker_gwbridge
         },
         "ConfigOnly": false,
         "Containers": {
-            "17ca00bbc9e0513f8168d84357b83f59f204d3224737c4a9be6b76165d594a5e": {
-                "Name": "gateway_d63087c3850c",
-                "EndpointID": "8818139ba7b641ad75eee8117d6c34760320daead77d86e77918022254bd7a41",
-                "MacAddress": "02:42:ac:14:00:03",
-                "IPv4Address": "172.20.0.3/16",
-                "IPv6Address": ""
-            },
             "ingress-sbox": {
                 "Name": "gateway_ingress-sbox",
                 "EndpointID": "4986fc32aeefe212a5ba3aecbd75a6d90257273c435c578f717826c269f52c12",
                 "MacAddress": "02:42:ac:14:00:02",
-                "IPv4Address": "172.20.0.2/16",
+                "IPv4Address": "172.18.0.2/16",
                 "IPv6Address": ""
             }
         },
@@ -681,14 +675,14 @@ inet 10.0.1.3/24 brd 10.0.1.255 scope global eth0
 valid_lft forever preferred_lft forever
 45: eth1@if46: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP
 link/ether 02:42:ac:14:00:03 brd ff:ff:ff:ff:ff:ff
-inet 172.20.0.3/16 brd 172.20.255.255 scope global eth1
+inet 172.18.0.3/16 brd 172.20.255.255 scope global eth1
 valid_lft forever preferred_lft forever
 / # route -n
 Kernel IP routing table
 Destination Gateway Genmask Flags Metric Ref Use Iface
-0.0.0.0 172.20.0.1 0.0.0.0 UG 0 0 0 eth1
+0.0.0.0 172.18.0.1 0.0.0.0 UG 0 0 0 eth1
 10.0.1.0 0.0.0.0 255.255.255.0 U 0 0 0 eth0
-172.20.0.0 0.0.0.0 255.255.0.0 U 0 0 0 eth1
+172.18.0.0 0.0.0.0 255.255.0.0 U 0 0 0 eth1
 
 ```
 
