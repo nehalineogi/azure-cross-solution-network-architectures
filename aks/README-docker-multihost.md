@@ -59,7 +59,7 @@ ssh localadmin@[VM Public IP or DNS]
 - Overlay networks span multiple nodes and the Docker overlay network uses VXLAN to extend the layer-2 broadcast domain to multiple nodes
 - ![Overlay packets](images/vxlan-packets.png)
 - Encryption can be enabled on overlay networks
-- Ingress into the swarm cluster via ingress overlay. Layer 4 load balancing using service VIP. Cloud providers provide L4 load balancer in front of the nodes. Nginx or HA proxy can be used to load balanced the docker nodes.
+- Ingress into the swarm cluster via ingress overlay. Layer 4 load balancing using service VIP. Cloud providers provide L4 load balancer in front of the nodes. Nginx or HA proxy can be used to load balance the docker nodes.
 
 # Documentation links
 
