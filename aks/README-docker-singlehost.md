@@ -527,7 +527,7 @@ Cache-Control: no-cache
 #
 
 # From your laptop attempt to curl using the public IP, or use a browser to the public IP or hostname on port 8080. 
- 
+
 nehali@nehali-laptop:~$ curl -I 20.127.137.145:8080
 HTTP/1.1 200 OK
 Server: nginx/1.21.6
@@ -607,6 +607,10 @@ root@docker-host-1:/home/localadmin# ip add
     link/ether e2:d3:0f:d8:42:3f brd ff:ff:ff:ff:ff:ff link-netnsid 6
     inet6 fe80::e0d3:fff:fed8:423f/64 scope link
        valid_lft forever preferred_lft forever
+
+# Install net-tools and view routes on the docker host
+
+root@docker-host-1:/home/localadmin# apt install net-tools
 root@docker-host-1:/home/localadmin# route -n
 Kernel IP routing table
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
