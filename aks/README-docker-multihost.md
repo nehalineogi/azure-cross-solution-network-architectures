@@ -701,10 +701,11 @@ Destination Gateway Genmask Flags Metric Ref Use Iface
 
 ```
 
-root@docker-host-1:~# docker service ps web-service
-ID NAME IMAGE NODE DESIRED STATE CURRENT STATE ERROR PORTS
-4j5g6tq92nlq web-service.1 nginxdemos/hello:latest docker-host-2 Running Running about an hour ago
-4nvjeoc4irny web-service.2 nginxdemos/hello:latest docker-host-1 Running Running about an hour ago
+root@docker-host-1:/home/localadmin# docker ps
+
+CONTAINER ID   IMAGE                     COMMAND                  CREATED          STATUS          PORTS     NAMES
+5277b04b07b3   nginxdemos/hello:latest   "/docker-entrypoint.…"   31 minutes ago   Up 30 minutes   80/tcp    web-service.2.4nvjeoc4irny8vq5mbr2vxhkz
+
 root@docker-host-1:~# docker exec -it web-service.2.4nvjeoc4irny8vq5mbr2vxhkz sh
 
 / # ip add
@@ -782,7 +783,9 @@ root@docker-host-1:/home/localadmin# docker service ps web-service
 ID             NAME            IMAGE                     NODE            DESIRED STATE   CURRENT STATE            ERROR     PORTS
 rbhms3k74l35   web-service.1   nginxdemos/hello:latest   docker-host-2   Running         Running 48 minutes ago
 xy2qpwzu7nqc   web-service.2   nginxdemos/hello:latest   docker-host-1   Running         Running 48 minutes ago
-root@docker-host-1:/home/localadmin# docker exec -it c4 sh
+
+
+root@docker-host-1:/home/localadmin# docker exec -it c4411c1155d5 sh
 
 / # ping web-service.1.rbhms3k74l35jrfc6eq2wh28u
 PING web-service.1.rbhms3k74l35jrfc6eq2wh28u (10.0.1.11): 56 data bytes
@@ -794,9 +797,6 @@ round-trip min/avg/max = 1.300/1.300/1.300 ms
 / #
 
 ```
-
-### Scoped locally!
-
 # Cleanup services, swarm cluster
 
 ```
