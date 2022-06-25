@@ -503,6 +503,7 @@ root@docker-host-1:/home/localadmin# docker inspect service web-service
 
 # Challenge 4: Inspect the container networking and egress path
 
+Note that you may have different IP addresses assigned, and the interfaces may be in a different order to those shown in the architectural diagram above. 
 ```
 #
 # On docker-host-1 ssh into the container. Use the 'docker ps' command to retrieve the container ID and then 'docker exec -it' command to open a shell.
