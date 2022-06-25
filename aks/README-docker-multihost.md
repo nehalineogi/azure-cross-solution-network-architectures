@@ -64,8 +64,9 @@ ssh localadmin@[VM Public IP or DNS]
 # Documentation links
 
 1. [Docker Swarm Mode](https://docs.docker.com/engine/swarm/swarm-mode/)
-2. [VXLAN Overlay Networks](https://docs.docker.com/network/overlay/)
-3. [Encrypt traffic on an overlay network](https://docs.docker.com/network/overlay/#encrypt-traffic-on-an-overlay-network)
+2. [Docker - How a swarm service works](https://docs.docker.com/engine/swarm/how-swarm-mode-works/services/)
+3. [VXLAN Overlay Networks](https://docs.docker.com/network/overlay/)
+4. [Encrypt traffic on an overlay network](https://docs.docker.com/network/overlay/#encrypt-traffic-on-an-overlay-network)
 
 # Challenge 1: Create a Docker Swarm Cluster
 
