@@ -611,6 +611,8 @@ Observations:
 
 # Challenge 5: Ingress overlay network and Service VIP Load balancing
 
+Note that you may have different IP addresses assigned, and the interfaces may be in a different order to those shown in the architectural diagram above. 
+
 ```
 root@docker-host-1:/home/localadmin# docker service inspect web-service | grep -A 9 -i VirtualIPs
 "VirtualIPs": [
@@ -770,7 +772,7 @@ CONTAINER ID   IMAGE                     COMMAND                  CREATED       
 29eab7a74545   nginxdemos/hello:latest   "/docker-entrypoint.…"   49 minutes ago   Up 49 minutes   80/tcp    web-service.1.rbhms3k74l35jrfc6eq2wh28u
 
 #
-# docker-host-1 (pint container on docker-host-2 by name)
+# docker-host-1 (ping container on docker-host-2 by name)
 #
 
 root@docker-host-1:/home/localadmin# docker ps
