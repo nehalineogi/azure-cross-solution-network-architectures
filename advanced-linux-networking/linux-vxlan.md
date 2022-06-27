@@ -46,7 +46,7 @@ It is not uncommon for tenants that are managed by corporations to restrict the 
 
 Before: Notice no vxlan interface
 
-```
+```console
 root@linux-host-1:~# ip add sh
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
