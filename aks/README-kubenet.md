@@ -1,10 +1,10 @@
-## Azure AKS Basic /Kubenet Networking
+# Azure AKS Basic /Kubenet Networking
 
 This architecture uses the AKS Basic (Kubenet) Network Model. 
 
 Observe that the AKS nodes receive their IP address from the azure subnet (NODE CIDR) and the pods receive their IP address from a "POD CIDR" range that is different from the node network. Note the traffic flows for inbound connectivity to AKS via internal and public load balancers. This architecture also demonstrates connectivity and flows to and from on-premises. Outbound flows from AKS pods to internet traverse the Azure load balancer. There are other design options to egress via Azure firewall/NVA or Azure NAT Gateway.
 
-## Reference Architecture
+# Reference Architecture
 
 #### Basic/Kubenet Networking
 
@@ -42,9 +42,7 @@ It is not uncommon for tenants that are managed by corporations to restrict the 
 6. [Core DNS with AKS](https://docs.microsoft.com/en-us/azure/aks/coredns-custom)
 7. [DNS with Private DNS Zone](https://docs.microsoft.com/en-us/azure/private-link/private-endpoint-dns)
 
-## Design Components and Planning
-
-### [Design Considerations](https://docs.microsoft.com/en-us/azure/aks/concepts-network#kubenet-basic-networking)
+# [Design Considerations](https://docs.microsoft.com/en-us/azure/aks/concepts-network#kubenet-basic-networking)
 
 The kubenet networking option is the default configuration for AKS cluster creation. 
 Components with blue dotted lines in the diagram above are automatically deployed and a three node AKS cluster is deployed in kubenet mode by default. 
@@ -101,7 +99,7 @@ Diagram showing load balancer traffic flow in an AKS cluster
 
 Outbound traffic from the pods to the Internet flows via the Azure public load balancer (Separate article showing the outbound via Azure firwall/NVA/NAT will follow)
 
-## Deployment Validations
+# Deployment Validations
 
 These steps will deploy a single test pod and delete it. You should run all these commands from a cloud shell for best results.
 
@@ -109,52 +107,59 @@ These steps will deploy a single test pod and delete it. You should run all thes
 
 Note: If you get a warning "an object named MyAKSCluster already exists in your kubeconfig file, Overwrite? ", you should overwrite to obtain fresh credentials.
 
-```az aks get-credentials --resource-group aks-KUBENET --name myAKSCluster```
+```shaun@Azure:~$ az aks get-credentials --resource-group aks-KUBENET --name myAKSCluster```
 
 2. Open cloud shell and clone the reposity
 
-```git clone https://github.com/nehalineogi/azure-cross-solution-network-architectures```
+```shaun@Azure:~$ git clone https://github.com/nehalineogi/azure-cross-solution-network-architectures```
 
 3. Navigate to the dnsutils directory 
 
-```cd azure-cross-solution-network-architectures/aks/yaml/dns```
+```shaun@Azure:~$ cd azure-cross-solution-network-architectures/aks/yaml/dns```
 
 4. Deploy a simple pod
 
-```kubectl apply -f dnsutils.yaml```
+```shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl apply -f dnsutils.yaml```
 
 5. Check pod is running successfully 
 
-```kubectl get pods -o wide```
+```shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get pods -o wide```
 
 6. Delete pod (cleanup)
 
-```kubectl delete pod dnsutils```
+```shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl delete pod dnsutils```
 
 **1. Verify nodes**
 
-```
+```console
 
-kubectl get nodes -o wide
+shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get nodes -o wide
 NAME STATUS ROLES AGE VERSION INTERNAL-IP EXTERNAL-IP OS-IMAGE KERNEL-VERSION CONTAINER-RUNTIME
 node/aks-nodepool1-62766439-vmss000000 Ready agent 7h8m v1.19.11 172.16.239.4 <none> Ubuntu 18.04.5 LTS 5.4.0-1049-azure containerd://1.4.4+azure
 node/aks-nodepool1-62766439-vmss000001 Ready agent 7h8m v1.19.11 172.16.239.5 <none> Ubuntu 18.04.5 LTS 5.4.0-1049-azure containerd://1.4.4+azure
 node/aks-nodepool1-62766439-vmss000002 Ready agent 7h8m v1.19.11 172.16.239.6 <none> Ubuntu 18.04.5 LTS 5.4.0-1049-azure containerd://1.4.4+azure
 
-kubectl get pods -o wide
+shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get pods -o wide
 ```
 
+# Challenge 1: Deploy Pods and Internal Service
 
-**2. Deploy Pods and Internal Service**
+In this challenge you will deploy pods and configure an internal service using an existing yaml definition in the repository. 
 
 ```
-kubectl create ns colors-ns
-cd yaml/colors-ns
-kubectl apply -f red-internal-service.yaml
-kubectl get pods,services -o wide -n colors-ns
-kubectl describe service red-service-internal -n colors-ns
+#
+# Create a namespace for the service
+#
+shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl create ns colors-ns
 
-kubectl get pods,services -o wide -n colors-ns
+shaun@Azure:~/azure-cross-solution-network-architectures$ cd yaml/colors-ns
+
+shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl apply -f red-internal-service.yaml
+shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get pods,services -o wide -n colors-ns
+shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl describe service red-service-internal -n colors-ns
+
+shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get pods,services -o wide -n colors-ns
+
 NAME                                  READY   STATUS    RESTARTS   AGE   IP            NODE                                NOMINATED NODE   READINESS GATES
 pod/red-deployment-5f589f64c6-fslc8   1/1     Running   0          28s   10.244.2.21   aks-nodepool1-62766439-vmss000000   <none>           <none>
 pod/red-deployment-5f589f64c6-jbrzp   1/1     Running   0          28s   10.244.1.19   aks-nodepool1-62766439-vmss000002   <none>           <none>
