@@ -243,11 +243,11 @@ Azure Powershell
 ```
 ## Are there any commands I can use to get the host's DNS, passwords and to change the Network Security Group (NSG) rule, instead of using the portal? 
 
-Yes, below are commands that can be used to more quickly retieve this information. 
+Yes, below are commands that can be used to more quickly retrieve this information. 
 
 <b> Obtain password from keyvault (example for linux-host-1 host in default resource group) </b>
 
-If you wish to retieve passwords for a different hostname, simply change the name property to match.
+If you wish to retrieve passwords for a different hostname, simply change the name property to match.
 
 ``` az keyvault secret show --name "linux-host-1-admin-password" --vault-name $(az keyvault list -g linuxhost --query "[].name" -o tsv) --query "value" -o tsv ```
 

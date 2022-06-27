@@ -445,11 +445,11 @@ OS level configuration is applied via a VM custom script extension, for referenc
 The scripts are called automatically by the [aks-private.json](json/aks-private.json) ARM template on deployment.
 ## Are there any commands I can use to get the host's DNS, passwords and to change the Network Security Group (NSG) rule, instead of using the portal? 
 
-Yes, below are commands that can be used to more quickly retieve this information. 
+Yes, below are commands that can be used to more quickly retrieve this information. 
 
 <b> Obtain password from keyvault (example for vpnvm host in default resource group) </b>
 
-If you wish to retieve passwords for a different hostname, simply change the name property to match.
+If you wish to retrieve passwords for a different hostname, simply change the name property to match.
 
 ``` az keyvault secret show --name "vpnvm-admin-password" --vault-name $(az keyvault list -g nnaks-private-rg --query "[].name" -o tsv) --query "value" -o tsv ```
 

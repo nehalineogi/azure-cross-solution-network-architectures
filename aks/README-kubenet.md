@@ -2,7 +2,7 @@
 
 This architecture uses the AKS Basic (Kubenet) Network Model. 
 
-Observe that the AKS nodes receive their IP address from the azure subnet (NODE CIDR) and the pods receive their IP address from a "POD CIDR" range that is different from the node network. Note the traffic flows for inbound connectivity to AKS via Internal and External Load balancers. This architecture also demonstrates connectivity and flows to and from on-premises. Outbound flows from AKS pods to internet traverse the Azure load balancer. There are other design options to egress via Azure firewall/NVA or Azure NAT Gateway.
+Observe that the AKS nodes receive their IP address from the azure subnet (NODE CIDR) and the pods receive their IP address from a "POD CIDR" range that is different from the node network. Note the traffic flows for inbound connectivity to AKS via internal and public load balancers. This architecture also demonstrates connectivity and flows to and from on-premises. Outbound flows from AKS pods to internet traverse the Azure load balancer. There are other design options to egress via Azure firewall/NVA or Azure NAT Gateway.
 
 ## Reference Architecture
 
@@ -51,13 +51,13 @@ Components with blue dotted lines in the diagram above are automatically deploye
 
 The AKS nodes are deployed to the spoke-virtual-network on CIDR range 172.16.239.0/24 (aks-node-subnet). The pods are deployed to CIDR range 10.244.0.0/16.
 
-Some design considerations for Kubenet
+Some general design considerations for Kubenet
 
 - Nodes receive an IP address from the Azure subnet (aks-node-subnet). You can deploy these nodes in an existing or new Azure Virtual Network (VNet).
-- Pods receive an IP address from a POD CIDR which is logically different address space than the NODE CIDR. Direct pod addressing isn't supported for kubenet due to kubenet design.
+- Pods receive an IP address from a POD CIDR which is a logically different address space than the NODE CIDR. Direct pod addressing isn't supported for kubenet due to kubenet design.
 - Route tables and user-defined routes are required for using kubenet, which adds complexity to operations.
 - AKS Uses Network address translation (NAT) so that the pods can reach resources on the Azure virtual and on-prem resources. The source IP address of the traffic is translated to the node's primary IP address
-- Inbound connectivity using Internal or External load Balancer
+- Inbound connectivity using internal or public load Balancer
 - Use Kubnet when you have limited IP address space on Azure VNet
 - Most of the pod communication is within the cluster.
 - Azure Network Policy is not supported but calico policies are supported
@@ -99,7 +99,7 @@ Diagram showing Load Balancer traffic flow in an AKS cluster
 
 ### Outbound to Internet
 
-Outbound traffic from the pods to the Internet flows via Azure External load Balancer (Separate article showing the outbound via Azure firwall/NVA/NAT)
+Outbound traffic from the pods to the Internet flows via Azure public load balancer (Separate article showing the outbound via Azure firwall/NVA/NAT)
 
 ## Deployment Validations
 
@@ -509,7 +509,7 @@ OS level configuration is applied via a VM custom script extension, for referenc
 The scripts are called automatically by the [aks-kubenet.json](json/aks-kubenet.json) ARM template on deployment.
 ## Are there any commands I can use to get the host's DNS, passwords and to change the Network Security Group (NSG) rule, instead of using the portal? 
 
-Yes, below are commands that can be used to more quickly retieve this information. 
+Yes, below are commands that can be used to more quickly retrieve this information. 
 
 <b> Obtain password from keyvault (example for vpnvm host in default resource group) </b>
 
