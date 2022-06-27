@@ -56,9 +56,9 @@ Some general design considerations for Kubenet
 - Nodes receive an IP address from the Azure subnet (aks-node-subnet). You can deploy these nodes in an existing or new Azure Virtual Network (VNet).
 - Pods receive an IP address from a POD CIDR which is a logically different address space than the NODE CIDR. Direct pod addressing isn't supported for kubenet due to kubenet design.
 - Route tables and user-defined routes are required for using kubenet, which adds complexity to operations.
-- AKS Uses Network address translation (NAT) so that the pods can reach resources on the Azure virtual and on-prem resources. The source IP address of the traffic is translated to the node's primary IP address
+- AKS Uses network address translation (NAT) so that the pods can reach resources on the Azure virtual and on-prem resources. The source IP address of the traffic is translated to the node's primary IP address
 - Inbound connectivity using internal or public load Balancer
-- Use Kubnet when you have limited IP address space on Azure VNet
+- Use Kubenet when you have limited IP address space on Azure VNet
 - Most of the pod communication is within the cluster.
 - Azure Network Policy is not supported but calico policies are supported
 
@@ -68,11 +68,11 @@ kubenet - a simple /24 IP address range can support up to 251 nodes in the clust
 
 With kubenet, you can use a much smaller IP address range and be able to support large clusters and application demands. For example, even with a /27 IP address range on your subnet, you could run a 20-25 node cluster with enough room to scale or upgrade. This cluster size would support up to 2,200-2,750 pods (with a default maximum of 110 pods per node). The maximum number of pods per node that you can configure with kubenet in AKS is 110.
 
-### Routing to and from onpremises
+### Routing to and from on-premises
 
 ```
-Outbound from AKS to On-Premises
-Note: On-Premise sees the Node IP
+Outbound from AKS to on-premises
+Note: on-premises sees the Node IP
 python3 -m http.server
 Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 172.16.239.6 - - [16/Jul/2021 14:51:52] "GET / HTTP/1.1" 200 -
