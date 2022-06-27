@@ -1,6 +1,8 @@
 ## Azure AKS Basic /Kubenet Networking
 
-This architecture uses the for AKS Basic/Kubenet Network Model. Observe that the AKS Nodes receive IP address from Azure subnet (NODE CIDR) and Pod receive an IP address from a POD CIDR different from the node network. Note the traffic flows for inbound connectivity to AKS via Internal and External Load balancers.This architecture also demonstrates connectivity and flows to and from on-premises. Outbound flows from AKS pods to internet traverse the Azure load balancer. There are other design options to egress via Azure firewall/NVA or Azure NAT Gateway.
+This architecture uses the AKS Basic (Kubenet) Network Model. 
+
+Observe that the AKS nodes receive their IP address from the azure subnet (NODE CIDR) and the pods receive their IP address from a "POD CIDR" range that is different from the node network. Note the traffic flows for inbound connectivity to AKS via Internal and External Load balancers. This architecture also demonstrates connectivity and flows to and from on-premises. Outbound flows from AKS pods to internet traverse the Azure load balancer. There are other design options to egress via Azure firewall/NVA or Azure NAT Gateway.
 
 ## Reference Architecture
 
@@ -47,16 +49,16 @@ It is not uncommon for tenants that are managed by corporations to restrict the 
 The kubenet networking option is the default configuration for AKS cluster creation. 
 Components with blue dotted lines in the diagram above are automatically deployed and a three node AKS cluster is deployed in kubenet mode by default. 
 
-The Node CIDR is 172.16.239.0/24 (aks-node-subnet) and POD CIDR is 10.244.0.0/16.
+The AKS nodes are deployed to the spoke-virtual-network on CIDR range 172.16.239.0/24 (aks-node-subnet). The pods are deployed to CIDR range 10.244.0.0/16.
 
 Some design considerations for Kubenet
 
-- Nodes receive an IP address from the Azure subnet (NODE CIDR). You can deploy these nodes in existing Azure VNET or a new VNET.
+- Nodes receive an IP address from the Azure subnet (aks-node-subnet). You can deploy these nodes in an existing or new Azure Virtual Network (VNet).
 - Pods receive an IP address from a POD CIDR which is logically different address space than the NODE CIDR. Direct pod addressing isn't supported for kubenet due to kubenet design.
 - Route tables and user-defined routes are required for using kubenet, which adds complexity to operations.
 - AKS Uses Network address translation (NAT) so that the pods can reach resources on the Azure virtual and on-prem resources. The source IP address of the traffic is translated to the node's primary IP address
 - Inbound connectivity using Internal or External load Balancer
-- Use Kubnet when you have limited IP address space on Azure VNET
+- Use Kubnet when you have limited IP address space on Azure VNet
 - Most of the pod communication is within the cluster.
 - Azure Network Policy is not supported but calico policies are supported
 
@@ -426,7 +428,7 @@ Address:        10.101.0.10#53
 
 ### DNS with Private DNS Zone
 
-Make sure there is a VNET link from the AKS-VNET to the private DNS Zone in question.
+Make sure there is a VNet link from the AKS-VNET to the private DNS Zone in question.
 
 ```
 kubectl exec -it dnsutils sh
