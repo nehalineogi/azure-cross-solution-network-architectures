@@ -65,7 +65,7 @@ root@linux-host-1:~# ip add sh
 
 Configure VXLAN. Using VXLAN Port of 4789. Per RFC link [here](https://datatracker.ietf.org/doc/html/rfc7348)
 
-```
+```console
     -  Destination Port: IANA has assigned the value 4789 for the
          VXLAN UDP port, and this value SHOULD be used by default as the
          destination UDP port.  Some early implementations of VXLAN have
@@ -75,7 +75,7 @@ Configure VXLAN. Using VXLAN Port of 4789. Per RFC link [here](https://datatrack
 
 ```
 
-```
+```console
 root@linux-host-1:~# ip link add vxlan-demo type vxlan id 5001 remote 172.16.24.5 local 172.16.24.4 de
 v eth0 dstport 4789
 root@linux-host-1:~# ip addr add 192.168.100.1/24 dev vxlan-demo
@@ -105,7 +105,7 @@ root@linux-host-1:~# ip add
 
 ## Linux host 2
 
-```
+```console
 root@linux-host-2:~# ip link add vxlan-demo type vxlan id 5001 remote 172.16.24.4 local 172.16.24.5 de
 v eth0 dstport 4789
 
@@ -139,7 +139,7 @@ root@linux-host-2:~#
 
 ## On host 1: Initiate the ping
 
-```
+```console
 
 root@linux-host-1:~# ping 192.168.100.2
 PING 192.168.100.2 (192.168.100.2) 56(84) bytes of data.
@@ -152,7 +152,7 @@ PING 192.168.100.2 (192.168.100.2) 56(84) bytes of data.
 
 ###### Note: First the ARP packet, VNI ID of 5001 and then VXLAN encapsulated inside ICMP packet
 
-```
+```console
 root@linux-host-2:~# tcpdump -ni eth0 port 4789
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
 listening on eth0, link-type EN10MB (Ethernet), capture size 262144 bytes
@@ -266,7 +266,3 @@ You should change a.a.a.a to match your public IP address
 # TODO:
 
 1. Attach the vxlan-demo interface to custom docker bridge and create a manual cluster!
-
-```
-
-```
