@@ -811,7 +811,7 @@ root@docker-host-2:~#
 
 ```
 
-# Docker Installation - Troubleshooting
+# FAQ/Troubleshooting
 
 ## I am unable to SSH to hosts, what do I need to do?
 
