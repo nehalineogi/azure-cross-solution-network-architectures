@@ -15,7 +15,7 @@ Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF]
 # Quickstart deployment
 ### Task 1: Start Deployment
 
-1. Click Deploy to Azure button above and supply the signed-in user ID from step 2. Leave all defaults and deploy.
+1. Click Deploy to Azure button above and supply the signed-in user ID from step 2.
 
 2. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
 
@@ -23,23 +23,12 @@ Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF]
 az ad signed-in-user show --query id -o tsv
 ```
 
-3. You can log in to the supporting VMs (DC, hub DNS, VPN VM) using the username `localadmin` and passwords from the deployed keyvault.
+3. Using Azure Bastion, log in to the VMs using the username `localadmin` and passwords from keyvault.
 
-4. You can log into the AKS cluster by using kubectl from cloud shell. Follow the challenges below. 
+Note: SSH directly to the VMs is possible, however, it is best security practice to not expose VMs to the internet for SSH. 
+It is not uncommon for tenants that are managed by corporations to restrict the use of SSH directly from the internet. More information can be found in the [FAQ](https://github.com/nehalineogi/azure-cross-solution-network-architectures/blob/main/aks/README-kubenet.md#faqtroubleshooting).
 
-### Task 2 (optional): SSH to the supporting VMs.
-
-1. Locate the Network Security Group (NSG) called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
-
-2. Retrieve the public IP address (or DNS label) for each VM
-
-3. Retrieve the VM passwords from the keyvault.
-
-4. SSH to your VMs
-
-```
-ssh localadmin@[VM Public IP or DNS]
-```
+4. log in as root with command ```sudo su```
 
 ## Azure Documentation links
 
@@ -457,9 +446,21 @@ kubectl delete ns colors-ns
 
 # FAQ/Troubleshooting
 
-## I am unable to SSH to hosts, what do I need to do?
+### Steps to enable SSH to the docker VMs.
 
-The automated deployment deploys Azure Bastion so you can connect to the VMs via the portal using Bastion. Alternatively the subnet hosting the VMs has a Network Security Group (NSG) attached called "Allow-tunnel-traffic" with a rule called 'allow-ssh-inbound' which is set to Deny by default. If you wish to allow SSH direct to the hosts, you can edit this rule and change the Source from 127.0.0.1 to your current public IP address. Afterwards, Remember to set the rule from Deny to Allow.
+1. Locate the Network Security Group (NSG) called "Allow-tunnel-traffic" and amend rule "allow-ssh-inbound" - change 127.0.0.1 to your current public IP address and change rule from Deny to Allow
+
+2. Retrieve the public IP address (or DNS label) for each VM
+
+3. Retrieve the VM passwords from the keyvault.
+
+4. SSH to your VMs
+
+```
+ssh localadmin@[VM Public IP or DNS]
+```
+
+5. log in as root with command ```sudo su```
 
 ## I have followed the steps suggested above, but I still cannot log in over SSH? 
 
@@ -470,6 +471,8 @@ If you are using a Virtual Private Network (VPN) for outbound internet access, t
 Alternatively, you can check on the destination side (host in Azure) exactly what public IP address is connecting by running this iptables command and then viewing /var/log/syslog. You can use bastion to connect to the host.
 
 ``` iptables -I INPUT -p tcp -m tcp --dport 22 -m state --state NEW  -j LOG --log-level 1 --log-prefix "SSH Log" ```
+
+Finally, check that your company is not blocking or restricting port 22 access to the VMs.
 
 ## What are the logins for the VMs?
 

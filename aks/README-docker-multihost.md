@@ -33,7 +33,7 @@ az ad signed-in-user show --query id -o tsv
 3. Using Azure Bastion, log in to the VMs using the username `localadmin` and passwords from keyvault.
 
 Note: SSH directly to the VMs is possible, however, it is best security practice to not expose VMs to the internet for SSH. 
-It is not uncommon for tenants that are managed by corporations to restrict the use of SSH directly from the internet. More information can be found in the FAQ below.
+It is not uncommon for tenants that are managed by corporations to restrict the use of SSH directly from the internet. More information can be found in the [FAQ](https://github.com/nehalineogi/azure-cross-solution-network-architectures/blob/main/aks/README-docker-multihost.md#faqtroubleshooting).
 
 4. log in as root with command ```sudo su```
 
