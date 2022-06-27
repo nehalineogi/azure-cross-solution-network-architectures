@@ -103,13 +103,15 @@ Outbound traffic from the pods to the Internet flows via the Azure public load b
 
 ## Deployment Validations
 
-These steps will deploy a single test pod and delete it.
+These steps will deploy a single test pod and delete it. You should run all these commands from a cloud shell for best results.
 
-1. Obtain the cluster credentials to log in to kubectl (if you did not use the default, replace resource-group with your specified resource group name). 
+1. Obtain the cluster credentials to log in to kubectl (if you did not use the default, replace resource-group with your specified resource group name).
 
-```az aks get-credentials --resource-group aks --name myAKSCluster```
+Note: If you get a warning "an object named MyAKSCluster already exists in your kubeconfig file, Overwrite? ", you should overwrite to obtain fresh credentials.
 
-2. Open Cloud Shell and clone the reposity
+```az aks get-credentials --resource-group aks-KUBENET --name myAKSCluster```
+
+2. Open cloud shell and clone the reposity
 
 ```git clone https://github.com/nehalineogi/azure-cross-solution-network-architectures```
 
@@ -141,6 +143,7 @@ node/aks-nodepool1-62766439-vmss000002 Ready agent 7h8m v1.19.11 172.16.239.6 <n
 
 kubectl get pods -o wide
 ```
+
 
 **2. Deploy Pods and Internal Service**
 
