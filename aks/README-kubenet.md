@@ -87,19 +87,19 @@ red
 ```
 ### DNS Design
 
-Azure Subnet can use custom DNS or Azure Default DNS. Core DNS can be used along with Azure DNS.
+Azure Subnet can use custom DNS or Azure Default DNS. Custom DNS can be used alongside Azure DNS.
 
 ### Inbound Services
 
-AKS Uses [services](https://docs.microsoft.com/en-us/azure/aks/concepts-network#services) to provide inbound connectivity to pods insides the AKS cluster. The three service types are (Cluster IP, NodePort and LoadBalancer). In the archictecture above, the service type is LoadBalancer. AKS Creates an Azure load balancer resource, configures an external IP address, and connects the requested pods to the load balancer backend pool. To allow customers' traffic to reach the application, load balancing rules are created on the desired ports.
+AKS uses [services](https://docs.microsoft.com/en-us/azure/aks/concepts-network#services) to provide inbound connectivity to pods insides the AKS cluster. The three service types are Cluster IP, NodePort and LoadBalancer. In the archictecture above, the service type is LoadBalancer. AKS Creates an Azure load balancer resource, configures an external IP address, and connects the requested pods to the load balancer backend pool. To allow customers' traffic to reach the application, load balancing rules are created on the desired ports.
 
-Diagram showing Load Balancer traffic flow in an AKS cluster
+Diagram showing load balancer traffic flow in an AKS cluster
 
 ![AKS Basic Networking](images/aks-loadbalancer.png)
 
 ### Outbound to Internet
 
-Outbound traffic from the pods to the Internet flows via Azure public load balancer (Separate article showing the outbound via Azure firwall/NVA/NAT)
+Outbound traffic from the pods to the Internet flows via the Azure public load balancer (Separate article showing the outbound via Azure firwall/NVA/NAT will follow)
 
 ## Deployment Validations
 
