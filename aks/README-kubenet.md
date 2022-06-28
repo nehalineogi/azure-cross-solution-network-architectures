@@ -252,12 +252,6 @@ Events:
 
 AKS automatically applies an NSG to the interfaces of the node pool VMSS instances. Check in the portal for an NSG beginning aks-agentpoolxxxx in the resource group and find the NSG rule automatically written to accept connections on port 8080. You can test this from the VPN VM or from your own device to check the application is accessible.
 
-```
-localadmin@vpnvm:~$ curl external_load_balancer_ip:8080
-red
-
-```
-
 ### Route table Validation
 
 Note the POD CIDR is 10.244.0.0/16. See the route tables created to support the NAT from POD CIDR to Node primary IP.
