@@ -26,7 +26,7 @@ The passwords are stored in a keyvault deployed to the same resource group.
 
 2. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
 
-```
+```consoles
 az ad signed-in-user show --query id -o tsv
 ```
 
@@ -61,7 +61,7 @@ List the default networks and initialize docker swarm cluster
 
 ### Initialize the cluster on the Manager Node
 
-```
+```console
 #
 # On docker-host-1 (manager node)
 # Intialize the cluster and grade the swarm join
@@ -87,7 +87,7 @@ To add a manager to this swarm, run 'docker swarm join-token manager' and follow
 
 ### Join the Worker Node to the swarm cluster
 
-```
+```console
 #
 # On docker-host-2 (worker node)
 # Use the join command from the output above
@@ -102,7 +102,7 @@ Bridge Network: Layer2 broadcast domain. All containers connected to the bridge 
 
 ### Run validations Manager Node
 
-```
+```console
 #
 # On docker-host-1
 #
@@ -221,7 +221,7 @@ root@docker-host-2:~# docker network inspect docker_gwbridge
 
 Note: These overlay networks are scoped as "swarm"
 
-```
+```console
 #
 # create read overlay network
 #
@@ -341,7 +341,7 @@ Observations:
 
 # Challenge 3: Create docker service with 2 replicas on the red-overlay network
 
-```
+```console
 #
 # create a docker service with 2 replicas and expose
 # expose port 8080 on host to 80 on service
@@ -491,7 +491,7 @@ root@docker-host-1:/home/localadmin# docker inspect service web-service
 # Challenge 4: Inspect the container networking and egress path
 
 Note that you may have different IP addresses assigned, and the interfaces may be in a different order to those shown in the architectural diagram above. 
-```
+```console
 #
 # On docker-host-1 ssh into the container. Use the 'docker ps' command to retrieve the container ID and then 'docker exec -it' command to open a shell.
 #
@@ -600,7 +600,7 @@ Observations:
 
 Note that you may have different IP addresses assigned, and the interfaces may be in a different order to those shown in the architectural diagram above. 
 
-```
+```console
 root@docker-host-1:/home/localadmin# docker service inspect web-service | grep -A 9 -i VirtualIPs
 "VirtualIPs": [
 {
@@ -626,7 +626,7 @@ root@docker-host-1:/home/localadmin# curl -s 172.16.24.4:8080 | grep -i address
 
 ### Task 1: Validate egress IP
 
-```
+```console
 root@docker-host-1:~# docker exec -it web-service.2.4nvjeoc4irny8vq5mbr2vxhkz sh
 / # ip add
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
@@ -686,7 +686,7 @@ Destination Gateway Genmask Flags Metric Ref Use Iface
 
 ### Initiate ping from container on docker-host-1 to container on docker-host-2
 
-```
+```console
 
 root@docker-host-1:/home/localadmin# docker ps
 
@@ -726,7 +726,7 @@ round-trip min/avg/max = 0.837/1.124/1.331 ms
 
 Observe vxlan encapsulated packets (inner icmp packets)
 
-```
+```console
 
 root@docker-host-2:~# tcpdump -ni eth0 port 4789
 tcpdump: verbose output suppressed, use -v or -vv for full protocol decode
@@ -752,7 +752,7 @@ IP 10.0.1.3 > 10.0.1.4: ICMP echo reply, id 54, seq 3, length 64
 
 # Challenge 7: DNS Container and Service resolution
 
-```
+```console
 # docker-host-2 (grab the container name)
 
 root@docker-host-2:/home/localadmin# docker ps
@@ -786,7 +786,7 @@ round-trip min/avg/max = 1.300/1.300/1.300 ms
 ```
 # Cleanup services, swarm cluster
 
-```
+```conosle
 
 root@docker-host-1:~# docker service ls
 ID NAME MODE REPLICAS IMAGE PORTS
@@ -829,7 +829,7 @@ Alternatively the subnet hosting the VMs has a Network Security Group (NSG) atta
 
 4. SSH to your VMs
 
-```
+```console
 ssh localadmin@[VM Public IP or DNS]
 ```
 
@@ -843,7 +843,7 @@ If you are using a Virtual Private Network (VPN) for outbound internet access, t
 
 Alternatively, you can check on the destination side (host in Azure) exactly what public IP address is connecting by running this iptables command and then viewing /var/log/syslog. You can use bastion to connect to the host.
 
-``` iptables -I INPUT -p tcp -m tcp --dport 22 -m state --state NEW  -j LOG --log-level 1 --log-prefix "SSH Log" ```
+```console iptables -I INPUT -p tcp -m tcp --dport 22 -m state --state NEW  -j LOG --log-level 1 --log-prefix "SSH Log" ```
 
 Finally, check that your company is not blocking or restricting port 22 access to the VMs.
 
@@ -859,11 +859,11 @@ No. The passwords are generated deterministically and therefore should be change
 
 In order for the deployment to provision your signed-in user account access to the keyvault, you will need to provide your Azure Active Directory (AAD) signed-in user ObjectID. In order to retrieve this there are serveral methods. The Azure CLI and Azure Powershell methods are provided below. You can use the cloud shell to run the Azure CLI method, but for powershell you must run this from your own device using Azure Powershell module.
 
-Note that older versions of az cli you may need to run the command with ```--query Objectid``` instead of ```--query id```
+Note that older versions of az cli you may need to run the command with ```console --query Objectid``` instead of ```console --query id```
 
 Azure CLI or Cloud Shell
 
-```
+```console
 
 az ad signed-in-user show --query id -o tsv
 
@@ -871,7 +871,7 @@ az ad signed-in-user show --query id -o tsv
 
 Azure Powershell
 
-```
+```console
 
 (Get-AzContext).Account.ExtendedProperties.HomeAccountId.Split('.')[0]
 
@@ -891,19 +891,19 @@ Yes, below are commands that can be used to more quickly retrieve this informati
 
 If you wish to retrieve passwords for a different hostname, simply change the name property to match.
 
-``` az keyvault secret show --name "docker-host-1-admin-password" --vault-name $(az keyvault list -g dockerhost --query "[].name" -o tsv) --query "value" -o tsv ```
+```console az keyvault secret show --name "docker-host-1-admin-password" --vault-name $(az keyvault list -g dockerhost --query "[].name" -o tsv) --query "value" -o tsv ```
 
 If you receive an error on this command relating to a timeout and you are using Windows Subsystem for Linux and referencing the Windows based az, you should reference this github issue - https://github.com/Azure/azure-cli/issues/13573. Use powershell or cloud shell instead to mitigate this known bug.
 
 <b> Obtain DNS label for public IP of host (example for docker-host-1 in default resource group) </b>
 
-``` az network public-ip show -g dockerhost -n docker-host-1-nic-pip --query "dnsSettings.fqdn" -o tsv ```
+```console az network public-ip show -g dockerhost -n docker-host-1-nic-pip --query "dnsSettings.fqdn" -o tsv ```
 
 <b> Change Network Security Rule (NSG) to allow SSH inbound from a specific public IP address </b>
 
 You should change a.a.a.a to match your public IP address
 
-``` az network nsg rule update -g dockerhost --nsg-name Allow-tunnel-traffic -n allow-ssh-inbound  --access allow --source-address-prefix "a.a.a.a" ```
+```console az network nsg rule update -g dockerhost --nsg-name Allow-tunnel-traffic -n allow-ssh-inbound  --access allow --source-address-prefix "a.a.a.a" ```
 
 
 # TODO
