@@ -454,41 +454,23 @@ red
 
 Azure documentation
 https://docs.microsoft.com/en-us/azure/aks/private-clusters#use-aks-run-command
-
-Quick way to run kubectl commands using AKS run:
-
-```
- kubectl get pods -o wide
- Unable to connect to the server: dial tcp: i/o timeout
+https://docs.microsoft.com/en-us/azure/aks/command-invoke 
 
 
- az aks command invoke -g aks-private-cluster-rg -n nnaks-private -c "kubectl get nodes -o wide"
-command started at 2021-09-21 13:08:40+00:00, finished at 2021-09-21 13:08:41+00:00 with exitcode=0
-NAME                                STATUS   ROLES   AGE   VERSION    INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
-aks-nodepool1-40840556-vmss000000   Ready    agent   64d   v1.19.11   172.16.238.5    <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
-aks-nodepool1-40840556-vmss000001   Ready    agent   64d   v1.19.11   172.16.238.36   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
-aks-nodepool1-40840556-vmss000002   Ready    agent   64d   v1.19.11   172.16.238.67   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
+Quick way to run kubectl commands using AKS ```command invoke``` from a cloud shell against a private deployment of AKS (note this does not require you to initiate the connection from a private location, and can be run from cloud shell or any other location, such as your local device following authentication. This permissions is configurable as per documentation above). 
+
+You can use any kubectl command here as normal
 
 ```
-
-Sample deployment using AKS Run:
+shaun@Azure:~$ az aks command invoke -g nnaks-private-rg -n nnaks-private -c "kubectl get nodes -o wide"
+command started at 2022-06-28 18:32:49+00:00, finished at 2022-06-28 18:32:51+00:00 with exitcode=0
+NAME                                 STATUS   ROLES   AGE    VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
+aks-agentpool1-38167371-vmss000000   Ready    agent   132m   v1.22.6   172.16.240.5    <none>        Ubuntu 18.04.6 LTS   5.4.0-1083-azure   containerd://1.5.11+azure-2
+aks-agentpool1-38167371-vmss000001   Ready    agent   132m   v1.22.6   172.16.240.36   <none>        Ubuntu 18.04.6 LTS   5.4.0-1083-azure   containerd://1.5.11+azure-2
+aks-agentpool1-38167371-vmss000002   Ready    agent   132m   v1.22.6   172.16.240.67   <none>        Ubuntu 18.04.6 LTS   5.4.0-1083-azure   containerd://1.5.11+azure-2
 
 ```
-az aks command invoke -g aks-private-cluster-rg -n nnaks-private -c "kubectl create ns demo-ns"
-command started at 2021-09-21 13:18:27+00:00, finished at 2021-09-21 13:18:28+00:00 with exitcode=0
-namespace/demo-ns created
 
-az aks command invoke -g aks-private-cluster-rg -n nnaks-private -c "kubectl apply -f deployment.yaml" -f deployment.yaml
-command started at 2021-09-21 13:19:06+00:00, finished at 2021-09-21 13:19:07+00:00 with exitcode=0
-deployment.apps/nginx-deployment created
-
-az aks command invoke -g aks-private-cluster-rg -n nnaks-private -c "kubectl get pods -o wide -n demo-ns"
-command started at 2021-09-21 13:19:32+00:00, finished at 2021-09-21 13:19:33+00:00 with exitcode=0
-NAME                                READY   STATUS    RESTARTS   AGE   IP              NODE                                NOMINATED NODE   READINESS GATES
-nginx-deployment-6c46465cc6-2nhqq   1/1     Running   0          26s   172.16.238.33   aks-nodepool1-40840556-vmss000000   <none>           <none>
-nginx-deployment-6c46465cc6-kk284   1/1     Running   0          26s   172.16.238.97   aks-nodepool1-40840556-vmss000002   <none>           <none>
-nginx-deployment-6c46465cc6-txs5j   1/1     Running   0          26s   172.16.238.45   aks-nodepool1-40840556-vmss000001   <none>           <none>
-```
 # FAQ/Troubleshooting
 
 ## I am unable to SSH to hosts, what do I need to do?
