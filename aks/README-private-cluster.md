@@ -450,42 +450,6 @@ localadmin@vpnvm:~$ curl http://51.104.252.152:8080
 red
 
 ```
-
-## Application Gateway Ingress with Private Cluster in Azure CNI Mode
-
-This is supported in Azure CNI mode only. For details see the application gateway ingress controller document [here](README-ingress-controllers.md)
-
-```
-kubectl get nodes,pods,service,ingress  -n colors-ns -o wide
-Warning: extensions/v1beta1 Ingress is deprecated in v1.14+, unavailable in v1.22+; use networking.k8s.io/v1 Ingress
-NAME                                     STATUS   ROLES   AGE   VERSION    INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
-node/aks-nodepool1-40840556-vmss000000   Ready    agent   13d   v1.19.11   172.16.238.5    <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
-node/aks-nodepool1-40840556-vmss000001   Ready    agent   13d   v1.19.11   172.16.238.36   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
-node/aks-nodepool1-40840556-vmss000002   Ready    agent   13d   v1.19.11   172.16.238.67   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
-
-NAME                                    READY   STATUS    RESTARTS   AGE    IP              NODE                                NOMINATED NODE   READINESS GATES
-pod/blue-deployment-d5ccf9445-t2j7z     1/1     Running   0          3m2s   172.16.238.30   aks-nodepool1-40840556-vmss000000   <none>           <none>
-pod/blue-deployment-d5ccf9445-wh5cr     1/1     Running   0          3m2s   172.16.238.88   aks-nodepool1-40840556-vmss000002   <none>           <none>
-pod/blue-deployment-d5ccf9445-xz25k     1/1     Running   0          3m2s   172.16.238.54   aks-nodepool1-40840556-vmss000001   <none>           <none>
-pod/green-deployment-59cfdc54fb-l6nxv   1/1     Running   0          3m4s   172.16.238.16   aks-nodepool1-40840556-vmss000000   <none>           <none>
-pod/green-deployment-59cfdc54fb-lfhv7   1/1     Running   0          3m4s   172.16.238.72   aks-nodepool1-40840556-vmss000002   <none>           <none>
-pod/green-deployment-59cfdc54fb-tb6ls   1/1     Running   0          3m4s   172.16.238.41   aks-nodepool1-40840556-vmss000001   <none>           <none>
-pod/red-deployment-5f589f64c6-msqnw     1/1     Running   0          12d    172.16.238.11   aks-nodepool1-40840556-vmss000000   <none>           <none>
-pod/red-deployment-5f589f64c6-sdm8f     1/1     Running   0          12d    172.16.238.73   aks-nodepool1-40840556-vmss000002   <none>           <none>
-pod/red-deployment-5f589f64c6-xq4gh     1/1     Running   0          12d    172.16.238.60   aks-nodepool1-40840556-vmss000001   <none>           <none>
-
-NAME                               TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)          AGE    SELECTOR
-service/blue-service-cluster-ip    ClusterIP      10.101.242.201   <none>          8080/TCP         3m1s   app=blue
-service/green-service-cluster-ip   ClusterIP      10.101.213.227   <none>          8080/TCP         3m4s   app=green
-service/red-service                LoadBalancer   10.101.154.43    52.226.99.79    8080:30914/TCP   12d    app=red
-service/red-service-cluster-ip     ClusterIP      10.101.42.247    <none>          8080/TCP         3m7s   app=red
-service/red-service-internal       LoadBalancer   10.101.218.208   172.16.238.98   8080:31418/TCP   12d    app=red
-
-NAME                                             CLASS    HOSTS                                                                                       ADDRESS         PORTS   AGE
-ingress.extensions/colors-fanout-ingress         <none>   akscolors.penguintrails.com                                                                 104.211.0.182   80      2m27s
-ingress.extensions/colors-virtual-host-ingress   <none>   aksred.penguintrails.com,aksgreen.penguintrails.com,aksblue.penguintrails.com + 1 more...   104.211.0.182   80      52s
-```
-
 # AKS Run command
 
 Azure documentation
