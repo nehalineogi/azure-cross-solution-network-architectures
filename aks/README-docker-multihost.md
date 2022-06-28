@@ -859,11 +859,11 @@ No. The passwords are generated deterministically and therefore should be change
 
 In order for the deployment to provision your signed-in user account access to the keyvault, you will need to provide your Azure Active Directory (AAD) signed-in user ObjectID. In order to retrieve this there are serveral methods. The Azure CLI and Azure Powershell methods are provided below. You can use the cloud shell to run the Azure CLI method, but for powershell you must run this from your own device using Azure Powershell module.
 
-Note that older versions of az cli you may need to run the command with ```console --query Objectid``` instead of ```console --query id```
+Note that older versions of az cli you may need to run the command with ``` --query Objectid``` instead of ``` --query id```
 
 Azure CLI or Cloud Shell
 
-```console
+```
 
 az ad signed-in-user show --query id -o tsv
 
@@ -871,7 +871,7 @@ az ad signed-in-user show --query id -o tsv
 
 Azure Powershell
 
-```console
+```
 
 (Get-AzContext).Account.ExtendedProperties.HomeAccountId.Split('.')[0]
 
@@ -891,19 +891,19 @@ Yes, below are commands that can be used to more quickly retrieve this informati
 
 If you wish to retrieve passwords for a different hostname, simply change the name property to match.
 
-```console az keyvault secret show --name "docker-host-1-admin-password" --vault-name $(az keyvault list -g dockerhost --query "[].name" -o tsv) --query "value" -o tsv ```
+``` az keyvault secret show --name "docker-host-1-admin-password" --vault-name $(az keyvault list -g dockerhost --query "[].name" -o tsv) --query "value" -o tsv ```
 
 If you receive an error on this command relating to a timeout and you are using Windows Subsystem for Linux and referencing the Windows based az, you should reference this github issue - https://github.com/Azure/azure-cli/issues/13573. Use powershell or cloud shell instead to mitigate this known bug.
 
 <b> Obtain DNS label for public IP of host (example for docker-host-1 in default resource group) </b>
 
-```console az network public-ip show -g dockerhost -n docker-host-1-nic-pip --query "dnsSettings.fqdn" -o tsv ```
+``` az network public-ip show -g dockerhost -n docker-host-1-nic-pip --query "dnsSettings.fqdn" -o tsv ```
 
 <b> Change Network Security Rule (NSG) to allow SSH inbound from a specific public IP address </b>
 
 You should change a.a.a.a to match your public IP address
 
-```console az network nsg rule update -g dockerhost --nsg-name Allow-tunnel-traffic -n allow-ssh-inbound  --access allow --source-address-prefix "a.a.a.a" ```
+``` az network nsg rule update -g dockerhost --nsg-name Allow-tunnel-traffic -n allow-ssh-inbound  --access allow --source-address-prefix "a.a.a.a" ```
 
 
 # TODO
