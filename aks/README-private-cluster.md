@@ -212,7 +212,6 @@ From the VPN server on-premise (vpnvm) log in via bastion (password in keyvault)
 ```
 localadmin@vpnvm:~$ curl http://172.16.240.98:8080/
 red
-
 ```
 # Challenge 3: Deploy Pods and External Service
 
