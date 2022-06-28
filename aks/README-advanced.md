@@ -90,7 +90,7 @@ These steps will deploy a single test pod. You should run all these commands fro
 
 Note: If you get a warning "an object named MyAKSCluster already exists in your kubeconfig file, Overwrite? ", you should overwrite to obtain fresh credentials.
 
-```shaun@Azure:~$ az aks get-credentials --resource-group aks-KUBENET --name myAKSCluster```
+```shaun@Azure:~$ az aks get-credentials --resource-group aks-CNI --name myAKSCluster```
 
 2. Open cloud shell and clone the reposity (if you haven't already from a previous lab)
 
