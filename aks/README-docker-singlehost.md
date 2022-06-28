@@ -38,6 +38,8 @@ It is not uncommon for tenants that are managed by corporations to restrict the 
 
 4. log in as root with command ```sudo su```
 
+5. Note that you may have different IP addresses and interfaces on your environment than the screenshots throughout this series, this is expected.
+
 # Design Components
 
 The above architecture diagram contains a few key components
@@ -48,7 +50,7 @@ The above architecture diagram contains a few key components
 4. Two docker hosts are connected to the same subnet. Containers connected to the bridge network on one docker host cannot talk to the container on the other host. Note: Bridge network are scoped locally and don't span multiple hosts.
 5. Bridge networks are like two isolated layer two switches.
 6. Inbound and oubound connectivity to and from container via host port (eth0)
-7. Note that you may have different IP addresses and interfaces on your environment than the screenshots throughout this series, this is expected. 
+
 
 ## Documentation links
 

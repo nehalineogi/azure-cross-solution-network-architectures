@@ -32,6 +32,8 @@ It is not uncommon for tenants that are managed by corporations to restrict the 
 
 4. log in as root with command ```sudo su```
 
+5. Note that you may have different IP addresses and interfaces on your environment than the screenshots throughout this series, this is expected.
+
 ## Azure Documentation links
 
 1. [Choosing a network model](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#choose-a-network-model-to-use)
@@ -59,7 +61,7 @@ Some general design considerations for Kubenet
 6. Use Kubenet when you have limited IP address space on Azure VNet
 7. Most of the pod communication is within the cluster.
 8. Azure Network Policy is not supported but calico policies are supported
-9. Note that you may have different IP addresses and interfaces on your environment than the screenshots throughout this series, this is expected. 
+ 
 
 ### [IP Address Calculations](https://docs.microsoft.com/en-us/azure/aks/)
 

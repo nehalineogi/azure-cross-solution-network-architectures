@@ -37,6 +37,8 @@ It is not uncommon for tenants that are managed by corporations to restrict the 
 
 4. log in as root with command ```sudo su```
 
+5. Note that you may have different IP addresses and interfaces on your environment than the screenshots throughout this series, this is expected.
+
 # Design Components
 
 1. Two Ubuntu Linux VM acting as docker hosts. In this design, docker host VMs reside on the same azure subnet but it can be deployed in environments where they have layer 3 connectivity.
@@ -47,7 +49,7 @@ It is not uncommon for tenants that are managed by corporations to restrict the 
 6. ![Overlay packets](images/vxlan-packets.png)
 7. Encryption can be enabled on overlay networks
 8. Ingress into the swarm cluster via ingress overlay. Layer 4 load balancing using service VIP. Cloud providers provide L4 load balancer in front of the nodes. Nginx or HA proxy can be used to load balance the docker nodes.
-9. Note that you may have different IP addresses and interfaces on your environment than the screenshots throughout this series, this is expected. 
+
 
 # Documentation links
 

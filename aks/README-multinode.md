@@ -18,7 +18,6 @@ Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF]
 
 ## Design Considerations
 
-1. Note that you may have different IP addresses and interfaces on your environment than the screenshots throughout this series, this is expected. 
 
 
 

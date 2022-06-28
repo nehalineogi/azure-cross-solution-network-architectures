@@ -1,6 +1,8 @@
 ## Azure AKS Advanced/CNI Networking
 
-This architecture uses the for AKS Advanced/CNI Network Model. Observe that the AKS Nodes **and** Pods receive IP address from Azure subnet (NODE CIDR). Note the traffic flows for inbound connectivity to AKS via Internal and External Load balancers.This architecture also demonstrates connectivity and flows to and from on-premises. On-premises network can directly reach both node and pod networks. Outbound flows from AKS pods to internet traverse the Azure load balancer. There are other design options to egress via Azure firewall/NVA or Azure NAT Gateway.
+This architecture uses the AKS Advanced (CNI) Network Model. 
+
+Observe that the AKS Nodes **and** Pods receive IP address from Azure subnet (NODE CIDR). Note the traffic flows for inbound connectivity to AKS via internal and public load balancers.This architecture also demonstrates connectivity and flows to and from on-premises. On-premises network can directly reach both node and pod networks. Outbound flows from AKS pods to internet traverse the Azure load balancer. There are other design options to egress via Azure firewall/NVA or Azure NAT Gateway.
 
 ## Reference Architecture
 
@@ -29,6 +31,8 @@ Note: SSH directly to the VMs is possible, however, it is best security practice
 It is not uncommon for tenants that are managed by corporations to restrict the use of SSH directly from the internet. More information can be found in the [FAQ](https://github.com/nehalineogi/azure-cross-solution-network-architectures/blob/main/aks/README-advanced.md#faqtroubleshooting).
 
 4. log in as root with command ```sudo su```
+
+5. Note that you may have different IP addresses and interfaces on your environment than the screenshots throughout this series, this is expected.
 ## Azure Documentation links
 
 1. [Choose a Network Model](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#choose-a-network-model-to-use)
@@ -37,28 +41,29 @@ It is not uncommon for tenants that are managed by corporations to restrict the 
 4. [AKS CNI Networking](https://docs.microsoft.com/en-us/azure/aks/configure-azure-cni)
 5. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
 
-## Design Components
+## Design Considerations
 
-0. Network Model Comparison [From Azure Documentation](https://docs.microsoft.com/en-us/azure/aks/concepts-network#compare-network-models)
+Network Model Comparison from [Azure Documentation](https://docs.microsoft.com/en-us/azure/aks/concepts-network#compare-network-models)
 
 ![AKS Advanced Networking](images/network-model-comparison.png)
 
-1. [Key Design considerations](https://docs.microsoft.com/en-us/azure/aks/concepts-network#azure-cni-advanced-networking)
+[Key Design considerations](https://docs.microsoft.com/en-us/azure/aks/concepts-network#azure-cni-advanced-networking)
 
 The CNI networking option is used during AKS cluster creation. 
 
 Components with blue dotted lines in the diagram above are automatically deployed and a three node AKS cluster is deployed in CNI mode by default. 
 
-The Node CIDR is 172.16.240.0/24 (aks-node-subnet) and PODs will use IPs from the same subnet.
+The NODE CIDR is 172.16.240.0/24 (aks-node-subnet) and PODs will use IPs from the same subnet.
 
-- Nodes and PODs get IPs from the same subnet - this could lead to IP exhaustion issue and need for a large IP space to be available.
-- Pods get full virtual network connectivity and can be directly reached via their private IP address from connected networks
-- Needs a large available IP address space. Common consideration is the assigned IP address range is too small to then add additional nodes when you scale or upgrade a cluster.
-- The network team may also not be able to issue a large enough IP address range to support your expected application demands.
-- There is no user defined routes for pod connectivity.
-- Azure Network Policy support
+1. Nodes and PODs get IPs from the same subnet - this could lead to IP exhaustion issue and need for a large IP space to be available.
+2. Pods get full virtual network connectivity and can be directly reached via their private IP address from connected networks
+3. Needs a large available IP address space. Common consideration is the assigned IP address range is too small to then add additional nodes when you scale or upgrade a cluster.
+4. The network team may also not be able to issue a large enough IP address range to support your expected application demands.
+5. There is no user defined routes for pod connectivity.
+6. Azure Network Policy support
 
-2. [IP Address Calculations](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#ip-address-availability-and-exhaustion)
+
+### [IP Address Calculations](https://docs.microsoft.com/en-us/azure/aks/configure-kubenet#ip-address-availability-and-exhaustion)
    With Azure CNI network model, that same /24 subnet (251 usable IPs) range could only support a maximum of 8 nodes in the cluster
    This node count could only support up to 240 (8x30) pods (with a default maximum of 30 pods per node with Azure CNI).
 
@@ -66,7 +71,7 @@ The Node CIDR is 172.16.240.0/24 (aks-node-subnet) and PODs will use IPs from th
 
    Note: Maximum nodes per cluster with Virtual Machine Scale Sets and Standard Load Balancer SKU. Limits link [here](https://docs.microsoft.com/en-us/azure/azure-resource-manager/management/azure-subscription-service-limits#azure-kubernetes-service-limits))
 
-3. [External Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
+### [Public Load Balancer](https://docs.microsoft.com/en-us/azure/aks/load-balancer-standard)
 
 AKS uses [services](https://docs.microsoft.com/en-us/azure/aks/concepts-network#services) to provide inbound connectivity to pods insides the AKS cluster. The three service types are (Cluster IP, NodePort and LoadBalancer). In the archictecture above, the service type is LoadBalancer. AKS Creates an Azure load balancer resource, configures an external IP address, and connects the requested pods to the load balancer backend pool. To allow customers' traffic to reach the application, load balancing rules are created on the desired ports. Internal load balancer and external load balancer can be used at the same time. All egress traffic from the NODEs and PODs use the loadbalancer IP for outbound traffic.
 

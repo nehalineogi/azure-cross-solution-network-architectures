@@ -34,12 +34,14 @@ It is not uncommon for tenants that are managed by corporations to restrict the 
 
 4. log in as root with command ```sudo su```
 
+5. Note that you may have different IP addresses and interfaces on your environment than the screenshots throughout this series, this is expected.
+
 # Design Components
 
 1. Two Ubuntu linux VMs in a subnet with eth0 interface (deployed via "Deploy to Azure" button)
 2. VXLAN-demo interface acting as the VTEP and creating the overlay (layer2 over layer3)
 3. Packet captures showing VXLAN encapsulated ICMP packets
-4. Note that you may have different IP addresses and interfaces on your environment than the screenshots throughout this series, this is expected. 
+
 
 # VXLAN between two linux hosts (As good as it gets!)
 
