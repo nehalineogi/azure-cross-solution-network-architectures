@@ -104,7 +104,7 @@ Outbound traffic from the pods to the Internet flows via the Azure public load b
 
 # Deployment Validations
 
-These steps will deploy a single test pod and delete it. You should run all these commands from a cloud shell for best results.
+These steps will deploy a single test pod. You should run all these commands from a cloud shell for best results.
 
 1. Obtain the cluster credentials to log in to kubectl (if you did not use the default, replace resource-group with your specified resource group name).
 
@@ -132,7 +132,7 @@ Note: If you get a warning "an object named MyAKSCluster already exists in your 
 
 ```shaun@Azure:~/azure-cross-solution-network-architectures$ cd ../../.. ```
 
-**1. Verify nodes**
+#### Verify nodes
 
 ```console
 
@@ -142,7 +142,6 @@ node/aks-nodepool1-62766439-vmss000000 Ready agent 7h8m v1.19.11 172.16.239.4 <n
 node/aks-nodepool1-62766439-vmss000001 Ready agent 7h8m v1.19.11 172.16.239.5 <none> Ubuntu 18.04.5 LTS 5.4.0-1049-azure containerd://1.4.4+azure
 node/aks-nodepool1-62766439-vmss000002 Ready agent 7h8m v1.19.11 172.16.239.6 <none> Ubuntu 18.04.5 LTS 5.4.0-1049-azure containerd://1.4.4+azure
 
-shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get pods -o wide
 ```
 
 # Challenge 1: Deploy Pods and Internal Service
