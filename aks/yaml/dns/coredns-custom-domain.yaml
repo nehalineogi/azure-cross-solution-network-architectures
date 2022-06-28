@@ -12,5 +12,5 @@ data:
         errors
         log
         cache 30
-        forward nnlab.local 192.168.199.5  # this is my test/dev DNS server
+        forward contoso.local 192.168.199.5  # this is my test/dev DNS server
     }
