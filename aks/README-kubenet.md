@@ -51,14 +51,15 @@ The AKS nodes are deployed to the spoke-virtual-network on CIDR range 172.16.239
 
 Some general design considerations for Kubenet
 
-- Nodes receive an IP address from the Azure subnet (aks-node-subnet). You can deploy these nodes in an existing or new Azure Virtual Network (VNet).
-- Pods receive an IP address from a POD CIDR which is a logically different address space than the NODE CIDR. Direct pod addressing isn't supported for kubenet due to kubenet design.
-- Route tables and user-defined routes are required for using kubenet, which adds complexity to operations.
-- AKS Uses network address translation (NAT) so that the pods can reach resources on the Azure virtual and on-prem resources. The source IP address of the traffic is translated to the node's primary IP address
-- Inbound connectivity using internal or public load Balancer
-- Use Kubenet when you have limited IP address space on Azure VNet
-- Most of the pod communication is within the cluster.
-- Azure Network Policy is not supported but calico policies are supported
+1. Nodes receive an IP address from the Azure subnet (aks-node-subnet). You can deploy these nodes in an existing or new Azure Virtual Network (VNet).
+2. Pods receive an IP address from a POD CIDR which is a logically different address space than the NODE CIDR. Direct pod addressing isn't supported for kubenet due to kubenet design.
+3. Route tables and user-defined routes are required for using kubenet, which adds complexity to operations.
+4. AKS Uses network address translation (NAT) so that the pods can reach resources on the Azure virtual and on-prem resources. The source IP address of the traffic is translated to the node's primary IP address
+5. Inbound connectivity using internal or public load Balancer
+6. Use Kubenet when you have limited IP address space on Azure VNet
+7. Most of the pod communication is within the cluster.
+8. Azure Network Policy is not supported but calico policies are supported
+9. Note that you may have different IP addresses and interfaces on your environment than the screenshots throughout this series, this is expected. 
 
 ### [IP Address Calculations](https://docs.microsoft.com/en-us/azure/aks/)
 
@@ -435,15 +436,15 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 
 ```
 
-### DNS and Custom domain
+# Challenge 6: Set up DNS for pods
 
-Validate before configuration
+Validate default out-the-box DNS configuration before configuration
 
 ```
 shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get configmaps --namespace=kube-system coredns-custom -o yaml
 ```
 
-DNS resolution for the AKS cluster can use CoreDNS (DNS service for AKS). We will configure this to forward requests to the on-prem domain controller in this example. You can also set this in many other modes, please refer to documentation. Ensure that you have routing to the on-prem network. A file exists within the repository called ``` coredns-custom-domain.yaml ``` that you can use to forward DNS requests to on-prem for resolution of the on-prem domain. 
+DNS resolution for the AKS cluster can use CoreDNS (DNS service for AKS). We will configure this to forward requests to the on-prem domain controller in this example. You can also set this in many other modes, please refer to the documentation links above for CoreDNS. Ensure that you have routing to the on-prem network. A file exists within the repository called ``` coredns-custom-domain.yaml ``` that you can use to forward DNS requests to on-prem for resolution of the on-prem domain.  
 
 ```
 shaun@Azure:~/azure-cross-solution-network-architectures$ cd aks/yaml/dns

@@ -39,14 +39,15 @@ It is not uncommon for tenants that are managed by corporations to restrict the 
 
 # Design Components
 
-- Two Ubuntu Linux VM acting as docker hosts. In this design, docker host VMs reside on the same azure subnet but it can be deployed in environments where they have layer 3 connectivity.
-- Enable Swarm Mode to create a multihost cluster
-- Custom Overlay Networks (red-overlay and green-overlay)
-- docker_gwbridge is the default bridge for swarm cluster
-- Overlay networks span multiple nodes and the Docker overlay network uses VXLAN to extend the layer-2 broadcast domain to multiple nodes
-- ![Overlay packets](images/vxlan-packets.png)
-- Encryption can be enabled on overlay networks
-- Ingress into the swarm cluster via ingress overlay. Layer 4 load balancing using service VIP. Cloud providers provide L4 load balancer in front of the nodes. Nginx or HA proxy can be used to load balance the docker nodes.
+1. Two Ubuntu Linux VM acting as docker hosts. In this design, docker host VMs reside on the same azure subnet but it can be deployed in environments where they have layer 3 connectivity.
+2. Enable Swarm Mode to create a multihost cluster
+3. Custom Overlay Networks (red-overlay and green-overlay)
+4. docker_gwbridge is the default bridge for swarm cluster
+5. Overlay networks span multiple nodes and the Docker overlay network uses VXLAN to extend the layer-2 broadcast domain to multiple nodes
+6. ![Overlay packets](images/vxlan-packets.png)
+7. Encryption can be enabled on overlay networks
+8. Ingress into the swarm cluster via ingress overlay. Layer 4 load balancing using service VIP. Cloud providers provide L4 load balancer in front of the nodes. Nginx or HA proxy can be used to load balance the docker nodes.
+9. Note that you may have different IP addresses and interfaces on your environment than the screenshots throughout this series, this is expected. 
 
 # Documentation links
 

@@ -16,7 +16,11 @@ Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF]
 [Node Pool with unique subnet- Prevew](https://docs.microsoft.com/en-us/azure/aks/use-multiple-node-pools#add-a-node-pool-with-a-unique-subnet-preview)
 [Node Pool tags](https://docs.microsoft.com/en-us/azure/aks/use-multiple-node-pools#setting-nodepool-azure-tags)
 
-## Design Components
+## Design Considerations
+
+1. Note that you may have different IP addresses and interfaces on your environment than the screenshots throughout this series, this is expected. 
+
+
 
 #### Add a Node pool, with node-public-ips and tag the nodes
 

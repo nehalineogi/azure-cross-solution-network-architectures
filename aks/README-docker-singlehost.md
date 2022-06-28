@@ -42,12 +42,13 @@ It is not uncommon for tenants that are managed by corporations to restrict the 
 
 The above architecture diagram contains a few key components
 
-- Two Ubuntu Linux VM acting as docker hosts. In this design, VMs reside on the same azure subnet but it can be deployed in environments where they have layer 3 connectivity.
-- Default docker bridge (docker0)
-- Custom docker bridge red-bridge and green-bridge
-- Two docker hosts are connected to the same subnet. Containers connected to the bridge network on one docker host cannot talk to the container on the other host. Note: Bridge network are scoped locally and don't span multiple hosts.
-- Bridge networks are like two isolated layer two switches.
-- Inbound and oubound connectivity to and from container via host port (eth0)
+1. Two Ubuntu Linux VM acting as docker hosts. In this design, VMs reside on the same azure subnet but it can be deployed in environments where they have layer 3 connectivity.
+2. Default docker bridge (docker0)
+3. Custom docker bridge red-bridge and green-bridge
+4. Two docker hosts are connected to the same subnet. Containers connected to the bridge network on one docker host cannot talk to the container on the other host. Note: Bridge network are scoped locally and don't span multiple hosts.
+5. Bridge networks are like two isolated layer two switches.
+6. Inbound and oubound connectivity to and from container via host port (eth0)
+7. Note that you may have different IP addresses and interfaces on your environment than the screenshots throughout this series, this is expected. 
 
 ## Documentation links
 
