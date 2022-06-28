@@ -415,10 +415,12 @@ index.html           100% |*****************************************************
 ```
 View results on the vpnvm 
 
+```
 localadmin@vpnvm:~$ python3 -m http.server
 Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 172.16.240.5 - - [28/Jun/2022 18:01:49] "GET / HTTP/1.1" 200 -
 
+```
 ## Traffic validations from On-Premises to AKS
 
 For ingress, note that the AKS pods are directly reachable using their own IP address from on-premise. Here you can access the red pod via its assigned POD IP. 
