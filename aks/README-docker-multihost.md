@@ -786,7 +786,7 @@ round-trip min/avg/max = 1.300/1.300/1.300 ms
 ```
 # Cleanup services, swarm cluster
 
-```conosle
+```console
 
 root@docker-host-1:~# docker service ls
 ID NAME MODE REPLICAS IMAGE PORTS
