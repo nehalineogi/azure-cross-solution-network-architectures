@@ -79,8 +79,6 @@ Diagram showing Load Balancer traffic flow in an AKS cluster <br />
 
 ![AKS Basic Networking](images/aks-loadbalancer.png)
 
-
-
 4. [Internal Load Balancer](https://docs.microsoft.com/en-us/azure/aks/internal-lb)
    Internal load balancer can be used to expose the services. This exposed IP will reside on the AKS-subnet. If you'd like to specify a specific IP address following instructions in [link here](https://docs.microsoft.com/en-us/azure/aks/internal-lb#specify-an-ip-address).
 
