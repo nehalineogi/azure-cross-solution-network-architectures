@@ -843,7 +843,7 @@ If you are using a Virtual Private Network (VPN) for outbound internet access, t
 
 Alternatively, you can check on the destination side (host in Azure) exactly what public IP address is connecting by running this iptables command and then viewing /var/log/syslog. You can use bastion to connect to the host.
 
-```console iptables -I INPUT -p tcp -m tcp --dport 22 -m state --state NEW  -j LOG --log-level 1 --log-prefix "SSH Log" ```
+``` iptables -I INPUT -p tcp -m tcp --dport 22 -m state --state NEW  -j LOG --log-level 1 --log-prefix "SSH Log" ```
 
 Finally, check that your company is not blocking or restricting port 22 access to the VMs.
 
