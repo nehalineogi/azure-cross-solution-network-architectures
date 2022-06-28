@@ -450,10 +450,10 @@ localadmin@vpnvm:~$ curl http://51.104.252.152:8080
 red
 
 ```
-# AKS Run command
+# AKS Run \ command invoke command
 
 Azure documentation
-https://docs.microsoft.com/en-us/azure/aks/private-clusters#use-aks-run-command
+https://docs.microsoft.com/en-us/azure/aks/private-clusters#use-aks-run-command <br />
 https://docs.microsoft.com/en-us/azure/aks/command-invoke 
 
 
