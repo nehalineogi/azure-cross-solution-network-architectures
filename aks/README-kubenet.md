@@ -73,7 +73,7 @@ With kubenet, you can use a much smaller IP address range and be able to support
 
 ```
 Outbound from AKS to on-premises
-Note: on-premises sees the Node IP
+Note: on-premises sees the Node IP for a pod request. Below shows a typical log from HTTP running from an on-premise VM, you can see the pod IP for an incoming request.
 python3 -m http.server
 Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 172.16.239.6 - - [16/Jul/2021 14:51:52] "GET / HTTP/1.1" 200 -
@@ -81,9 +81,9 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 172.16.239.6 - - [16/Jul/2021 14:53:00] "GET / HTTP/1.1" 200 -
 172.16.239.6 - - [16/Jul/2021 14:53:04] "GET / HTTP/1.1" 200 -
 
-From On-Prem to AKS use the internal load balancer over VPN/ExpressRoute
-nehali@nehali-laptop:~$ curl  172.16.239.7:8080
-red
+From on-premise to an AKS service, you can use the internal load balancer over VPN/ExpressRoute. 
+
+We cover this more thoroughly throughout the series
 
 ```
 ### DNS Design
