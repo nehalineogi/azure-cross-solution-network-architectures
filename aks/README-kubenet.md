@@ -443,20 +443,26 @@ Validate before configuration
 kubectl get configmaps --namespace=kube-system coredns-custom -o yaml
 ```
 
-DNS resolution for custom domain nnlab.local via 10.10.1.4. Ensure that you have routing to the 10.10.1.4 network. Create a file called coredns-custom-domain.yaml
+DNS resolution for the AKS cluster can use CoreDNS (DNS service for AKS). We will configure this to forward requests to the on-prem domain controller in this example. You can also set this in many other modes, please refer to documentation. Ensure that you have routing to the on-prem network. A file exists within the repository called ``` coredns-custom-domain.yaml ``` that you can use to forward DNS requests to on-prem for resolution of the on-prem domain and recursive lookups to the internet. 
 
 ```
+shaun@Azure:~/azure-cross-solution-network-architectures$ cat aks/yaml/dns/coredns-custom-domain.yaml 
+
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: coredns-custom
   namespace: kube-system
 data:
-  nnlab.server: |
-    nnlab.local:53 {
+  log.override: |
+   log
+
+  contoso.server: |
+    contoso.local:53 {
         errors
+        log
         cache 30
-        forward . 10.10.1.4  # this is my test/dev DNS server
+        forward contoso.local 192.168.199.5  # this is my test/dev DNS server
     }
 
 ```
