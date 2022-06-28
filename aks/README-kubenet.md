@@ -112,7 +112,7 @@ Note: If you get a warning "an object named MyAKSCluster already exists in your 
 
 ```shaun@Azure:~$ az aks get-credentials --resource-group aks-KUBENET --name myAKSCluster```
 
-2. Open cloud shell and clone the reposity
+2. Open cloud shell and clone the reposity (if you haven't already from a previous lab)
 
 ```shaun@Azure:~$ git clone https://github.com/nehalineogi/azure-cross-solution-network-architectures```
 
