@@ -1,6 +1,6 @@
 ## AKS Multiple Nodepool
 
-In AKS, **system nodes pool** is created when you create an AKS cluster. System node pools serve the primary prupose of hosting critical system pods such as CoreDNS and tunnel front. In Azure Kubernetes Service (AKS), nodes of the same configuration are grouped together into node pools. To support applications that have different compute or storage demands, you can create additonal **user node pools**.
+In AKS, **system nodes pool** is created when you create an AKS cluster. System node pools serve the primary purpose of hosting critical system pods such as CoreDNS and tunnel front. In Azure Kubernetes Service (AKS), nodes of the same configuration are grouped together into node pools. To support applications that have different compute or storage demands, you can create additonal **user node pools**.
 
 ## Reference Architecture
 
