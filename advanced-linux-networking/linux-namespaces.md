@@ -2,7 +2,9 @@
 
 Linux network namespace is logically another copy of the network stack with it own routes, arp table, firewall rules. 
 
-It is similiar to VRFs in the traditional networking. This concept of creating namespaces or VRFs is foundational to container networking. In the linux-bridge article we only had one namespace - the default naemspace. In this article we will explore creating namespaces other than the default namespace.
+It is similiar to VRFs in the traditional networking. This concept of creating namespaces or VRFs is foundational to container networking. 
+
+In the linux-bridge article we only had one namespace - the default naemspace. In this article we will explore creating namespaces other than the default namespace.
 
 # Reference Architecture (Coming Soon)
 
