@@ -440,7 +440,7 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 Validate before configuration
 
 ```
-kubectl get configmaps --namespace=kube-system coredns-custom -o yaml
+shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get configmaps --namespace=kube-system coredns-custom -o yaml
 ```
 
 DNS resolution for the AKS cluster can use CoreDNS (DNS service for AKS). We will configure this to forward requests to the on-prem domain controller in this example. You can also set this in many other modes, please refer to documentation. Ensure that you have routing to the on-prem network. A file exists within the repository called ``` coredns-custom-domain.yaml ``` that you can use to forward DNS requests to on-prem for resolution of the on-prem domain. 
