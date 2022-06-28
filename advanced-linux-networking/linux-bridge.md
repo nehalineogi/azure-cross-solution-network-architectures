@@ -10,7 +10,7 @@ A linux bridge behaves like a network switch. It forwards packets based on mac a
 
 # Challenge#1 (Create a basic layer 2 bridge or switch)
 
-```console
+```bash
 sudo -s
 ip link add test-int-1 type dummy
 ip link add test-int-2 type dummy
