@@ -1,6 +1,10 @@
 # Introduction
 
-Linux network namespace is logically another copy of the network stack with it own routes, arp table, firewall rules. It is similiar to VRFs in the traditional networking. This concept of creating namespaces or VRFs is foundational to container networking. In the linux-bridge article we only had one namespace - the default naemspace. In this article we will explore creating namespaces other than the default namespace.
+Linux network namespace is logically another copy of the network stack with it own routes, arp table, firewall rules. 
+
+It is similiar to VRFs in the traditional networking. This concept of creating namespaces or VRFs is foundational to container networking. 
+
+In the linux-bridge article we only had one namespace - the default naemspace. In this article we will explore creating namespaces other than the default namespace.
 
 # Reference Architecture (Coming Soon)
 
@@ -8,7 +12,7 @@ Linux network namespace is logically another copy of the network stack with it o
 
 # Challenge#1:Create linux namespace
 
-```
+```console
 sudo -s
 ip netns add red
 ip netns add green
@@ -54,7 +58,7 @@ root@linux-host-1:/home/nehali# ip netns exec red arp
 
 veth interfaces are virtual Ethernet devices and are always created a pairs.
 
-```
+```console
 #
 #Create linux bridge (network switch)
 #
@@ -123,7 +127,7 @@ root@linux-host-1:/home/nehali#
 
 Assign IP address to the interfaces
 
-```
+```console
 ip -n red add add 192.168.24.10/24 dev veth-red
 ip -n green add add 192.168.24.11/24 dev veth-green
 ip -n red link set veth-red up
@@ -149,7 +153,7 @@ Address                  HWtype  HWaddress           Flags Mask            Iface
 
 # Challenge#4 (Default gateway - For Outbound Connectivity)
 
-```
+```console
 ip add add 192.168.24.1/24 dev linux-bridge
 
 root@linux-host-1:/home/nehali# ip add add 192.168.24.1/24 dev linux-bridge
@@ -176,7 +180,7 @@ PING 8.8.8.8 (8.8.8.8) 56(84) bytes of data.
 
 # Challenge#5 (Inbound Connectivity - Port fowarding)
 
-```
+```console
 iptables -t nat -A PREROUTING -p tcp --dport 8080 -j DNAT --to-destination 192.168.24.10:80
 
 #
@@ -185,7 +189,7 @@ curl <public_ip>:8080
 
 # Cleanup
 
-```
+```console
 ip link delete veth-red
 ip link delete veth-green
 ```
