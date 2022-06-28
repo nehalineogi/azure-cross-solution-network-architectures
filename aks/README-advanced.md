@@ -76,6 +76,7 @@ The NODE CIDR is 172.16.240.0/24 (aks-node-subnet) and PODs will use IPs from th
 AKS uses [services](https://docs.microsoft.com/en-us/azure/aks/concepts-network#services) to provide inbound connectivity to pods insides the AKS cluster. The three service types are (Cluster IP, NodePort and LoadBalancer). In the archictecture above, the service type is LoadBalancer. AKS Creates an Azure load balancer resource, configures an external IP address, and connects the requested pods to the load balancer backend pool. To allow customers' traffic to reach the application, load balancing rules are created on the desired ports. Internal load balancer and external load balancer can be used at the same time. All egress traffic from the NODEs and PODs use the loadbalancer IP for outbound traffic.
 
 Diagram showing Load Balancer traffic flow in an AKS cluster
+
 ![AKS Basic Networking](images/aks-loadbalancer.png)
 
 4. [Internal Load Balancer](https://docs.microsoft.com/en-us/azure/aks/internal-lb)
