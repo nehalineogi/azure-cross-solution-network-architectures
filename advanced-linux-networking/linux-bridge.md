@@ -10,7 +10,7 @@ A linux bridge behaves like a network switch. It forwards packets based on mac a
 
 # Challenge#1 (Create a basic layer 2 bridge or switch)
 
-```bash
+```console
 sudo -s
 ip link add test-int-1 type dummy
 ip link add test-int-2 type dummy
@@ -30,7 +30,7 @@ ip link set dev test-int-2 up
 
 #### Default gateway and NAT for container
 
-```
+```console
 
 ip addr add 192.168.25.1/24 dev test-bridge
 
@@ -40,7 +40,7 @@ ip addr add 192.168.25.1/24 dev test-bridge
 
 ### Note: This is in default namespace. Same are using host networking with docker - docker run --name container --network=host
 
-```
+```console
 ip link add veth-int1 type veth peer name veth-int1-br
 ip link add veth-int2 type veth peer name veth-int2-br
 
