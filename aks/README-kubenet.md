@@ -252,6 +252,7 @@ Events:
 
 AKS automatically applies an NSG to the interfaces of the node pool VMSS instances. Check in the portal for an NSG beginning aks-agentpoolxxxx in the resource group and find the NSG rule automatically written to accept connections on port 8080. You can test this from the VPN VM or from your own device to check the application is accessible.
 
+
 ### Route table Validation
 
 Note the POD CIDR is 10.244.0.0/16. See the route tables created to support the NAT from POD CIDR to Node primary IP.
@@ -277,51 +278,39 @@ shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kub
 Creating debugging pod node-debugger-aks-agentpool1-33383507-vmss000000-jnfvj with container debugger on node aks-agentpool1-33383507-vmss000000.
 If you don't see a command prompt, try pressing enter.
 
-root@aks-agentpool1-33383507-vmss000000:/# chroot /host
-
-#ip add
-
+root@aks-agentpool1-19014455-vmss000000:/# chroot /host
+# ip add
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host
+    inet6 ::1/128 scope host 
        valid_lft forever preferred_lft forever
 2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc mq state UP group default qlen 1000
-    link/ether 00:0d:3a:9e:51:52 brd ff:ff:ff:ff:ff:ff
-    inet 172.16.239.6/24 brd 172.16.239.255 scope global eth0
+    link/ether 00:0d:3a:d6:28:1b brd ff:ff:ff:ff:ff:ff
+    inet 172.16.240.4/24 brd 172.16.240.255 scope global eth0
        valid_lft forever preferred_lft forever
-    inet6 fe80::20d:3aff:fe9e:5152/64 scope link
+    inet6 fe80::20d:3aff:fed6:281b/64 scope link 
        valid_lft forever preferred_lft forever
-3: enP58592s1: <BROADCAST,MULTICAST,SLAVE,UP,LOWER_UP> mtu 1500 qdisc mq master eth0 state UP group default qlen 1000
-    link/ether 00:0d:3a:9e:51:52 brd ff:ff:ff:ff:ff:ff
-4: cbr0: <BROADCAST,MULTICAST,PROMISC,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
-    link/ether ae:d6:45:3d:6f:ec brd ff:ff:ff:ff:ff:ff
-    inet 10.244.1.1/24 scope global cbr0
+8: azvea9ed1a8167@if7: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether fe:aa:2d:9b:a7:48 brd ff:ff:ff:ff:ff:ff link-netnsid 2
+    inet6 fe80::fcaa:2dff:fe9b:a748/64 scope link 
        valid_lft forever preferred_lft forever
-    inet6 fe80::acd6:45ff:fe3d:6fec/64 scope link
+10: azv6de87fdf838@if9: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 5e:dd:ec:e5:b9:b6 brd ff:ff:ff:ff:ff:ff link-netnsid 3
+    inet6 fe80::5cdd:ecff:fee5:b9b6/64 scope link 
        valid_lft forever preferred_lft forever
-5: veth482424ea@if3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master cbr0 state UP group default
-    link/ether 56:e5:eb:58:fb:44 brd ff:ff:ff:ff:ff:ff link-netnsid 0
-    inet6 fe80::54e5:ebff:fe58:fb44/64 scope link
+12: azv8ac2e35e029@if11: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 0e:81:e5:dc:83:27 brd ff:ff:ff:ff:ff:ff link-netnsid 4
+    inet6 fe80::c81:e5ff:fedc:8327/64 scope link 
        valid_lft forever preferred_lft forever
-6: veth93e12bb4@if3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master cbr0 state UP group default
-    link/ether 62:e2:4d:42:76:61 brd ff:ff:ff:ff:ff:ff link-netnsid 1
-    inet6 fe80::60e2:4dff:fe42:7661/64 scope link
+16: azv4bc020cf487@if15: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP group default qlen 1000
+    link/ether 56:3b:76:40:50:fa brd ff:ff:ff:ff:ff:ff link-netnsid 0
+    inet6 fe80::543b:76ff:fe40:50fa/64 scope link 
        valid_lft forever preferred_lft forever
-7: vethd95f569f@if3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master cbr0 state UP group default
-    link/ether 3e:cb:84:b2:f7:f0 brd ff:ff:ff:ff:ff:ff link-netnsid 2
-    inet6 fe80::3ccb:84ff:feb2:f7f0/64 scope link
-       valid_lft forever preferred_lft forever
-8: vethe75d7104@if3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master cbr0 state UP group default
-    link/ether 62:ee:97:dc:fd:75 brd ff:ff:ff:ff:ff:ff link-netnsid 3
-    inet6 fe80::60ee:97ff:fedc:fd75/64 scope link
-       valid_lft forever preferred_lft forever
-9: vethdd2875f0@if3: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue master cbr0 state UP group default
-    link/ether 3a:cb:a7:80:87:2f brd ff:ff:ff:ff:ff:ff link-netnsid 4
-    inet6 fe80::38cb:a7ff:fe80:872f/64 scope link
-       valid_lft forever preferred_lft forever
+
 # route -n
+
 Kernel IP routing table
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 0.0.0.0         172.16.239.1    0.0.0.0         UG    100    0        0 eth0
@@ -329,6 +318,7 @@ Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 168.63.129.16   172.16.239.1    255.255.255.255 UGH   100    0        0 eth0
 169.254.169.254 172.16.239.1    255.255.255.255 UGH   100    0        0 eth0
 172.16.239.0    0.0.0.0         255.255.255.0   U     0      0        0 eth0
+
 # more /etc/resolv.conf
 
 # This file is managed by man:systemd-resolved(8). Do not edit.

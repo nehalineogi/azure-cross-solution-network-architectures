@@ -155,7 +155,28 @@ service/red-service-internal   LoadBalancer   10.101.116.163   <pending>     808
 
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl describe service red-service-internal -n colors-ns
 
-[ENTER SCREENSHOT HERE]
+Name:                     red-service-internal
+Namespace:                colors-ns
+Labels:                   <none>
+Annotations:              service.beta.kubernetes.io/azure-load-balancer-internal: true
+Selector:                 app=red
+Type:                     LoadBalancer
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.101.116.163
+IPs:                      10.101.116.163
+LoadBalancer Ingress:     172.16.240.97
+Port:                     <unset>  8080/TCP
+TargetPort:               8080/TCP
+NodePort:                 <unset>  30889/TCP
+Endpoints:                172.16.240.31:8080,172.16.240.51:8080,172.16.240.70:8080
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:
+  Type    Reason                Age    From                Message
+  ----    ------                ----   ----                -------
+  Normal  EnsuringLoadBalancer  2m58s  service-controller  Ensuring load balancer
+  Normal  EnsuredLoadBalancer   2m31s  service-controller  Ensured load balancer
 
 ```
 
@@ -164,7 +185,7 @@ shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kub
 From the VPN server on-premise (vpnvm) log in via bastion (password in keyvault) and try to curl the service via the LoadBalancer Ingress:
 
 ```
-localadmin@vpnvm:~$ curl http://172.16.239.7:8080/
+localadmin@vpnvm:~$ curl http://172.16.240.97:8080/
 red
 
 ```
@@ -174,51 +195,80 @@ red
 ```
 
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl apply -f red-external-lb.yaml
+deployment.apps/red-deployment unchanged
+service/red-service-external created
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl get pods,services -o wide -n colors-ns
 
-[SCREENSHOT]
+NAME                                  READY   STATUS    RESTARTS   AGE   IP              NODE                                 NOMINATED NODE   READINESS GATES
+pod/red-deployment-5f589f64c6-9tw8x   1/1     Running   0          10m   172.16.240.31   aks-agentpool1-19014455-vmss000000   <none>           <none>
+pod/red-deployment-5f589f64c6-bnvkq   1/1     Running   0          10m   172.16.240.70   aks-agentpool1-19014455-vmss000002   <none>           <none>
+pod/red-deployment-5f589f64c6-c4xc9   1/1     Running   0          10m   172.16.240.51   aks-agentpool1-19014455-vmss000001   <none>           <none>
 
-shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl get service -n colors-ns
-
-[SCREESNHOT]
+NAME                           TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)          AGE   SELECTOR
+service/red-service-external   LoadBalancer   10.101.216.194   20.90.217.4     8080:31308/TCP   32s   app=red
+service/red-service-internal   LoadBalancer   10.101.116.163   172.16.240.97   8080:30889/TCP   10m   app=red
 
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl describe service red-service-external -n colors-ns
 
-[SCREENSHOT]
+Name:                     red-service-external
+Namespace:                colors-ns
+Labels:                   <none>
+Annotations:              <none>
+Selector:                 app=red
+Type:                     LoadBalancer
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.101.216.194
+IPs:                      10.101.216.194
+LoadBalancer Ingress:     20.90.217.4
+Port:                     <unset>  8080/TCP
+TargetPort:               8080/TCP
+NodePort:                 <unset>  31308/TCP
+Endpoints:                172.16.240.31:8080,172.16.240.51:8080,172.16.240.70:8080
+Session Affinity:         None
+External Traffic Policy:  Cluster
+Events:
+  Type    Reason                Age   From                Message
+  ----    ------                ----  ----                -------
+  Normal  EnsuringLoadBalancer  31m   service-controller  Ensuring load balancer
+  Normal  EnsuredLoadBalancer   31m   service-controller  Ensured load balancer
 
 ```
+# Challenge 4: Validate Network Security Group (NSG)
 
+### NSG Validation
 
+AKS automatically applies an NSG to the interfaces of the node pool VMSS instances. Check in the portal for an NSG beginning aks-agentpoolxxxx in the resource group and find the NSG rule automatically written to accept connections on port 8080. You can test this from the VPN VM or from your own device to check the application is accessible.
 
+# Challenge 5: Validate view from AKS nodes, pods and on-premise
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#### Node view
+In this challenge you will check the view from each type of AKS component. 
+### AKS Node view
 
 Note that node inherits the DNS from the Azure VNET DNS setting. The outbound IP for the node is the public load balancer outbound SNAT.
 
 ```
-shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get nodes,pods -o wide
+shaun@Azure:~$  kubectl get nodes,pods -o wide
+NAME                                      STATUS   ROLES   AGE    VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
+node/aks-agentpool1-19014455-vmss000000   Ready    agent   129m   v1.22.6   172.16.240.4    <none>        Ubuntu 18.04.6 LTS   5.4.0-1083-azure   containerd://1.5.11+azure-2
+node/aks-agentpool1-19014455-vmss000001   Ready    agent   129m   v1.22.6   172.16.240.35   <none>        Ubuntu 18.04.6 LTS   5.4.0-1083-azure   containerd://1.5.11+azure-2
+node/aks-agentpool1-19014455-vmss000002   Ready    agent   129m   v1.22.6   172.16.240.66   <none>        Ubuntu 18.04.6 LTS   5.4.0-1083-azure   containerd://1.5.11+azure-2
 
-NAME                                     STATUS   ROLES   AGE   VERSION    INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
-node/aks-nodepool1-38290826-vmss000000   Ready    agent   11m   v1.19.11   172.16.240.4    <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
-node/aks-nodepool1-38290826-vmss000001   Ready    agent   11m   v1.19.11   172.16.240.35   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
-node/aks-nodepool1-38290826-vmss000002   Ready    agent   11m   v1.19.11   172.16.240.66   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
+NAME           READY   STATUS    RESTARTS      AGE   IP              NODE                                 NOMINATED NODE   READINESS GATES
+pod/dnsutils   1/1     Running   1 (34m ago)   94m   172.16.240.55   aks-agentpool1-19014455-vmss000001   <none>           <none>
 
 Create shell connection to one of the nodes using the commands below. Replace with your own AKS node names. For further instructions on this process or to learn more see [Connect to AKS cluster nodes for maintenance or troubleshooting](https://docs.microsoft.com/en-us/azure/aks/node-access) 
+
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl get nodes
+
+NAME                                 STATUS   ROLES   AGE    VERSION
+aks-agentpool1-19014455-vmss000000   Ready    agent   133m   v1.22.6
+aks-agentpool1-19014455-vmss000001   Ready    agent   133m   v1.22.6
+aks-agentpool1-19014455-vmss000002   Ready    agent   133m   v1.22.6
+
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl debug nodes/aks-agentpool1-19014455-vmss000000 -it --image=mcr.microsoft.com/dotnet/runtime-deps:6.0
+Creating debugging pod node-debugger-aks-agentpool1-19014455-vmss000000-8kln4 with container debugger on node aks-agentpool1-19014455-vmss000000.
+If you don't see a command prompt, try pressing enter.
 
 root@aks-nodepool1-38290826-vmss000002:/# ip add
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
@@ -252,20 +302,19 @@ root@aks-nodepool1-38290826-vmss000002:/# ip add
     inet6 fe80::9479:aeff:fe18:fde4/64 scope link
        valid_lft forever preferred_lft forever
 
-root@aks-nodepool1-38290826-vmss000002:/# route -n
+# route -n
 Kernel IP routing table
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 0.0.0.0         172.16.240.1    0.0.0.0         UG    100    0        0 eth0
 168.63.129.16   172.16.240.1    255.255.255.255 UGH   100    0        0 eth0
 169.254.169.254 172.16.240.1    255.255.255.255 UGH   100    0        0 eth0
 172.16.240.0    0.0.0.0         255.255.255.0   U     0      0        0 eth0
-172.16.240.67   0.0.0.0         255.255.255.255 UH    0      0        0 azvb3c61c3cba9
-172.16.240.69   0.0.0.0         255.255.255.255 UH    0      0        0 azv9b700506950
-172.16.240.76   0.0.0.0         255.255.255.255 UH    0      0        0 azv3c30acfc1be
-172.16.240.80   0.0.0.0         255.255.255.255 UH    0      0        0 azv2f011236414
+172.16.240.11   0.0.0.0         255.255.255.255 UH    0      0        0 azv8ac2e35e029
+172.16.240.13   0.0.0.0         255.255.255.255 UH    0      0        0 azvea9ed1a8167
+172.16.240.29   0.0.0.0         255.255.255.255 UH    0      0        0 azv6de87fdf838
+172.16.240.31   0.0.0.0         255.255.255.255 UH    0      0        0 azv4bc020cf487
 
-root@aks-nodepool1-38290826-vmss000002:/# cat /etc/resolv.conf
-
+# cat /etc/resolv.conf
 # This file is managed by man:systemd-resolved(8). Do not edit.
 #
 # This is a dynamic resolv.conf file for connecting local clients directly to
@@ -279,13 +328,10 @@ root@aks-nodepool1-38290826-vmss000002:/# cat /etc/resolv.conf
 # operation for /etc/resolv.conf.
 
 nameserver 168.63.129.16
-search 1grit5g0qs5exa0hhgg2i425ng.bx.internal.cloudapp.net
-root@aks-nodepool1-38290826-vmss000002:/# curl ifconfig.io
-20.84.17.89
+search pzlew5cwozpurboboh2bo2wgue.zx.internal.cloudapp.net
 
 ```
-
-#### POD View
+### AKS Pod view
 
 Note that the outbound IP of the POD is the External Load balancer SNAT.
 
