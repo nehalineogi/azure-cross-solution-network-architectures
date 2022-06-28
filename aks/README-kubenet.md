@@ -447,7 +447,7 @@ DNS resolution for the AKS cluster can use CoreDNS (DNS service for AKS). We wil
 
 ```
 shaun@Azure:~/azure-cross-solution-network-architectures$ cd aks/yaml/dns
-shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/dns$ kubectl apply -f coredns-custom-domain.yaml
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/dns$ cat coredns-custom-domain.yaml
 
 apiVersion: v1
 kind: ConfigMap
@@ -471,42 +471,55 @@ data:
 Apply the configuration
 
 ```
-kubectl apply -f coredns-custom-domain.yaml
-restart core-dns pod
-kubectl delete pod --namespace kube-system --selector k8s-app=kube-dns
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/dns$ kubectl apply -f coredns-custom-domain.yaml
+
+# For troubleshooting you may need to run the commands to restart and delete the pod and allow it to respawn
+
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/dns$ kubectl delete pod --namespace kube-system --selector k8s-app=kube-dns
+
+# Check the coreDNS pods are running
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/dns$ kubectl get pods --namespace=kube-system -l k8s-app=kube-dns
 
 
-validate nnlab.local resolution from dnsutils pod
-kubectl exec -it dnsutils sh
-
-
-/ # nslookup store1.nnlab.local
+validate contoso.local resolution and internet resolution from dnsutils pod
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/dns$ kubectl exec -i -t dnsutils -- nslookup dc1.contoso.local
 Server:         10.101.0.10
 Address:        10.101.0.10#53
 
-Name:   store1.nnlab.local
-Address: 172.27.225.10
+Name:   dc1.contoso.local
+Address: 192.168.199.5
 
-/ # nslookup www.google.com
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/dns$ kubectl exec -i -t dnsutils -- nslookup www.microsoft.com
 Server:         10.101.0.10
 Address:        10.101.0.10#53
+
+Non-authoritative answer:
+www.microsoft.com       canonical name = www.microsoft.com-c-3.edgekey.net.
+www.microsoft.com-c-3.edgekey.net       canonical name = www.microsoft.com-c-3.edgekey.net.globalredir.akadns.net.
+www.microsoft.com-c-3.edgekey.net.globalredir.akadns.net        canonical name = e13678.dscb.akamaiedge.net.
+Name:   e13678.dscb.akamaiedge.net
+Address: 184.31.225.172
+Name:   e13678.dscb.akamaiedge.net
+Address: 2a02:26f0:5700:1bb::356e
+Name:   e13678.dscb.akamaiedge.net
+Address: 2a02:26f0:5700:1b4::356e
 
 ```
 
 ### DNS with Private DNS Zone
 
-Make sure there is a VNet link from the AKS-VNET to the private DNS Zone in question.
+Make sure there is a VNet link from the AKS-VNET to the private DNS Zone in question. For the test below a private zone was created for test123.com and a host record of test with IP 127.0.0.1 was created.
 
 ```
-kubectl exec -it dnsutils sh
- # nslookup nnnetworklogs.blob.core.windows.net
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/dns$ kubectl exec -it dnsutils -- sh
+ # nslookup test.test123.com 
 Server:         10.101.0.10
 Address:        10.101.0.10#53
 
 Non-authoritative answer:
-nnnetworklogs.blob.core.windows.net     canonical name = nnnetworklogs.privatelink.blob.core.windows.net.
-Name:   nnnetworklogs.privatelink.blob.core.windows.net
-Address: 172.16.1.7
+Name:   test.test123.com
+Address: 1.1.1.1
+
 ```
 
 ## Cleanup
