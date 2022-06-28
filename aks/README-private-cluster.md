@@ -395,6 +395,8 @@ options ndots:5
 
 Initiate Outbound traffic from AKS to On-Premises. Note that on-premise sees the node IP. You will initiate a simple HTTP server on the VPN VM (vpnvm) and see the outbound IP call from the dnsutil pod on AKS to the vpn vm HTTP server. 
 
+You will also validate that you can resolve the API server address for the kubernetes cluster from the domain controller. The domain controller has a conditional forward to the hubs DNS service to allow resolution. 
+
 **From AKS to On-premises**
 Note: On-Premises server sees the node IP.
 
@@ -420,6 +422,42 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 172.16.240.5 - - [28/Jun/2022 18:01:49] "GET / HTTP/1.1" 200 -
 
 ```
+
+## Validate resolution from dc1 to Azure 
+
+On hubdnsvm run the following command: 
+
+```
+root@hubdnsvm:/home/localadmin/azure-cross-solution-network-architectures/aks/yaml/colors-ns# kubectl cluster-info
+Kubernetes control plane is running at https://nnaks-private-dns-305bb3bc.nnaks-private.privatelink.uksouth.azmk8s.io:443
+CoreDNS is running at https://nnaks-private-dns-305bb3bc.nnaks-private.privatelink.uksouth.azmk8s.io:443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
+Metrics-server is running at https://nnaks-private-dns-305bb3bc.nnaks-private.privatelink.uksouth.azmk8s.io:443/api/v1/namespaces/kube-system/services/https:metrics-server:/proxy
+
+To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
+```
+
+Log in to dc1 and open a powershell window and lookup the control plan FQDN. Note that you are able to resolve the private IP from on-prem. Check in DNS (```dnsmgmt.msc``` in powershell) for the conditional forwarder to the hub DNS server to allow this.
+
+```
+PS C:\Users\localadmin> nslookup
+Default Server:  UnKnown
+Address:  ::1
+
+> nnaks-private-dns-305bb3bc.nnaks-private.privatelink.uksouth.azmk8s.io
+Server:  UnKnown
+Address:  ::1
+
+Non-authoritative answer:
+Name:    nnaks-private-dns-305bb3bc.nnaks-private.privatelink.uksouth.azmk8s.io
+Address:  172.16.240.4
+
+>
+
+```
+
+
+nnaks-private-dns-305bb3bc.nnaks-private.privatelink.uksouth.azmk8s.io
+
 ## Traffic validations from On-Premises to AKS
 
 For ingress, note that the AKS pods are directly reachable using their own IP address from on-premise. Here you can access the red pod via its assigned POD IP. 
