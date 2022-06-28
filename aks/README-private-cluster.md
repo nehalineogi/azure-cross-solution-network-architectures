@@ -419,38 +419,12 @@ localadmin@vpnvm:~$ python3 -m http.server
 Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 172.16.240.5 - - [28/Jun/2022 18:01:49] "GET / HTTP/1.1" 200 -
 
-## Traffic validations from On-Premises to Azure
+## Traffic validations from On-Premises to AKS
 
-```
-
-On Prem server:
-nehali@nehali-laptop:~$ ifconfig eth5
-eth5: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 192.168.199.130  netmask 255.255.255.128  broadcast 192.168.199.255
-        inet6 fe80::d9b2:eb5a:4d72:3918  prefixlen 64  scopeid 0xfd<compat,link,site,host>
-        ether 00:ff:96:aa:71:26  (Ethernet)
-        RX packets 0  bytes 0 (0.0 B)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 0  bytes 0 (0.0 B)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-
-Internal Load Balancer Service IP
-nehali@nehali-laptop:~$ curl  http://172.16.238.98:8080
-red
-
-Directly Hitting the POD IP:
-nehali@nehali-laptop:~$ curl  http://172.16.238.11:8080
-red
-
-Public IP Via public load Balancer
-nehali@nehali-laptop:~$ curl  http://52.226.99.79:8080
-red
-```
-
-**From On-Premises to AKS:**
 For ingress, note that the AKS pods are directly reachable using their own IP address from on-premise. Here you can access the red pod via its assigned POD IP. 
 
 ```
+
 root@hubdnsvm:/home/localadmin/azure-cross-solution-network-architectures/aks/yaml/colors-ns# kubectl get pods,services -o wide -n colors-ns
 NAME                                  READY   STATUS    RESTARTS   AGE   IP              NODE                                 NOMINATED NODE   READINESS GATES
 pod/red-deployment-5f589f64c6-bbmt4   1/1     Running   0          52m   172.16.240.12   aks-agentpool1-38167371-vmss000000   <none>           <none>
@@ -461,10 +435,17 @@ NAME                           TYPE           CLUSTER-IP      EXTERNAL-IP      P
 service/red-service-external   LoadBalancer   10.101.192.67   51.104.252.152   8080:32615/TCP   34m   app=red
 service/red-service-internal   LoadBalancer   10.101.156.68   172.16.240.98    8080:30454/TCP   52m   app=red
 
-```
-From vpn vm to a pod in the 'red' service:
-```
-localadmin@vpnvm:~$ curl http://172.16.240.12:8080/
+
+Internal load balancer service IP
+localadmin@vpnvm:~$ curl http://172.16.240.98:8080
+red
+
+Directly Hitting the POD IP:
+localadmin@vpnvm:~$ curl http://172.16.240.12:8080
+red
+
+Public IP Via public load balancer service IP
+localadmin@vpnvm:~$ curl http://51.104.252.152:8080
 red
 
 ```
