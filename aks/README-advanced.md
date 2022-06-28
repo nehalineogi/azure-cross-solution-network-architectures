@@ -336,27 +336,29 @@ search pzlew5cwozpurboboh2bo2wgue.zx.internal.cloudapp.net
 Note that the outbound IP of the POD is the External Load balancer SNAT.
 
 ```
-kubectl exec -it dnsutils -- sh
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl exec -it dnsutils -- sh
 / # ip add
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host
+    inet6 ::1/128 scope host 
        valid_lft forever preferred_lft forever
-10: eth0@if11: <BROADCAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP qlen 1000
-    link/ether c2:76:6a:85:ee:09 brd ff:ff:ff:ff:ff:ff
-    inet 172.16.240.67/24 scope global eth0
+7: eth0@if8: <BROADCAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP qlen 1000
+    link/ether da:79:8d:ef:5a:38 brd ff:ff:ff:ff:ff:ff
+    inet 172.16.240.55/24 scope global eth0
        valid_lft forever preferred_lft forever
-    inet6 fe80::c076:6aff:fe85:ee09/64 scope link
+    inet6 fe80::d879:8dff:feef:5a38/64 scope link 
        valid_lft forever preferred_lft forever
-/ # route -n
+
+/ # route -n 
 Kernel IP routing table
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
 0.0.0.0         169.254.1.1     0.0.0.0         UG    0      0        0 eth0
 169.254.1.1     0.0.0.0         255.255.255.255 UH    0      0        0 eth0
+
 / # cat /etc/resolv.conf
-search default.svc.cluster.local svc.cluster.local cluster.local 1grit5g0qs5exa0hhgg2i425ng.bx.internal.cloudapp.net
+search default.svc.cluster.local svc.cluster.local cluster.local pzlew5cwozpurboboh2bo2wgue.zx.internal.cloudapp.net
 nameserver 10.101.0.10
 options ndots:5
 
@@ -365,144 +367,83 @@ options ndots:5
 
 ```
 
-#### Traffic flows to and from On-premises
+### On Premises view
+
+Initiate Outbound traffic from AKS to On-Premises. Note that on-premise sees the Node IP where the pod is hosted. You will initiate a simple HTTP server on the VPN VM (vpnvm) and see the outbound IP call from the dnsutil pod on AKS to the vpn vm HTTP server. 
 
 **From AKS to On-premises**
 Note: On-Premises server sees the Node IP.
 
+Log in to the VPN VM and start the server 
+
 ```
-k exec -it dnsutils -- sh
-/ # ip add
-1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
-    link/loopbackubectl 00:00:00:00:00:00 brd 00:00:00:00:00:00
-    inet 127.0.0.1/8 scope host lo
-       valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host
-       valid_lft forever preferred_lft forever
-10: eth0@if11: <BROADCAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP qlen 1000
-    link/ether c2:76:6a:85:ee:09 brd ff:ff:ff:ff:ff:ff
-    inet 172.16.240.67/24 scope global eth0
-       valid_lft forever preferred_lft forever
-    inet6 fe80::c076:6aff:fe85:ee09/64 scope link
-       valid_lft forever preferred_lft forever
-/ # wget 192.168.199.130:8000
-Connecting to 192.168.199.130:8000 (192.168.199.130:8000)
-index.html           100% |******************************************************************************************************************|   854   0:00:00 ETA
-/ #
+localadmin@vpnvm:~$ python3 -m http.server
 
-On Prem server:
-nehali@nehali-laptop:~$ ifconfig eth5
-eth5: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 192.168.199.130  netmask 255.255.255.128  broadcast 192.168.199.255
-        inet6 fe80::d9b2:eb5a:4d72:3918  prefixlen 64  scopeid 0xfd<compat,link,site,host>
-        ether 00:ff:96:aa:71:26  (Ethernet)
-        RX packets 0  bytes 0 (0.0 B)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 0  bytes 0 (0.0 B)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
-nehali@nehali-laptop:/mnt/c/Users/neneogi$ python3 -m http.server
+```
+From cloud shell, create a shell connection to the dnsutil pod and initiate a connection
+
+```
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl exec -it dnsutils -- sh
+
+/ # wget 192.168.199.4:8000
+Connecting to 192.168.199.4:8000 (192.168.199.4:8000)
+index.html           100% |************************************************************************************************************************************************************************************************************|   575   0:00:00 ETA
+
+
+From on-premise VPN VM:
+root@vpnvm:/home/localadmin# python3 -m http.server
 Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
-172.16.240.66 - - [17/Jul/2021 11:00:47] "GET / HTTP/1.1" 200 -
-
+172.16.240.35 - - [28/Jun/2022 15:17:58] "GET / HTTP/1.1" 200 -
 
 ```
 
 **From On-Premises to AKS:**
-Note that the AKS pods are directly reachable
+For ingress, note that the AKS pods are directly reachable using their own IP address from on-premise. Here you can access the red pod via its assigned POD IP. 
 
 ```
-nehali@nehali-laptop:~$ ifconfig eth5
-eth5: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-        inet 192.168.199.2  netmask 255.255.255.128  broadcast 192.168.199.127
-        inet6 fe80::d9b2:eb5a:4d72:3918  prefixlen 64  scopeid 0xfd<compat,link,site,host>
-        ether 00:ff:96:aa:71:26  (Ethernet)
-        RX packets 0  bytes 0 (0.0 B)
-        RX errors 0  dropped 0  overruns 0  frame 0
-        TX packets 0  bytes 0 (0.0 B)
-        TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl get pods,services -o wide -n colors-ns
 
-nehali@nehali-laptop:~$ curl  http://172.16.240.97:8080
-red
-nehali@nehali-laptop:~$ curl  172.16.240.50:8080
+NAME                                  READY   STATUS    RESTARTS   AGE    IP              NODE                                 NOMINATED NODE   READINESS GATES
+pod/red-deployment-5f589f64c6-9tw8x   1/1     Running   0          122m   172.16.240.31   aks-agentpool1-19014455-vmss000000   <none>           <none>
+pod/red-deployment-5f589f64c6-bnvkq   1/1     Running   0          122m   172.16.240.70   aks-agentpool1-19014455-vmss000002   <none>           <none>
+pod/red-deployment-5f589f64c6-c4xc9   1/1     Running   0          122m   172.16.240.51   aks-agentpool1-19014455-vmss000001   <none>           <none>
+
+```
+From vpn vm to a pod in the 'red' service:
+```
+localadmin@vpnvm:~$ curl http://172.16.240.31:8080/
 red
 
 ```
 
-#### Azure VM View
+### Azure VM View
 
-Note: Azure VM on the same VNET sees the actual POD IP.
-
-```
-POD:
-kubectl exec -it dnsutils -- sh
-/ # ip add
-1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
-link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-inet 127.0.0.1/8 scope host lo
-valid_lft forever preferred_lft forever
-inet6 ::1/128 scope host
-valid_lft forever preferred_lft forever
-10: eth0@if11: <BROADCAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP qlen 1000
-link/ether c2:76:6a:85:ee:09 brd ff:ff:ff:ff:ff:ff
-inet 172.16.240.67/24 scope global eth0
-valid_lft forever preferred_lft forever
-inet6 fe80::c076:6aff:fe85:ee09/64 scope link
-valid_lft forever preferred_lft forever
-/ # wget 172.16.1.5:8000
-Connecting to 172.16.1.5:8000 (172.16.1.5:8000)
-wget: can't open 'index.html': File exists
-/ # rm index.html
-/ # wget 172.16.1.5:8000
-Connecting to 172.16.1.5:8000 (172.16.1.5:8000)
-index.html 100% |\***\*\*\*\*\*\*\***\*\*\***\*\*\*\*\*\*\***\*\*\*\*\***\*\*\*\*\*\*\***\*\*\***\*\*\*\*\*\*\***\*\*\***\*\*\*\*\*\*\***\*\*\***\*\*\*\*\*\*\***\*\*\*\*\***\*\*\*\*\*\*\***\*\*\***\*\*\*\*\*\*\***| 77 0:00:00 ETA
-/ # exit
-
-**VM in Azure (Same VNET as AKS-subnet)**
-
-nehali@nn-linux-dev:~$ ifconfig eth0
-eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST> mtu 1500
-inet 172.16.1.5 netmask 255.255.255.0 broadcast 172.16.1.255
-inet6 fe80::20d:3aff:fe1c:8876 prefixlen 64 scopeid 0x20<link>
-ether 00:0d:3a:1c:88:76 txqueuelen 1000 (Ethernet)
-RX packets 79611619 bytes 21567157846 (21.5 GB)
-RX errors 0 dropped 0 overruns 0 frame 0
-TX packets 80391879 bytes 13317890087 (13.3 GB)
-TX errors 0 dropped 0 overruns 0 carrier 0 collisions 0
-
-nehali@nn-linux-dev:~$ python3 -m http.server
-Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
-172.16.240.67 - - [17/Jul/2021 15:05:43] "GET / HTTP/1.1" 200 -
-172.16.240.67 - - [17/Jul/2021 15:05:48] "GET / HTTP/1.1" 200 -
-
-```
+For this challenge you will need to deploy a VM onto the same VNet as the AKS nodes. You can then run the same steps as above, but instead of using the VPN VM on-premise, you can use the VM on the same subnet. Note: Azure VM on the same VNET sees the actual POD IP, not the NODE IP!
 
 ### External Service
 
-Note the Endpoints are up. Node the Type:LoadBalancer and exposed IP is public
+Note the Endpoints are up. Node Type:LoadBalancer and exposed IP is public
 
 ```
-kubectl describe service red-service -n colors-ns
-Name:                     red-service
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl describe service red-service-external -n colors-ns
+Name:                     red-service-external
 Namespace:                colors-ns
 Labels:                   <none>
 Annotations:              <none>
 Selector:                 app=red
 Type:                     LoadBalancer
-IP Families:              <none>
-IP:                       10.101.214.144
-IPs:                      <none>
-LoadBalancer Ingress:     20.72.170.184
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.101.216.194
+IPs:                      10.101.216.194
+LoadBalancer Ingress:     20.90.217.4
 Port:                     <unset>  8080/TCP
 TargetPort:               8080/TCP
-NodePort:                 <unset>  31838/TCP
-Endpoints:                172.16.240.11:8080,172.16.240.50:8080,172.16.240.76:8080
+NodePort:                 <unset>  31308/TCP
+Endpoints:                172.16.240.31:8080,172.16.240.51:8080,172.16.240.70:8080
 Session Affinity:         None
 External Traffic Policy:  Cluster
-Events:
-  Type    Reason                Age   From                Message
-  ----    ------                ----  ----                -------
-  Normal  EnsuringLoadBalancer  21m   service-controller  Ensuring load balancer
-  Normal  EnsuredLoadBalancer   21m   service-controller  Ensured load balancer
+Events:                   <none>
 
 ```
 
@@ -511,28 +452,26 @@ Events:
 Note the type: Load balancer and the exposed IP is private
 
 ```
-kubectl describe service red-service-internal -n colors-ns
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl describe service red-service-internal -n colors-ns
+
 Name:                     red-service-internal
 Namespace:                colors-ns
 Labels:                   <none>
 Annotations:              service.beta.kubernetes.io/azure-load-balancer-internal: true
 Selector:                 app=red
 Type:                     LoadBalancer
-IP Families:              <none>
-IP:                       10.101.54.70
-IPs:                      <none>
+IP Family Policy:         SingleStack
+IP Families:              IPv4
+IP:                       10.101.116.163
+IPs:                      10.101.116.163
 LoadBalancer Ingress:     172.16.240.97
 Port:                     <unset>  8080/TCP
 TargetPort:               8080/TCP
-NodePort:                 <unset>  32732/TCP
-Endpoints:                172.16.240.11:8080,172.16.240.50:8080,172.16.240.76:8080
+NodePort:                 <unset>  30889/TCP
+Endpoints:                172.16.240.31:8080,172.16.240.51:8080,172.16.240.70:8080
 Session Affinity:         None
 External Traffic Policy:  Cluster
-Events:
-  Type    Reason                Age                From                Message
-  ----    ------                ----               ----                -------
-  Normal  EnsuringLoadBalancer  47s (x2 over 21m)  service-controller  Ensuring load balancer
-  Normal  EnsuredLoadBalancer   46s (x2 over 19m)  service-controller  Ensured load balancer
+Events:                   <none>
 
 ```
 
