@@ -151,7 +151,7 @@ In this challenge you will deploy pods and configure an internal service using a
 
 ```
 #
-# Create a namespace for the service
+# Create a namespace for the service, and apply the configuration
 #
 shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl create ns colors-ns
 shaun@Azure:~/azure-cross-solution-network-architectures$ cd aks/yaml/colors-ns

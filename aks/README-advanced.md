@@ -134,18 +134,24 @@ aks-agentpool1-19014455-vmss000002   Ready    agent   37m   v1.22.6   172.16.240
 
 # Challenge 1: Deploy Pods and Internal Service
 
-In this challenge you will deploy pods and configure an internal service using an existing yaml definition in the repository. 
+In this challenge you will deploy pods and configure an internal service using an existing yaml definition in the repository. Notice how the pods are placed on the three nodes using the IP addresses from the AKS VNet, and spread over the three VMSS instances that make the AKS cluster. 
 
 ```
 #
-# Create a namespace for the service
+# Create a namespace for the service, and apply the configuration
 #
 shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl create ns colors-ns
 shaun@Azure:~/azure-cross-solution-network-architectures$ cd aks/yaml/colors-ns
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl apply -f red-internal-service.yaml
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl get pods,services -o wide -n colors-ns
 
-[ENTER SCREENSHOT HERE]
+NAME                                  READY   STATUS    RESTARTS   AGE   IP              NODE                                 NOMINATED NODE   READINESS GATES
+pod/red-deployment-5f589f64c6-9tw8x   1/1     Running   0          7s    172.16.240.31   aks-agentpool1-19014455-vmss000000   <none>           <none>
+pod/red-deployment-5f589f64c6-bnvkq   1/1     Running   0          7s    172.16.240.70   aks-agentpool1-19014455-vmss000002   <none>           <none>
+pod/red-deployment-5f589f64c6-c4xc9   1/1     Running   0          7s    172.16.240.51   aks-agentpool1-19014455-vmss000001   <none>           <none>
+
+NAME                           TYPE           CLUSTER-IP       EXTERNAL-IP   PORT(S)          AGE   SELECTOR
+service/red-service-internal   LoadBalancer   10.101.116.163   <pending>     8080:30889/TCP   7s    app=red
 
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl describe service red-service-internal -n colors-ns
 
