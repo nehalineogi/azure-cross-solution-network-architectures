@@ -334,7 +334,7 @@ search pzlew5cwozpurboboh2bo2wgue.zx.internal.cloudapp.net
 ```
 ### AKS Pod view
 
-Note that the outbound IP of the POD is the External Load balancer SNAT.
+Note that the outbound IP of the POD is the public load balancer SNAT.
 
 ```
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl exec -it dnsutils -- sh
@@ -370,10 +370,10 @@ options ndots:5
 
 ### On Premises view
 
-Initiate Outbound traffic from AKS to On-Premises. Note that on-premise sees the Node IP where the pod is hosted. You will initiate a simple HTTP server on the VPN VM (vpnvm) and see the outbound IP call from the dnsutil pod on AKS to the vpn vm HTTP server. 
+Initiate Outbound traffic from AKS to On-Premises. Note that on-premise sees the node IP. You will initiate a simple HTTP server on the VPN VM (vpnvm) and see the outbound IP call from the dnsutil pod on AKS to the vpn vm HTTP server. 
 
 **From AKS to On-premises**
-Note: On-Premises server sees the Node IP.
+Note: On-Premises server sees the node IP.
 
 Log in to the VPN VM and start the server 
 
