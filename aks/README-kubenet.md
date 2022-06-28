@@ -85,7 +85,7 @@ red
 ```
 ### DNS Design
 
-Azure Subnet can use custom DNS or Azure Default DNS. Custom DNS can be used alongside Azure DNS.
+Azure Subnet can use custom DNS or Azure Default DNS. Core DNS can be used along with Azure DNS.
 
 ### Inbound Services
 
@@ -119,15 +119,15 @@ Note: If you get a warning "an object named MyAKSCluster already exists in your 
 
 4. Deploy a simple pod
 
-```shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl apply -f dnsutils.yaml```
+```shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/dns$ kubectl apply -f dnsutils.yaml```
 
 5. Check pod is running successfully 
 
-```shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get pods -o wide```
+```shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/dns$ kubectl get pods -o wide```
 
-6. Delete pod (cleanup)
+6. Move to repo base directory 
 
-```shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl delete pod dnsutils```
+```shaun@Azure:~/azure-cross-solution-network-architectures$ cd ../../.. ```
 
 **1. Verify nodes**
 
@@ -152,8 +152,8 @@ In this challenge you will deploy pods and configure an internal service using a
 #
 shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl create ns colors-ns
 shaun@Azure:~/azure-cross-solution-network-architectures$ cd aks/yaml/colors-ns
-shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl apply -f red-internal-service.yaml
-shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get pods,services -o wide -n colors-ns
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl apply -f red-internal-service.yaml
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl get pods,services -o wide -n colors-ns
 
 NAME                                  READY   STATUS    RESTARTS   AGE   IP            NODE                                NOMINATED NODE   READINESS GATES
 pod/red-deployment-5f589f64c6-fslc8   1/1     Running   0          28s   10.244.2.21   aks-nodepool1-62766439-vmss000000   <none>           <none>
@@ -163,7 +163,7 @@ pod/red-deployment-5f589f64c6-pzwzs   1/1     Running   0          28s   10.244.
 NAME                           TYPE           CLUSTER-IP       EXTERNAL-IP    PORT(S)          AGE     SELECTOR
 service/red-service-internal   LoadBalancer   10.101.202.203   172.16.239.7   8080:32164/TCP   8m20s   app=red
 
-shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl describe service red-service-internal -n colors-ns
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl describe service red-service-internal -n colors-ns
 Name:                     red-service-internal
 Namespace:                colors-ns
 Labels:                   <none>
@@ -203,8 +203,8 @@ red
 
 ```
 
-shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl apply -f red-external-lb.yaml
-shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get pods,services -o wide -n colors-ns
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl apply -f red-external-lb.yaml
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl get pods,services -o wide -n colors-ns
 
 NAME                                  READY   STATUS    RESTARTS   AGE   IP            NODE                                NOMINATED NODE   READINESS GATES
 pod/red-deployment-5f589f64c6-fslc8   1/1     Running   0          22m   10.244.2.21   aks-nodepool1-62766439-vmss000000   <none>           <none>
@@ -266,7 +266,7 @@ Note the POD CIDR is 10.244.0.0/16. See the route tables created to support the 
 In this challenge you will check the view from each type of AKS component. 
 ### AKS Node view
 
-Node inherits Azure DNS for resolution. Create shell connection to one of the nodes using the commands below. Replace with your own AKS node names.
+Node inherits Azure DNS for resolution. Create shell connection to one of the nodes using the commands below. Replace with your own AKS node names. For further instructions on this process or to learn more see [Connect to AKS cluster nodes for maintenance or troubleshooting](https://docs.microsoft.com/en-us/azure/aks/node-access) 
 
 ```
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl get nodes
@@ -359,76 +359,79 @@ cbr0            8000.aed6453d6fec       no              veth482424ea
 
 ```
 
-**6. POD View**
+### AKS Pod view
 
 The curl output showing the egress from POD to Internet via load balancer IP.
 
 ```
-kubectl get pods -o wide
+shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ cd ../../../
+shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get pods -o wide
+
 NAME       READY   STATUS    RESTARTS   AGE   IP           NODE                                NOMINATED NODE   READINESS GATES
 dnsutils   1/1     Running   0          10m   10.244.1.5   aks-nodepool1-62766439-vmss000002   <none>           <none>
 
-kubectl exec -it dnsutils sh
-kubectl exec [POD] [COMMAND] is DEPRECATED and will be removed in a future version. Use kubectl exec [POD] -- [COMMAND] instead.
+shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl exec -it dnsutils -- sh
 
 / # ip add
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
     inet 127.0.0.1/8 scope host lo
        valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host
+    inet6 ::1/128 scope host 
        valid_lft forever preferred_lft forever
-3: eth0@if8: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP
-    link/ether 9a:40:c8:86:07:f7 brd ff:ff:ff:ff:ff:ff
-    inet 10.244.1.5/24 scope global eth0
+3: eth0@if7: <BROADCAST,MULTICAST,UP,LOWER_UP,M-DOWN> mtu 1500 qdisc noqueue state UP 
+    link/ether f2:e4:64:d3:73:90 brd ff:ff:ff:ff:ff:ff
+    inet 10.244.0.4/32 scope global eth0
        valid_lft forever preferred_lft forever
-    inet6 fe80::9840:c8ff:fe86:7f7/64 scope link
+    inet6 fe80::f0e4:64ff:fed3:7390/64 scope link 
        valid_lft forever preferred_lft forever
 / # route -n
 Kernel IP routing table
 Destination     Gateway         Genmask         Flags Metric Ref    Use Iface
-0.0.0.0         10.244.1.1      0.0.0.0         UG    0      0        0 eth0
-10.244.1.0      0.0.0.0         255.255.255.0   U     0      0        0 eth0
+0.0.0.0         169.254.1.1     0.0.0.0         UG    0      0        0 eth0
+169.254.1.1     0.0.0.0         255.255.255.255 UH    0      0        0 eth0
 
 / # wget -qO- ifconfig.me
 20.81.108.198
 
 ```
 
-**7. On Premises view**
+### On Premises view
 
-Initiate Outbound traffic from AKS to On-Premises. Note that On-Premise sees the Node IP where the pod is hosted
+Initiate Outbound traffic from AKS to On-Premises. Note that On-Premise sees the Node IP where the pod is hosted. You will initiate a simple HTTP server on the VPN VM (vpnvm) and see the outbound IP call from the dnsutil pod on AKS to the vpn vm HTTP server. 
+
+Log in to the VPN VM and start the server 
 
 ```
+localadmin@vpnvm:~$ python3 -m http.server
 
-Source AKS:
-Exec into AKS Pod
-kubectl get pods -o wide
-NAME       READY   STATUS    RESTARTS   AGE     IP           NODE                                NOMINATED NODE   READINESS GATES
-dnsutils   1/1     Running   6          6h55m   10.244.1.5   aks-nodepool1-62766439-vmss000002   <none>           <none>
- kubectl get nodes -o wide
-NAME                                STATUS   ROLES   AGE     VERSION    INTERNAL-IP    EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
-aks-nodepool1-62766439-vmss000000   Ready    agent   7h21m   v1.19.11   172.16.239.4   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
-aks-nodepool1-62766439-vmss000001   Ready    agent   7h22m   v1.19.11   172.16.239.5   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
-aks-nodepool1-62766439-vmss000002   Ready    agent   7h22m   v1.19.11   172.16.239.6   <none>        Ubuntu 18.04.5 LTS   5.4.0-1049-azure   containerd://1.4.4+azure
- kubectl exec -it dnsutils -- sh
-/ # wget 192.168.199.130:8000
+```
+From cloud shell, create a shell connection to the dnsutil pod and initiate a connection
+```
+
+shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get pods -o wide
+
+NAME                                                     READY   STATUS      RESTARTS   AGE   IP             NODE                                 NOMINATED NODE   READINESS GATES
+dnsutils                                                 1/1     Running     0          30m   10.244.0.4     aks-agentpool1-33383507-vmss000000   <none>           <none>
+node-debugger-aks-agentpool1-33383507-vmss000000-jnfvj   0/1     Completed   0          40m   172.16.239.4   aks-agentpool1-33383507-vmss000000   <none>           <none>
+
+shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl exec -it dnsutils -- sh
+
+/ # wget 192.168.199.4:8000
 Connecting to 192.168.199.130:8000 (192.168.199.130:8000)
 index.html           100% |*********************************************************************************************************************|   854   0:00:00 ETA
 / # exit
 
-Destination On-Premises:
+```
+Check the VPN VM for the result of the page request from the AKS pod, note how it sees the node IP address (this is due to the use of kubenet)
 
-python3 -m http.server
+```
+localadmin@vpnvm:~$ python3 -m http.server
 Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
-172.16.239.6 - - [16/Jul/2021 14:51:52] "GET / HTTP/1.1" 200 -
-172.16.239.6 - - [16/Jul/2021 14:51:59] "GET / HTTP/1.1" 200 -
-172.16.239.6 - - [16/Jul/2021 14:53:00] "GET / HTTP/1.1" 200 -
-172.16.239.6 - - [16/Jul/2021 14:53:04] "GET / HTTP/1.1" 200 -
-
-From On-Prem to AKS
-nehali@nehali-laptop:~$ curl  172.16.239.7:8080
-red
+172.16.239.4 - - [27/Jun/2022 18:06:50] "GET / HTTP/1.1" 200 -
+172.16.239.4 - - [27/Jun/2022 18:06:52] "GET / HTTP/1.1" 200 -
+172.16.239.4 - - [27/Jun/2022 18:06:57] "GET / HTTP/1.1" 200 -
+172.16.239.4 - - [27/Jun/2022 18:06:58] "GET / HTTP/1.1" 200 -
 
 ```
 

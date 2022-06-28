@@ -7,11 +7,10 @@ data:
   log.override: |
    log
 
-  nnlab.server: |
-    nnlab.local:53 {
+  contoso.server: |
+    contoso.local:53 {
         errors
         log
         cache 30
-        forward nnlab.local 10.10.1.4  # this is my test/dev DNS server
-        #forward nnlab.local 1.2.3.4  # this is my test/dev DNS server
+        forward nnlab.local 192.168.199.5  # this is my test/dev DNS server
     }
