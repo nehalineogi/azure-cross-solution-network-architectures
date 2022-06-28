@@ -67,7 +67,7 @@ You will run commands below to show that there are no running containers (```doc
 
 List the default networks. Bridge Network: Layer2 broadcast domain. All containers connected to the bridge can talk to each other. All docker installations come with the default docker bridge - docker0. 
 
-```
+```console
 root@docker-host-1:/home/localadmin# docker ps
 CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
 root@docker-host-1:/home/localadmin# docker network ls
@@ -83,7 +83,7 @@ root@docker-host-1:/home/localadmin#
 
 ## Task 2: Create a container on the default bridge network (docker0)
 
-```
+```console
 #
 # Run nginx container
 #
@@ -142,7 +142,7 @@ root@docker-host-1:/home/localadmin# curl ifconfig.me
 
 ## Task 3: Create another container in the default bridge network and ping the first container
 
-```
+```console
 #
 # Create a second container on the default docker0 bridge
 #
@@ -186,7 +186,7 @@ Cache-Control: no-cache
 
 Observe subnet, gateway and container IPs
 
-```
+```console
 root@docker-host-1:/home/localadmin# docker network inspect bridge
 [
     {
@@ -244,7 +244,7 @@ root@docker-host-1:~#
 
 # Challenge 2: Create two custom bridges (red-bridge and green-bridge)
 
-```
+```console
 #
 # Create a red-bridge
 #
@@ -338,7 +338,7 @@ Observations:
 
 Docker container inherits the DNS configuration from the Docker host. Containers cannot reference each other by name.
 
-```
+```console
 root@docker-host-1:/home/localadmin# docker exec -it blue-c1 sh
 / # more /etc/resolv.conf
 <snip>
@@ -366,7 +366,7 @@ ping: bad address 'blue-c2'
 
 User-defined bridges provide automatic DNS resolution between containers.  Containers can reference each other by name.
 
-```
+```console
 root@docker-host-1:/home/localadmin# docker exec -it green-c1 sh
 / # more /etc/resolv.conf
 search pa5y0bwcl5yetg3n1qcsrqtlzh.bx.internal.cloudapp.net
@@ -406,7 +406,7 @@ round-trip min/avg/max = 0.106/0.145/0.184 ms
 
 # Challenge 4: Dual Home a Container
 
-```
+```console
 #
 # Attach red-c1 to docker0 bridge and observe networking
 #
@@ -489,7 +489,7 @@ Observations:
 
 # Challenge 5: Expose the Container to the outside world
 
-```
+```console
 #
 # Run a new container named "web" and port forward 8080
 # on docker-host-1 to 80 on the nginx container named web
@@ -530,7 +530,7 @@ Cache-Control: no-cache
 
 Note Docker0 interface and veth pairs, iptables and port forwarding.
 
-```
+```console
 root@docker-host-1:/home/localadmin# ip add
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
     link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
@@ -662,7 +662,7 @@ RETURN     all  --  0.0.0.0/0            0.0.0.0/0
 
 List all running containers and cleanup
 
-```
+```console
 root@docker-host-1:/home/localadmin# docker ps
 CONTAINER ID   IMAGE              COMMAND                  CREATED          STATUS          PORTS                                   NAMES
 064c04a43c01   nginxdemos/hello   "/docker-entrypoint.…"   4 minutes ago    Up 4 minutes    0.0.0.0:8080->80/tcp, :::8080->80/tcp   web
@@ -718,7 +718,7 @@ Alternatively the subnet hosting the VMs has a Network Security Group (NSG) atta
 
 4. SSH to your VMs
 
-```
+```console
 ssh localadmin@[VM Public IP or DNS]
 ```
 
