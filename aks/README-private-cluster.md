@@ -603,3 +603,7 @@ If you receive an error on this command relating to a timeout and you are using 
 You should change a.a.a.a to match your public IP address
 
 ``` az network nsg rule update -g nnaks-private-rg --nsg-name Allow-tunnel-traffic -n allow-ssh-inbound  --access allow --source-address-prefix "a.a.a.a" ```
+
+## What is the secondary resource group created starting with MC_? 
+
+This is created automatically during the AKS deployment and Azure resources are created here to support AKS. More information can be found [here](https://docs.microsoft.com/en-us/azure/aks/faq#why-are-two-resource-groups-created-with-aks) in the AKS FAQ
