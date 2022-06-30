@@ -15,6 +15,12 @@ Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF]
 [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Faks-kubenet.json)
 
 # Quickstart deployment
+
+The username for the deployed VMs is `localadmin`
+
+The passwords are stored in a keyvault deployed to the same resource group.
+
+For a high level diagram of all deployed resources please see [Environment Components](images/aks-public.png)
 ### Task 1: Start Deployment
 
 1. Click Deploy to Azure button above and supply the signed-in user ID from step 2.

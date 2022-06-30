@@ -20,9 +20,6 @@ The username for the deployed VMs is `localadmin`
 
 The passwords are stored in a keyvault deployed to the same resource group.
 
-For a high level diagram of all deployed resources please see [Environment Components](images/aks-public.png)
-
-
 ### Task 1: Start Deployment
 
 1. Click Deploy to Azure button above and supply the signed-in user ID from step 2.
