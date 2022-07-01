@@ -129,7 +129,7 @@ Note that AKS nodes and pods get IPs from the same AKS subnet
 
 #### Verify nodes
 
-```
+```console
 shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get nodes -o wide
 
 NAME                                 STATUS   ROLES   AGE   VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
@@ -143,7 +143,7 @@ aks-agentpool1-19014455-vmss000002   Ready    agent   37m   v1.22.6   172.16.240
 
 In this challenge you will deploy pods and configure an internal service using an existing yaml definition in the repository. Notice how the pods are placed on the three nodes using the IP addresses from the AKS VNet, and spread over the three VMSS instances that make the AKS cluster. 
 
-```
+```console
 #
 # Create a namespace for the service, and apply the configuration
 #
@@ -191,7 +191,7 @@ Events:
 
 From the VPN server on-premise (vpnvm) log in via bastion (password in keyvault) and try to curl the service via the LoadBalancer Ingress:
 
-```
+```console
 localadmin@vpnvm:~$ curl http://172.16.240.97:8080/
 red
 
@@ -199,7 +199,7 @@ red
 
 # Challenge 3: Deploy Pods and External Service
 
-```
+```console
 
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl apply -f red-external-lb.yaml
 deployment.apps/red-deployment unchanged
@@ -254,7 +254,7 @@ In this challenge you will check the view from each type of AKS component.
 
 Note that node inherits the DNS from the Azure VNET DNS setting. The outbound IP for the node is the public load balancer outbound SNAT.
 
-```
+```console
 shaun@Azure:~$  kubectl get nodes,pods -o wide
 NAME                                      STATUS   ROLES   AGE    VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
 node/aks-agentpool1-19014455-vmss000000   Ready    agent   129m   v1.22.6   172.16.240.4    <none>        Ubuntu 18.04.6 LTS   5.4.0-1083-azure   containerd://1.5.11+azure-2
@@ -347,7 +347,7 @@ search pzlew5cwozpurboboh2bo2wgue.zx.internal.cloudapp.net
 
 Note that the outbound IP of the POD is the public load balancer SNAT.
 
-```
+```console
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl exec -it dnsutils -- sh
 / # ip add
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
@@ -388,13 +388,13 @@ Note: On-Premises server sees the node IP.
 
 Log in to the VPN VM and start the server 
 
-```
+```console
 localadmin@vpnvm:~$ python3 -m http.server
 
 ```
 From cloud shell, create a shell connection to the dnsutil pod and initiate a connection
 
-```
+```console
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl exec -it dnsutils -- sh
 
 / # wget 192.168.199.4:8000
@@ -412,7 +412,7 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 **From On-Premises to AKS:**
 For ingress, note that the AKS pods are directly reachable using their own IP address from on-premise. Here you can access the red pod via its assigned POD IP. 
 
-```
+```console
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl get pods,services -o wide -n colors-ns
 
 NAME                                  READY   STATUS    RESTARTS   AGE    IP              NODE                                 NOMINATED NODE   READINESS GATES
@@ -422,7 +422,7 @@ pod/red-deployment-5f589f64c6-c4xc9   1/1     Running   0          122m   172.16
 
 ```
 From vpn vm to a pod in the 'red' service:
-```
+```console
 localadmin@vpnvm:~$ curl http://172.16.240.31:8080/
 red
 
@@ -436,7 +436,7 @@ For this challenge you will need to deploy a VM onto the same VNet as the AKS no
 
 Note the Endpoints are up. Node Type:LoadBalancer and exposed IP is public
 
-```
+```console
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl describe service red-service-external -n colors-ns
 Name:                     red-service-external
 Namespace:                colors-ns
@@ -463,7 +463,7 @@ Events:                   <none>
 
 Note the type: Load balancer and the exposed IP is private
 
-```
+```console
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl describe service red-service-internal -n colors-ns
 
 Name:                     red-service-internal
@@ -499,7 +499,7 @@ Events:                   <none>
 
 4. SSH to your VMs
 
-```
+```console
 ssh localadmin@[VM Public IP or DNS]
 ```
 
