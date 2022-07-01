@@ -346,11 +346,26 @@ root@docker-host-1:/home/localadmin# docker exec -it blue-c1 sh
 <snip>
 nameserver 168.63.129.16
 search pa5y0bwcl5yetg3n1qcsrqtlzh.bx.internal.cloudapp.net
+/ # nslookup www.google.com
+Server:168.63.129.16
+Address:168.63.129.16:53
+
+Non-authoritative answer:
+Name:www.google.com
+Address: 216.58.212.228
+
+Non-authoritative answer:
+Name:www.google.com
+Address: 2a00:1450:4009:815::2004
+
 / # curl ifconfig.io
 20.127.137.145
+
 / # exit
 root@docker-host-1:/home/localadmin# curl ifconfig.io
 20.127.137.145
+
+# nslookup www.google.com
 Non-authoritative answer:
 Name:   www.google.com
 Address: 172.217.12.228
