@@ -2,7 +2,7 @@
 
 This architecture demonstrates _single_ docker host and networking within the docker host, custom bridge networks and dual homing containers. Containers connected to the bridge network on one docker host cannot talk to the container on the other host. **Bridge networks are scoped locally and don't span multiple hosts**.
 
-The quickstart deployment will provision two Azure VMs acting as docker hosts, each has an out-the-box installation of docker. Azure bastion is also deployed and enabled for the VMs and you can connect to the docker VMs using this method immediately. For direct SSH connection, please see quickstart guide below.
+The quickstart deployment will provision two Azure VMs acting as docker hosts, each has an out-the-box installation of docker. Azure bastion is also deployed and enabled for the VMs and you can connect to the docker VMs using this method immediately. 
 
 # Reference Architecture
 
