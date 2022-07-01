@@ -37,6 +37,8 @@ It is not uncommon for tenants that are managed by corporations to restrict the 
 
 4. Log in to kubectl from the hubvm, follow instructions below
 
+5. Note that you may have different IP addresses and interfaces on your environment than the screenshots throughout this series, this is expected.
+
 ## Azure Documentation links
 
 1. [AKS Baseline architecture](https://docs.microsoft.com/en-us/azure/architecture/reference-architectures/containers/aks/secure-baseline-aks)
@@ -62,9 +64,9 @@ It is not uncommon for tenants that are managed by corporations to restrict the 
 - Use an Express Route or VPN connection.
 - Use the AKS Run Command feature.
 
-8. Common errors without DNS and Routing in place.
+8. Common errors without DNS and Routing in place, attempting to connect from a networking not layer 3 connected internally.
 
-```
+```console
 kubectl get pods -o wide
 Unable to connect to the server: dial tcp: i/o timeout
 
@@ -85,8 +87,8 @@ Note the kubeAPI / cluster IP will resolve differently in your deployment based 
 
 The form will be [clustername].privatelink.[location].azmk8s.io (private endpoint IP)
 
-```
-kubectlcluster-info
+```console
+root@hubdnsvm:/home/localadmin# kubectlcluster-info
 Kubernetes control plane is running at https://nnaks-private-b8afe38a.abc8bcf2-73d8-4d97-83d5-0ae74d9aa974.privatelink.eastus.azmk8s.io:443
 healthmodel-replicaset-service is running at https://nnaks-private-b8afe38a.abc8bcf2-73d8-4d97-83d5-0ae74d9aa974.privatelink.eastus.azmk8s.io:443/api/v1/namespaces/kube-system/services/healthmodel-replicaset-service/proxy
 CoreDNS is running at https://nnaks-private-b8afe38a.abc8bcf2-73d8-4d97-83d5-0ae74d9aa974.privatelink.eastus.azmk8s.io:443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
@@ -95,12 +97,13 @@ To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'
 
 ```
 
-Note that the KubeAPI DNS resolves to private IP and hence routing to the private IP needs to be configured. Best practice to use the hybrid On-premises DNS best practices for DNS resolution of private endpoint from on-premises. However, a local hosts file can be leverage for lab/POC.
+Note that the KubeAPI DNS resolves to private IP and hence routing to the private IP needs to be configured. Best practice to use the hybrid On-premises DNS best practices for DNS resolution of private endpoint from on-premises. However, a local hosts file can be leverage for lab/POC. 
 
-```
+The automated deployed configures an Azure private DNS zone where AKS registers the KubeAPI IP , the domain controller on the simulated on-premises environment is then able to resolve the API address. The hubdnsvm is also able to resolve the API.
+
+```console
 To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
-nehali@nehali-laptop:/mnt/c/Users/neneogi/Documents/repos/k8s/aks-azcli$ more /etc/hosts | grep nnaks-private-b8afe38a.abc8bcf2-73d8-4d97-83d5-0ae74d9aa974.privatelink.eastus.azmk8s.io
-172.16.238.4 nnaks-private-b8afe38a.abc8bcf2-73d8-4d97-83d5-0ae74d9aa974.privatelink.eastus.azmk8s.io
+
 
 ```
 ## Deployment Validations
@@ -153,7 +156,7 @@ This deployment will be using Azure CNI so the node and pod IPs are in the same 
 
 #### Verify nodes
 
-```
+```console
 root@hubdnsvm:/home/localadmin/azure-cross-solution-network-architectures# kubectl get nodes -o wide
 
 NAME                                 STATUS   ROLES   AGE   VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
@@ -167,7 +170,7 @@ aks-agentpool1-38167371-vmss000002   Ready    agent   60m   v1.22.6   172.16.240
 
 In this challenge you will deploy pods and configure an internal service using an existing yaml definition in the repository. Notice how the pods are placed on the three nodes using the IP addresses from the AKS VNet, and spread over the three VMSS instances that make the AKS cluster. 
 
-```
+```console
 #
 # Create a namespace for the service, and apply the configuration
 #
@@ -215,7 +218,7 @@ Events:
 
 From the VPN server on-premise (vpnvm) log in via bastion (password in keyvault) and try to curl the service via the LoadBalancer Ingress:
 
-```
+```console
 localadmin@vpnvm:~$ curl http://172.16.240.98:8080/
 red
 ```
@@ -223,7 +226,7 @@ red
 
 Note that although the AKS cluster has been deployed as a private cluster, this refers to the control plane, and it is still possible to expose a service publically as we are here. Test from a browser on your own device that you can reach the load balancer ingress IP.
 
-```
+```console
 
 root@hubdnsvm:/home/localadmin/azure-cross-solution-network-architectures/aks/yaml/colors-ns# kubectl apply -f red-external-lb.yaml
 deployment.apps/red-deployment unchanged
@@ -276,7 +279,7 @@ In this challenge you will check the view from each type of AKS component.
 
 NNote the Node inherits the DNS from VNET DNS setting and egress for the node via Azure public load balancer (NVA/Firewall options available)
 
-```
+```console
 root@hubdnsvm:/home/localadmin/azure-cross-solution-network-architectures/aks/yaml/colors-ns# kubectl get nodes,pods -o wide
 NAME                                      STATUS   ROLES   AGE   VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
 node/aks-agentpool1-38167371-vmss000000   Ready    agent   90m   v1.22.6   172.16.240.5    <none>        Ubuntu 18.04.6 LTS   5.4.0-1083-azure   containerd://1.5.11+azure-2
@@ -370,7 +373,7 @@ search sbmktmjsj3jezjiccjszwcqdra.zx.internal.cloudapp.net
 
 Pod Inherits DNS from the Node and egress via external LB.
 
-```
+```console
 root@hubdnsvm:/home/localadmin/azure-cross-solution-network-architectures/aks/yaml/colors-ns# kubectl exec -it dnsutils -- sh
 / # ip add
 1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
@@ -412,12 +415,12 @@ Note: On-Premises server sees the node IP.
 
 Log in to the VPN VM and start the server 
 
-```
+```console
 localadmin@vpnvm:~$ python3 -m http.server
 ```
 From hubdnsvm, create a shell connection to the dnsutil pod and initiate a connection
 
-```
+```console
 root@hubdnsvm:/home/localadmin/azure-cross-solution-network-architectures/aks/yaml/colors-ns# kubectl exec -it dnsutils -- sh
 / # wget 192.168.199.4:8000
 Connecting to 192.168.199.4:8000 (192.168.199.4:8000)
@@ -426,7 +429,7 @@ index.html           100% |*****************************************************
 ```
 View results on the vpnvm 
 
-```
+```console
 localadmin@vpnvm:~$ python3 -m http.server
 Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 172.16.240.5 - - [28/Jun/2022 18:01:49] "GET / HTTP/1.1" 200 -
@@ -437,7 +440,7 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 
 On hubdnsvm run the following command: 
 
-```
+```console
 root@hubdnsvm:/home/localadmin/azure-cross-solution-network-architectures/aks/yaml/colors-ns# kubectl cluster-info
 Kubernetes control plane is running at https://nnaks-private-dns-305bb3bc.nnaks-private.privatelink.uksouth.azmk8s.io:443
 CoreDNS is running at https://nnaks-private-dns-305bb3bc.nnaks-private.privatelink.uksouth.azmk8s.io:443/api/v1/namespaces/kube-system/services/kube-dns:dns/proxy
@@ -448,7 +451,7 @@ To further debug and diagnose cluster problems, use 'kubectl cluster-info dump'.
 
 Log in to dc1 and open a powershell window and lookup the control plan FQDN. Note that you are able to resolve the private IP from on-prem. Check in DNS (```dnsmgmt.msc``` in powershell) for the conditional forwarder to the hub DNS server to allow this.
 
-```
+```console
 PS C:\Users\localadmin> nslookup
 Default Server:  UnKnown
 Address:  ::1
@@ -465,14 +468,11 @@ Address:  172.16.240.4
 
 ```
 
-
-nnaks-private-dns-305bb3bc.nnaks-private.privatelink.uksouth.azmk8s.io
-
 ## Traffic validations from On-Premises to AKS
 
 For ingress, note that the AKS pods are directly reachable using their own IP address from on-premise. Here you can access the red pod via its assigned POD IP. 
 
-```
+```console
 
 root@hubdnsvm:/home/localadmin/azure-cross-solution-network-architectures/aks/yaml/colors-ns# kubectl get pods,services -o wide -n colors-ns
 NAME                                  READY   STATUS    RESTARTS   AGE   IP              NODE                                 NOMINATED NODE   READINESS GATES
@@ -509,7 +509,7 @@ Quick way to run kubectl commands using AKS ```command invoke``` from a cloud sh
 
 You can use any kubectl command here as normal
 
-```
+```console
 shaun@Azure:~$ az aks command invoke -g nnaks-private-rg -n nnaks-private -c "kubectl get nodes -o wide"
 command started at 2022-06-28 18:32:49+00:00, finished at 2022-06-28 18:32:51+00:00 with exitcode=0
 NAME                                 STATUS   ROLES   AGE    VERSION   INTERNAL-IP     EXTERNAL-IP   OS-IMAGE             KERNEL-VERSION     CONTAINER-RUNTIME
@@ -537,7 +537,7 @@ Alternatively the subnet hosting the VMs has a Network Security Group (NSG) atta
 
 4. SSH to your VMs
 
-```
+```console
 ssh localadmin@[VM Public IP or DNS]
 ```
 
