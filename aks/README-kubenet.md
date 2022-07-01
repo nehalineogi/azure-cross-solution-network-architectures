@@ -27,7 +27,7 @@ For a high level diagram of all deployed resources please see [Environment Compo
 
 2. Open Cloud Shell and retrieve your signed-in user ID below (this is used to apply access to Keyvault).
 
-```
+```console
 az ad signed-in-user show --query id -o tsv
 ```
 
@@ -77,7 +77,7 @@ With kubenet, you can use a much smaller IP address range and be able to support
 
 ### Routing to and from on-premises
 
-```
+```console
 Outbound from AKS to on-premises
 Note: on-premises sees the Node IP for a pod request. Below shows a typical log from HTTP running from an on-premise VM, you can see the pod IP for an incoming request.
 python3 -m http.server
@@ -155,7 +155,7 @@ node/aks-nodepool1-62766439-vmss000002 Ready agent 7h8m v1.19.11 172.16.239.6 <n
 
 In this challenge you will deploy pods and configure an internal service using an existing yaml definition in the repository. 
 
-```
+```console
 #
 # Create a namespace for the service, and apply the configuration
 #
@@ -202,7 +202,7 @@ Events:
 
 From the VPN server on-premise (vpnvm) log in via bastion (password in keyvault) and try to curl the service via the LoadBalancer Ingress:
 
-```
+```console
 localadmin@vpnvm:~$ curl http://172.16.239.7:8080/
 red
 
@@ -210,7 +210,7 @@ red
 
 # Challenge 3: Deploy Pods and External Service
 
-```
+```console
 
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl apply -f red-external-lb.yaml
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl get pods,services -o wide -n colors-ns
@@ -276,7 +276,7 @@ Remember to replace the ```kubectl debug node``` command with your own node name
 
 For further instructions on this process or to learn more see [Connect to AKS cluster nodes for maintenance or troubleshooting](https://docs.microsoft.com/en-us/azure/aks/node-access) 
 
-```
+```console
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl get nodes
 NAME                                 STATUS   ROLES   AGE   VERSION
 aks-agentpool1-33383507-vmss000000   Ready    agent   78m   v1.22.6
@@ -360,7 +360,7 @@ cbr0            8000.aed6453d6fec       no              veth482424ea
 
 The curl output showing the egress from POD to Internet via load balancer IP.
 
-```
+```console
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ cd ../../../
 shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get pods -o wide
 
@@ -399,12 +399,12 @@ Initiate Outbound traffic from AKS to On-Premises. Note that On-Premise sees the
 
 Log in to the VPN VM and start the server 
 
-```
+```console
 localadmin@vpnvm:~$ python3 -m http.server
 
 ```
 From cloud shell, create a shell connection to the dnsutil pod and initiate a connection
-```
+```console
 
 shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get pods -o wide
 
@@ -422,7 +422,7 @@ index.html           100% |*****************************************************
 ```
 Check the VPN VM for the result of the page request from the AKS pod, note how it sees the node IP address (this is due to the use of kubenet)
 
-```
+```console
 localadmin@vpnvm:~$ python3 -m http.server
 Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 172.16.239.4 - - [27/Jun/2022 18:06:50] "GET / HTTP/1.1" 200 -
@@ -436,13 +436,13 @@ Serving HTTP on 0.0.0.0 port 8000 (http://0.0.0.0:8000/) ...
 
 Validate default out-the-box DNS configuration before configuration
 
-```
+```console
 shaun@Azure:~/azure-cross-solution-network-architectures$ kubectl get configmaps --namespace=kube-system coredns-custom -o yaml
 ```
 
 DNS resolution for the AKS cluster can use CoreDNS (DNS service for AKS). We will configure this to forward requests to the on-prem domain controller in this example. You can also set this in many other modes, please refer to the documentation links above for CoreDNS. Ensure that you have routing to the on-prem network. A file exists within the repository called ``` coredns-custom-domain.yaml ``` that you can use to forward DNS requests to on-prem for resolution of the on-prem domain.  
 
-```
+```console
 shaun@Azure:~/azure-cross-solution-network-architectures$ cd aks/yaml/dns
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/dns$ cat coredns-custom-domain.yaml
 
@@ -467,7 +467,7 @@ data:
 
 Apply the configuration
 
-```
+```console
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/dns$ kubectl apply -f coredns-custom-domain.yaml
 
 # For troubleshooting you may need to run the commands to restart and delete the pod and allow it to respawn
@@ -507,7 +507,7 @@ Address: 2a02:26f0:5700:1b4::356e
 
 Make sure there is a VNet link from the AKS-VNET to the private DNS Zone in question. For the test below a private zone was created for test123.com and a host record of test with IP 127.0.0.1 was created.
 
-```
+```console
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/dns$ kubectl exec -it dnsutils -- sh
  # nslookup test.test123.com 
 Server:         10.101.0.10
@@ -535,7 +535,7 @@ kubectl delete ns colors-ns
 
 4. SSH to your VMs
 
-```
+```console
 ssh localadmin@[VM Public IP or DNS]
 ```
 
