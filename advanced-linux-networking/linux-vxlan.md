@@ -66,6 +66,8 @@ root@linux-host-1:~# ip add sh
 
 ```
 
+# Challenge 1: Configure VXLAN between the two hosts
+
 Configure VXLAN. Using VXLAN Port of 4789. Per RFC link [here](https://datatracker.ietf.org/doc/html/rfc7348)
 
 ```console
@@ -138,7 +140,7 @@ root@linux-host-2:~#
 
 ```
 
-# Validations
+# Challenge 2: Validate VXLAN is working 
 
 ## On host 1: Initiate the ping
 
