@@ -264,7 +264,12 @@ node/aks-agentpool1-19014455-vmss000002   Ready    agent   129m   v1.22.6   172.
 NAME           READY   STATUS    RESTARTS      AGE   IP              NODE                                 NOMINATED NODE   READINESS GATES
 pod/dnsutils   1/1     Running   1 (34m ago)   94m   172.16.240.55   aks-agentpool1-19014455-vmss000001   <none>           <none>
 
-Create shell connection to one of the nodes using the commands below. Replace with your own AKS node names. For further instructions on this process or to learn more see [Connect to AKS cluster nodes for maintenance or troubleshooting](https://docs.microsoft.com/en-us/azure/aks/node-access) 
+Create shell connection to one of the nodes using the commands below. 
+
+Remember to replace the ```kubectl debug node``` command with your own node names as retrieved by ```kubectl get nodes``` below. 
+
+For further instructions on this process or to learn more see [Connect to AKS cluster nodes for maintenance or troubleshooting](https://docs.microsoft.com/en-us/azure/aks/node-access) 
+
 
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl get nodes
 

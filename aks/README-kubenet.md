@@ -270,7 +270,11 @@ Note the POD CIDR is 10.244.0.0/16. See the route tables created to support the 
 In this challenge you will check the view from each type of AKS component. 
 ### AKS Node view
 
-Node inherits Azure DNS for resolution. Create shell connection to one of the nodes using the commands below. Replace with your own AKS node names. For further instructions on this process or to learn more see [Connect to AKS cluster nodes for maintenance or troubleshooting](https://docs.microsoft.com/en-us/azure/aks/node-access) 
+Node inherits Azure DNS for resolution. Create shell connection to one of the nodes using the commands below. 
+
+Remember to replace the ```kubectl debug node``` command with your own node names as retrieved by ```kubectl get nodes``` below. 
+
+For further instructions on this process or to learn more see [Connect to AKS cluster nodes for maintenance or troubleshooting](https://docs.microsoft.com/en-us/azure/aks/node-access) 
 
 ```
 shaun@Azure:~/azure-cross-solution-network-architectures/aks/yaml/colors-ns$ kubectl get nodes
