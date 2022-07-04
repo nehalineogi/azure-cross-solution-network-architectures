@@ -49,6 +49,7 @@ The above architecture diagram contains a few key components
 4. Two docker hosts are connected to the same subnet. Containers connected to the bridge network on one docker host cannot talk to the container on the other host. Note: Bridge network are scoped locally and don't span multiple hosts.
 5. Bridge networks are like two isolated layer two switches.
 6. Inbound and outbound connectivity to and from container via host port (eth0)
+7. The challenges below are focused on one host (docker-host-1) but you can repeat them on the second host to check that the bridge networks are locally scoped only and not spanned across hosts. This is an optional exercise
 
 
 ## Documentation links
