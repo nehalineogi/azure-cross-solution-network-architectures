@@ -12,7 +12,7 @@ Observe that the AKS Nodes **and** Pods receive IP addresses from Azure subnet (
 
 Download [Multi-tab Visio](aks-all-reference-architectures-visio.vsdx) and [PDF](aks-all-reference-architectures-PDF.pdf)
 
-[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnehalineogi%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Faks-cni.json)
+[![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fshcrouch%2Fazure-cross-solution-network-architectures%2Fmain%2Faks%2Fjson%2Faks-cni.json)
 
 # Quickstart deployment
 
