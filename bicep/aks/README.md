@@ -36,7 +36,7 @@ az ad signed-in-user show --query id -o tsv
 5.  Run the following command to deploy using az cli
 
 ```
- az deployment sub create --name aks --template-file main.bicep --location [region] --parameters ADUserID=[paste-asUserId-here] KubenetOrCNINetworkPolicy=[kubenet\azure] PublicOrPrivateCluster=[public\private]
+ az deployment sub create --name aks --template-file main.bicep --location [region] --parameters ADUserID=[paste-asUserId-here] KubenetOrCNINetworkPolicy=[kubenet\CNI] PublicOrPrivateCluster=[public\private]
  ```
 
  example : 

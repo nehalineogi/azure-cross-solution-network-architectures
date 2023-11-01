@@ -4,23 +4,22 @@
   "metadata": {
     "_generator": {
       "name": "bicep",
-      "version": "0.6.18.56646",
-      "templateHash": "15562176270787999987"
+      "version": "0.22.6.54827",
+      "templateHash": "6197212907270019557"
     }
   },
   "parameters": {
     "ADUserID": {
       "type": "string",
-      "defaultValue": "",
+      "minLength": 36,
+      "maxLength": 36,
       "metadata": {
         "description": "Used to set the Keyvault access policy - run this command using az cli to get your ObjectID : az ad signed-in-user show --query id -o tsv"
-      },
-      "maxLength": 36,
-      "minLength": 36
+      }
     },
     "ResourceGroupName": {
       "type": "string",
-      "defaultValue": "aks-CNI",
+      "defaultValue": "aks",
       "minLength": 3,
       "metadata": {
         "description": "Set the resource group name, this will be created automatically"
@@ -108,7 +107,7 @@
         "count": "[length(variables('env')[variables('networkPlugin')].vnets)]"
       },
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "[format('{0}', variables('env')[variables('networkPlugin')].vnets[copyIndex()].vnetName)]",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -130,7 +129,7 @@
             "value": "[variables('env')[variables('networkPlugin')].vnets[copyIndex()].subnets]"
           },
           "nsgDefaultId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'default-nsg')).outputs.nsgId.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'default-nsg'), '2022-09-01').outputs.nsgId.value]"
           }
         },
         "template": {
@@ -139,8 +138,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "5753543045224616099"
+              "version": "0.22.6.54827",
+              "templateHash": "559918671839915062"
             }
           },
           "parameters": {
@@ -200,7 +199,7 @@
             },
             "subnets": {
               "type": "array",
-              "value": "[reference(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName'))).subnets]"
+              "value": "[reference(resourceId('Microsoft.Network/virtualNetworks', parameters('vnetName')), '2021-02-01').subnets]"
             }
           }
         }
@@ -212,7 +211,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "vNetpeering",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -222,16 +221,16 @@
         "mode": "Incremental",
         "parameters": {
           "hubVnetId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))).outputs.vnid.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName)), '2022-09-01').outputs.vnid.value]"
           },
           "spokeVnetId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))).outputs.vnid.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName)), '2022-09-01').outputs.vnid.value]"
           },
           "hubVnetName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))).outputs.vnName.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName)), '2022-09-01').outputs.vnName.value]"
           },
           "spokeVnetName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))).outputs.vnName.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName)), '2022-09-01').outputs.vnName.value]"
           }
         },
         "template": {
@@ -240,8 +239,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "10798899040796013046"
+              "version": "0.22.6.54827",
+              "templateHash": "7180413659947170400"
             }
           },
           "parameters": {
@@ -293,15 +292,15 @@
       "dependsOn": [
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubgw')]",
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]"
       ]
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "bastionNSG",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -320,8 +319,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "11539219213836595884"
+              "version": "0.22.6.54827",
+              "templateHash": "17772224400308438990"
             }
           },
           "parameters": {
@@ -468,7 +467,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "default-nsg",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -487,8 +486,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "2215729185500223360"
+              "version": "0.22.6.54827",
+              "templateHash": "972827514926697121"
             }
           },
           "parameters": {
@@ -519,7 +518,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "bastionHubNsgAttachment",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -529,16 +528,16 @@
         "mode": "Incremental",
         "parameters": {
           "nsgId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'bastionNSG')).outputs.nsgId.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'bastionNSG'), '2022-09-01').outputs.nsgId.value]"
           },
           "subnetAddressPrefix": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))).outputs.subnets.value[1].properties.addressPrefix]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName)), '2022-09-01').outputs.subnets.value[1].properties.addressPrefix]"
           },
           "subnetName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))).outputs.subnets.value[1].name]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName)), '2022-09-01').outputs.subnets.value[1].name]"
           },
           "vnetName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))).outputs.vnName.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName)), '2022-09-01').outputs.vnName.value]"
           }
         },
         "template": {
@@ -547,8 +546,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "18442145850760487637"
+              "version": "0.22.6.54827",
+              "templateHash": "4764554843724630096"
             }
           },
           "parameters": {
@@ -591,7 +590,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "hubgw",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -601,7 +600,7 @@
         "mode": "Incremental",
         "parameters": {
           "gatewaySubnetId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))).outputs.subnets.value[2].id]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName)), '2022-09-01').outputs.subnets.value[2].id]"
           },
           "location": {
             "value": "[variables('location')]"
@@ -613,8 +612,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "8909459240945598780"
+              "version": "0.22.6.54827",
+              "templateHash": "8971263577905284377"
             }
           },
           "parameters": {
@@ -677,7 +676,7 @@
           "outputs": {
             "gwpip": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', 'gwpip')).ipAddress]"
+              "value": "[reference(resourceId('Microsoft.Network/publicIPAddresses', 'gwpip'), '2021-02-01').ipAddress]"
             },
             "vnetgwid": {
               "type": "string",
@@ -693,7 +692,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "onpremgw",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -706,10 +705,10 @@
             "value": "[variables('location')]"
           },
           "addressSpace": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.subnets.value[0].properties.addressPrefix]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.subnets.value[0].properties.addressPrefix]"
           },
           "ipAddress": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'onpremVpnVM')).outputs.VmIp.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'onpremVpnVM'), '2022-09-01').outputs.VmIp.value]"
           },
           "name": {
             "value": "onpremgw"
@@ -721,8 +720,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "8200432103064771903"
+              "version": "0.22.6.54827",
+              "templateHash": "8042985222633100100"
             }
           },
           "parameters": {
@@ -771,7 +770,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "onprem-azure-conn",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -784,13 +783,13 @@
             "value": "[variables('location')]"
           },
           "psk": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'psk')).outputs.psk.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'psk'), '2022-09-01').outputs.psk.value]"
           },
           "lngid": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'onpremgw')).outputs.lngid.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'onpremgw'), '2022-09-01').outputs.lngid.value]"
           },
           "vnetgwid": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubgw')).outputs.vnetgwid.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubgw'), '2022-09-01').outputs.vnetgwid.value]"
           },
           "name": {
             "value": "onprem-azure-conn"
@@ -802,8 +801,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "10790984955083811513"
+              "version": "0.22.6.54827",
+              "templateHash": "12578620424963853479"
             }
           },
           "parameters": {
@@ -862,7 +861,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "kv",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -884,8 +883,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "6604354719076478904"
+              "version": "0.22.6.54827",
+              "templateHash": "15376245078045182248"
             }
           },
           "parameters": {
@@ -987,7 +986,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "hubBastion",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -1003,7 +1002,7 @@
             "value": "[variables('location')]"
           },
           "subnetRef": {
-            "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))).outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))).outputs.subnets.value[1].name)]"
+            "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName)), '2022-09-01').outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName)), '2022-09-01').outputs.subnets.value[1].name)]"
           }
         },
         "template": {
@@ -1012,8 +1011,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "14707755523415851166"
+              "version": "0.22.6.54827",
+              "templateHash": "10337449313317347499"
             }
           },
           "parameters": {
@@ -1075,7 +1074,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "hubDnsVM",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -1094,13 +1093,13 @@
             "value": "[variables('VmAdminUsername')]"
           },
           "keyvault_name": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'kv')).outputs.keyvaultname.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'kv'), '2022-09-01').outputs.keyvaultname.value]"
           },
           "vmname": {
             "value": "[variables('hubDNSVmName')]"
           },
           "subnet1ref": {
-            "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))).outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))).outputs.subnets.value[0].name)]"
+            "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName)), '2022-09-01').outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName)), '2022-09-01').outputs.subnets.value[0].name)]"
           },
           "vmSize": {
             "value": "[variables('HostVmSize')]"
@@ -1113,12 +1112,12 @@
           },
           "vpnVars": {
             "value": {
-              "psk": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'psk')).outputs.psk.value]",
-              "gwip": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubgw')).outputs.gwpip.value]",
-              "gwaddressPrefix": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))).outputs.subnets.value[0].properties.addressPrefix]",
-              "onpremAddressPrefix": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.subnets.value[0].properties.addressPrefix]",
-              "spokeAddressPrefix": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))).outputs.subnets.value[0].properties.addressPrefix]",
-              "hubAddressPrefix": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))).outputs.subnets.value[0].properties.addressPrefix]"
+              "psk": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'psk'), '2022-09-01').outputs.psk.value]",
+              "gwip": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubgw'), '2022-09-01').outputs.gwpip.value]",
+              "gwaddressPrefix": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName)), '2022-09-01').outputs.subnets.value[0].properties.addressPrefix]",
+              "onpremAddressPrefix": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.subnets.value[0].properties.addressPrefix]",
+              "spokeAddressPrefix": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName)), '2022-09-01').outputs.subnets.value[0].properties.addressPrefix]",
+              "hubAddressPrefix": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName)), '2022-09-01').outputs.subnets.value[0].properties.addressPrefix]"
             }
           },
           "deployHubDns": {
@@ -1131,8 +1130,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "18095168029883451793"
+              "version": "0.22.6.54827",
+              "templateHash": "15336540380287741266"
             }
           },
           "parameters": {
@@ -1155,7 +1154,7 @@
               "type": "string"
             },
             "adminPassword": {
-              "type": "secureString",
+              "type": "securestring",
               "defaultValue": "[format('{0}aA1!{1}', uniqueString(resourceGroup().id, parameters('vmname')), uniqueString(parameters('adUserId')))]"
             },
             "windowsVM": {
@@ -1337,7 +1336,7 @@
                 "diagnosticsProfile": {
                   "bootDiagnostics": {
                     "enabled": true,
-                    "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))).primaryEndpoints.blob]"
+                    "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').primaryEndpoints.blob]"
                   }
                 }
               },
@@ -1475,16 +1474,16 @@
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'kv')]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'psk')]",
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]"
       ]
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "akssubnetNSG",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -1503,8 +1502,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "10939506485485057389"
+              "version": "0.22.6.54827",
+              "templateHash": "9860876065721772733"
             }
           },
           "parameters": {
@@ -1551,7 +1550,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "aksNsgAttachment",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -1561,16 +1560,16 @@
         "mode": "Incremental",
         "parameters": {
           "nsgId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'akssubnetNSG')).outputs.NsgId.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'akssubnetNSG'), '2022-09-01').outputs.NsgId.value]"
           },
           "subnetAddressPrefix": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))).outputs.subnets.value[0].properties.addressPrefix]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName)), '2022-09-01').outputs.subnets.value[0].properties.addressPrefix]"
           },
           "subnetName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))).outputs.subnets.value[0].name]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName)), '2022-09-01').outputs.subnets.value[0].name]"
           },
           "vnetName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))).outputs.vnName.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName)), '2022-09-01').outputs.vnName.value]"
           }
         },
         "template": {
@@ -1579,8 +1578,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "18442145850760487637"
+              "version": "0.22.6.54827",
+              "templateHash": "4764554843724630096"
             }
           },
           "parameters": {
@@ -1623,7 +1622,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "aks_user_identity",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -1645,8 +1644,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "5053401051570864844"
+              "version": "0.22.6.54827",
+              "templateHash": "5497281209876886595"
             }
           },
           "parameters": {
@@ -1672,11 +1671,11 @@
             },
             "clientId": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}identity', parameters('prefix')))).clientId]"
+              "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}identity', parameters('prefix'))), '2018-11-30').clientId]"
             },
             "principleId": {
               "type": "string",
-              "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}identity', parameters('prefix')))).principalId]"
+              "value": "[reference(resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', format('{0}identity', parameters('prefix'))), '2018-11-30').principalId]"
             }
           }
         }
@@ -1687,7 +1686,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "assign-RBAC-to-aks-rg",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -1700,7 +1699,7 @@
             "value": "[variables('location')]"
           },
           "principalId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'aks_user_identity')).outputs.principleId.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'aks_user_identity'), '2022-09-01').outputs.principleId.value]"
           },
           "roleDefinitionIdOrNames": {
             "value": [
@@ -1715,8 +1714,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "7455422579256098524"
+              "version": "0.22.6.54827",
+              "templateHash": "17096918523373918333"
             }
           },
           "parameters": {
@@ -1795,7 +1794,7 @@
     {
       "condition": "[contains(variables('aksPrivatePublic'), 'private')]",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "create-DNS-private-zone-for-AKS",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -1814,8 +1813,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "7655638119101232557"
+              "version": "0.22.6.54827",
+              "templateHash": "10954459403648602672"
             }
           },
           "parameters": {
@@ -1850,7 +1849,7 @@
     {
       "condition": "[contains(variables('aksPrivatePublic'), 'private')]",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "link-DNS-zone-to-spoke-vnet",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -1859,14 +1858,12 @@
         },
         "mode": "Incremental",
         "parameters": {
-          "privateDnsZoneName": {
-            "value": "[if(contains(variables('aksPrivatePublic'), 'private'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'create-DNS-private-zone-for-AKS'), '2020-10-01').outputs.privateDNSZoneName.value, '')]"
-          },
+          "privateDnsZoneName": "[if(contains(variables('aksPrivatePublic'), 'private'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'create-DNS-private-zone-for-AKS'), '2022-09-01').outputs.privateDNSZoneName.value), createObject('value', ''))]",
           "vnetId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))).outputs.vnid.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName)), '2022-09-01').outputs.vnid.value]"
           },
           "vnetName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))).outputs.vnName.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName)), '2022-09-01').outputs.vnName.value]"
           }
         },
         "template": {
@@ -1875,8 +1872,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "14658042611851144323"
+              "version": "0.22.6.54827",
+              "templateHash": "292286018968127597"
             }
           },
           "parameters": {
@@ -1916,7 +1913,7 @@
     {
       "condition": "[contains(variables('aksPrivatePublic'), 'private')]",
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "link-DNS-zone-to-hub-vnet",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -1925,14 +1922,12 @@
         },
         "mode": "Incremental",
         "parameters": {
-          "privateDnsZoneName": {
-            "value": "[if(contains(variables('aksPrivatePublic'), 'private'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'create-DNS-private-zone-for-AKS'), '2020-10-01').outputs.privateDNSZoneName.value, '')]"
-          },
+          "privateDnsZoneName": "[if(contains(variables('aksPrivatePublic'), 'private'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'create-DNS-private-zone-for-AKS'), '2022-09-01').outputs.privateDNSZoneName.value), createObject('value', ''))]",
           "vnetId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))).outputs.vnid.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName)), '2022-09-01').outputs.vnid.value]"
           },
           "vnetName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))).outputs.vnName.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName)), '2022-09-01').outputs.vnName.value]"
           }
         },
         "template": {
@@ -1941,8 +1936,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "14658042611851144323"
+              "version": "0.22.6.54827",
+              "templateHash": "292286018968127597"
             }
           },
           "parameters": {
@@ -1981,7 +1976,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "aks_cluster",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -1996,14 +1991,12 @@
           "location": {
             "value": "[variables('location')]"
           },
-          "networkPlugin": {
-            "value": "[if(contains(variables('networkPlugin'), 'CNI'), 'azure', 'kubenet')]"
-          },
+          "networkPlugin": "[if(contains(variables('networkPlugin'), 'CNI'), createObject('value', 'azure'), createObject('value', 'kubenet'))]",
           "networkPolicy": {
             "value": "calico"
           },
           "vnetSubnetID": {
-            "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))).outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))).outputs.subnets.value[0].name)]"
+            "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName)), '2022-09-01').outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName)), '2022-09-01').outputs.subnets.value[0].name)]"
           },
           "dockerBridgeCidr": {
             "value": "172.20.0.1/16"
@@ -2020,11 +2013,9 @@
           "PublicPrivateCluster": {
             "value": "[variables('aksPrivatePublic')]"
           },
-          "privateDNSZoneId": {
-            "value": "[if(contains(variables('aksPrivatePublic'), 'private'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'create-DNS-private-zone-for-AKS'), '2020-10-01').outputs.privateDNSZoneId.value, '')]"
-          },
+          "privateDNSZoneId": "[if(contains(variables('aksPrivatePublic'), 'private'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'create-DNS-private-zone-for-AKS'), '2022-09-01').outputs.privateDNSZoneId.value), createObject('value', ''))]",
           "userAssignedId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'aks_user_identity')).outputs.uId.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'aks_user_identity'), '2022-09-01').outputs.uId.value]"
           }
         },
         "template": {
@@ -2033,8 +2024,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "17492230371425351808"
+              "version": "0.22.6.54827",
+              "templateHash": "8301649003244098060"
             }
           },
           "parameters": {
@@ -2050,7 +2041,7 @@
             },
             "kubernetesVersion": {
               "type": "string",
-              "defaultValue": "1.25.2"
+              "defaultValue": "1.27.3"
             },
             "vmSize": {
               "type": "string",
@@ -2153,7 +2144,7 @@
           "outputs": {
             "controlPlaneFQDN": {
               "type": "string",
-              "value": "[if(contains(parameters('PublicPrivateCluster'), 'private'), '', reference(resourceId('Microsoft.ContainerService/managedClusters', parameters('clusterName'))).fqdn)]"
+              "value": "[if(contains(parameters('PublicPrivateCluster'), 'private'), '', reference(resourceId('Microsoft.ContainerService/managedClusters', parameters('clusterName')), '2022-01-01').fqdn)]"
             }
           }
         }
@@ -2168,7 +2159,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "onpremBastion",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -2184,7 +2175,7 @@
             "value": "[variables('location')]"
           },
           "subnetRef": {
-            "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.subnets.value[1].name)]"
+            "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.subnets.value[1].name)]"
           }
         },
         "template": {
@@ -2193,8 +2184,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "14707755523415851166"
+              "version": "0.22.6.54827",
+              "templateHash": "10337449313317347499"
             }
           },
           "parameters": {
@@ -2256,7 +2247,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "psk",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -2266,10 +2257,10 @@
         "mode": "Incremental",
         "parameters": {
           "keyvault_name": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'kv')).outputs.keyvaultname.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'kv'), '2022-09-01').outputs.keyvaultname.value]"
           },
           "onpremSubnetRef": {
-            "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.subnets.value[0].name)]"
+            "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.subnets.value[0].name)]"
           },
           "name": {
             "value": "azure-conn"
@@ -2281,8 +2272,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "5173335374356178932"
+              "version": "0.22.6.54827",
+              "templateHash": "75255668983437998"
             }
           },
           "parameters": {
@@ -2330,7 +2321,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "OnpremDC",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -2355,13 +2346,13 @@
             "value": "[variables('VmAdminUsername')]"
           },
           "keyvault_name": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'kv')).outputs.keyvaultname.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'kv'), '2022-09-01').outputs.keyvaultname.value]"
           },
           "vmname": {
             "value": "[variables('dcVmName')]"
           },
           "subnet1ref": {
-            "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.subnets.value[0].name)]"
+            "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.subnets.value[0].name)]"
           },
           "vmSize": {
             "value": "[variables('HostVmSize')]"
@@ -2372,11 +2363,9 @@
           "adUserId": {
             "value": "[parameters('ADUserID')]"
           },
-          "pDNSZone": {
-            "value": "[if(contains(variables('aksPrivatePublic'), 'private'), reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'create-DNS-private-zone-for-AKS'), '2020-10-01').outputs.privateDNSZoneName.value, 'placeholder.placeholder.placeholder')]"
-          },
+          "pDNSZone": "[if(contains(variables('aksPrivatePublic'), 'private'), createObject('value', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'create-DNS-private-zone-for-AKS'), '2022-09-01').outputs.privateDNSZoneName.value), createObject('value', 'placeholder.placeholder.placeholder'))]",
           "HubDNSIP": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubDnsVM')).outputs.VmPrivIp.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubDnsVM'), '2022-09-01').outputs.VmPrivIp.value]"
           }
         },
         "template": {
@@ -2385,8 +2374,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "18095168029883451793"
+              "version": "0.22.6.54827",
+              "templateHash": "15336540380287741266"
             }
           },
           "parameters": {
@@ -2409,7 +2398,7 @@
               "type": "string"
             },
             "adminPassword": {
-              "type": "secureString",
+              "type": "securestring",
               "defaultValue": "[format('{0}aA1!{1}', uniqueString(resourceGroup().id, parameters('vmname')), uniqueString(parameters('adUserId')))]"
             },
             "windowsVM": {
@@ -2591,7 +2580,7 @@
                 "diagnosticsProfile": {
                   "bootDiagnostics": {
                     "enabled": true,
-                    "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))).primaryEndpoints.blob]"
+                    "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').primaryEndpoints.blob]"
                   }
                 }
               },
@@ -2735,7 +2724,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "onpremVpnVM",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -2760,13 +2749,13 @@
             "value": "[variables('VmAdminUsername')]"
           },
           "keyvault_name": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'kv')).outputs.keyvaultname.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'kv'), '2022-09-01').outputs.keyvaultname.value]"
           },
           "vmname": {
             "value": "[variables('onpremVPNVmName')]"
           },
           "subnet1ref": {
-            "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.subnets.value[0].name)]"
+            "value": "[format('{0}/subnets/{1}', reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.vnid.value, reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.subnets.value[0].name)]"
           },
           "vmSize": {
             "value": "[variables('HostVmSize')]"
@@ -2779,12 +2768,12 @@
           },
           "vpnVars": {
             "value": {
-              "psk": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'psk')).outputs.psk.value]",
-              "gwip": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubgw')).outputs.gwpip.value]",
-              "gwaddressPrefix": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))).outputs.subnets.value[0].properties.addressPrefix]",
-              "onpremAddressPrefix": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.subnets.value[0].properties.addressPrefix]",
-              "spokeAddressPrefix": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))).outputs.subnets.value[0].properties.addressPrefix]",
-              "hubAddressPrefix": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))).outputs.subnets.value[0].properties.addressPrefix]"
+              "psk": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'psk'), '2022-09-01').outputs.psk.value]",
+              "gwip": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubgw'), '2022-09-01').outputs.gwpip.value]",
+              "gwaddressPrefix": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName)), '2022-09-01').outputs.subnets.value[0].properties.addressPrefix]",
+              "onpremAddressPrefix": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.subnets.value[0].properties.addressPrefix]",
+              "spokeAddressPrefix": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName)), '2022-09-01').outputs.subnets.value[0].properties.addressPrefix]",
+              "hubAddressPrefix": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName)), '2022-09-01').outputs.subnets.value[0].properties.addressPrefix]"
             }
           },
           "adUserId": {
@@ -2797,8 +2786,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "18095168029883451793"
+              "version": "0.22.6.54827",
+              "templateHash": "15336540380287741266"
             }
           },
           "parameters": {
@@ -2821,7 +2810,7 @@
               "type": "string"
             },
             "adminPassword": {
-              "type": "secureString",
+              "type": "securestring",
               "defaultValue": "[format('{0}aA1!{1}', uniqueString(resourceGroup().id, parameters('vmname')), uniqueString(parameters('adUserId')))]"
             },
             "windowsVM": {
@@ -3003,7 +2992,7 @@
                 "diagnosticsProfile": {
                   "bootDiagnostics": {
                     "enabled": true,
-                    "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))).primaryEndpoints.blob]"
+                    "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName')), '2019-06-01').primaryEndpoints.blob]"
                   }
                 }
               },
@@ -3141,16 +3130,16 @@
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'kv')]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'psk')]",
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]"
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]"
       ]
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "hubNSG",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -3163,7 +3152,7 @@
             "value": "[variables('location')]"
           },
           "sourceAddressPrefix": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubgw')).outputs.gwpip.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubgw'), '2022-09-01').outputs.gwpip.value]"
           }
         },
         "template": {
@@ -3172,8 +3161,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "7888930130975504912"
+              "version": "0.22.6.54827",
+              "templateHash": "5973064243354492323"
             }
           },
           "parameters": {
@@ -3238,7 +3227,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "onpremNsgAttachment",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -3248,16 +3237,16 @@
         "mode": "Incremental",
         "parameters": {
           "nsgId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubNSG')).outputs.onpremNsgId.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubNSG'), '2022-09-01').outputs.onpremNsgId.value]"
           },
           "subnetAddressPrefix": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.subnets.value[0].properties.addressPrefix]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.subnets.value[0].properties.addressPrefix]"
           },
           "subnetName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.subnets.value[0].name]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.subnets.value[0].name]"
           },
           "vnetName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.vnName.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.vnName.value]"
           }
         },
         "template": {
@@ -3266,8 +3255,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "18442145850760487637"
+              "version": "0.22.6.54827",
+              "templateHash": "4764554843724630096"
             }
           },
           "parameters": {
@@ -3310,7 +3299,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "rt",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -3323,25 +3312,25 @@
             "value": "[variables('location')]"
           },
           "applianceAddress": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'onpremVpnVM')).outputs.VmPrivIp.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'onpremVpnVM'), '2022-09-01').outputs.VmPrivIp.value]"
           },
           "nsgId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubNSG')).outputs.onpremNsgId.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubNSG'), '2022-09-01').outputs.onpremNsgId.value]"
           },
           "hubAddressPrefix": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))).outputs.subnets.value[0].properties.addressPrefix]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName)), '2022-09-01').outputs.subnets.value[0].properties.addressPrefix]"
           },
           "spokeAddressPrefix": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))).outputs.subnets.value[0].properties.addressPrefix]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName)), '2022-09-01').outputs.subnets.value[0].properties.addressPrefix]"
           },
           "subnetAddressPrefix": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.subnets.value[0].properties.addressPrefix]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.subnets.value[0].properties.addressPrefix]"
           },
           "subnetName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.subnets.value[0].name]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.subnets.value[0].name]"
           },
           "vnetName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.vnName.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.vnName.value]"
           }
         },
         "template": {
@@ -3350,8 +3339,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "16569982763254063679"
+              "version": "0.22.6.54827",
+              "templateHash": "9164363986642303842"
             }
           },
           "parameters": {
@@ -3433,8 +3422,8 @@
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'hubNSG')]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'onpremVpnVM')]",
         "[subscriptionResourceId('Microsoft.Resources/resourceGroups', parameters('ResourceGroupName'))]",
-        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[1].vnetName))]",
+        "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[0].vnetName))]",
         "[extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))]"
@@ -3442,7 +3431,7 @@
     },
     {
       "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2020-10-01",
+      "apiVersion": "2022-09-01",
       "name": "bastionOnpremNsgAttachment",
       "resourceGroup": "[parameters('ResourceGroupName')]",
       "properties": {
@@ -3452,16 +3441,16 @@
         "mode": "Incremental",
         "parameters": {
           "nsgId": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'bastionNSG')).outputs.nsgId.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', 'bastionNSG'), '2022-09-01').outputs.nsgId.value]"
           },
           "subnetAddressPrefix": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.subnets.value[1].properties.addressPrefix]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.subnets.value[1].properties.addressPrefix]"
           },
           "subnetName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.subnets.value[1].name]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.subnets.value[1].name]"
           },
           "vnetName": {
-            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName))).outputs.vnName.value]"
+            "value": "[reference(extensionResourceId(format('/subscriptions/{0}/resourceGroups/{1}', subscription().subscriptionId, parameters('ResourceGroupName')), 'Microsoft.Resources/deployments', format('{0}', variables('env')[variables('networkPlugin')].vnets[2].vnetName)), '2022-09-01').outputs.vnName.value]"
           }
         },
         "template": {
@@ -3470,8 +3459,8 @@
           "metadata": {
             "_generator": {
               "name": "bicep",
-              "version": "0.6.18.56646",
-              "templateHash": "18442145850760487637"
+              "version": "0.22.6.54827",
+              "templateHash": "4764554843724630096"
             }
           },
           "parameters": {
