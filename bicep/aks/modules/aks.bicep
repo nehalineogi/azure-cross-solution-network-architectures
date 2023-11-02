@@ -1,7 +1,7 @@
 param location string
 param clusterName string
 param nodeCount int = 3
-param kubernetesVersion string = '1.25.2' // time writing almost GA
+param kubernetesVersion string = '1.27.3' // time writing almost GA
 param vmSize string = 'Standard_B4ms'
 param networkPlugin string
 param networkPolicy string
